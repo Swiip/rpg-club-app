@@ -1,0 +1,11 @@
+[package]
+name = "rpg_club_types"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[build-dependencies]
+anyhow.workspace = true
+crux_core = { workspace = true, features = ["typegen"] }
+rpg_club_core = { path = "../rpg_club_core", features = ["typegen"] }

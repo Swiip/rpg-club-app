@@ -1,0 +1,13 @@
+[workspace]
+members = ["rpg_club_api", "rpg_club_core", "rpg_club_types"]
+
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "rustc-dev"]
+targets = ["wasm32-unknown-unknown"]
+profile = "minimal"
+
+[workspace.dependencies]
+anyhow = "1.0.86"
+crux_core = "0.8"
+serde = "1.0.203"
