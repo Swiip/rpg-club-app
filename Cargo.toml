@@ -1,5 +1,5 @@
 [workspace]
-members = ["rpg_club_api", "rpg_club_bot", "rpg_club_core", "rpg_club_types"]
+members = ["rpg_club_api", "rpg_club_bot", "rpg_club_core", "rpg_club_db", "rpg_club_types"]
 
 [toolchain]
 channel = "stable"
