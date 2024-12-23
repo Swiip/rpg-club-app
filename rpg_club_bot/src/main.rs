@@ -1,6 +1,10 @@
+mod commands;
+
 use std::env;
 
-use serenity::all::Ready;
+use serenity::all::{
+    Command, CreateInteractionResponse, CreateInteractionResponseMessage, Interaction, Ready,
+};
 use serenity::async_trait;
 use serenity::model::channel::Message;
 use serenity::prelude::*;
@@ -26,12 +30,37 @@ impl EventHandler for Handler {
         }
     }
 
+    async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
+        if let Interaction::Command(command) = interaction {
+            println!("Received command interaction: {command:#?}");
+
+            let content = match command.data.name.as_str() {
+                "ping" => Some(commands::ping::run(&command.data.options())),
+                // "id" => Some(commands::id::run(&command.data.options())),
+                // "attachmentinput" => Some(commands::attachmentinput::run(&command.data.options())),
+                // "modal" => {
+                //     commands::modal::run(&ctx, &command).await.unwrap();
+                //     None
+                // }
+                _ => Some("not implemented :(".to_string()),
+            };
+
+            if let Some(content) = content {
+                let data = CreateInteractionResponseMessage::new().content(content);
+                let builder = CreateInteractionResponse::Message(data);
+                if let Err(why) = command.create_response(&ctx.http, builder).await {
+                    println!("Cannot respond to slash command: {why}");
+                }
+            }
+        }
+    }
+
     // Set a handler to be called on the `ready` event. This is called when a shard is booted, and
     // a READY payload is sent by Discord. This payload contains data like the current user's guild
     // Ids, current user data, private channels, and more.
     //
     // In this case, just print what the current user's username is.
-    async fn ready(&self, _: Context, ready: Ready) {
+    async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
         println!("Bot ID: {}", ready.user.id);
         println!("Connected to {} guilds", ready.guilds.len());
@@ -39,6 +68,10 @@ impl EventHandler for Handler {
         for guild in &ready.guilds {
             println!("Connected to guild ID: {}", guild.id);
         }
+
+        let commands = Command::create_global_command(&ctx.http, commands::ping::register()).await;
+
+        println!("I created the following global slash command: {commands:#?}");
     }
 }
 
