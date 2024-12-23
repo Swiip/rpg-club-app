@@ -36,6 +36,8 @@ impl EventHandler for Handler {
 
             let content = match command.data.name.as_str() {
                 "ping" => Some(commands::ping::run(&command.data.options())),
+                "addgame" => Some(commands::add_game::run(&command.data.options())),
+                "listgames" => Some(commands::list_games::run(&command.data.options())),
                 // "id" => Some(commands::id::run(&command.data.options())),
                 // "attachmentinput" => Some(commands::attachmentinput::run(&command.data.options())),
                 // "modal" => {
@@ -69,7 +71,16 @@ impl EventHandler for Handler {
             println!("Connected to guild ID: {}", guild.id);
         }
 
-        let commands = Command::create_global_command(&ctx.http, commands::ping::register()).await;
+        let commands = vec![
+            commands::ping::register(),
+            commands::add_game::register(),
+            commands::list_games::register(),
+        ];
+
+        for command in &commands {
+            let cmd = Command::create_global_command(&ctx.http, command.clone()).await;
+            println!("Created command: {cmd:#?}");
+        }
 
         println!("I created the following global slash command: {commands:#?}");
     }
@@ -85,6 +96,10 @@ async fn main() {
         | GatewayIntents::MESSAGE_CONTENT;
 
     println!("Client created successfully {}", token);
+
+    if let Err(why) = rpg_club_db::init() {
+        println!("DB error: {why:?}");
+    }
 
     // Create a new instance of the Client, logging in as a bot. This will automatically prepend
     // your bot token with "Bot ", which is a requirement by Discord for bot users.

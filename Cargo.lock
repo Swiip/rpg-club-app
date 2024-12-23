@@ -1643,6 +1643,7 @@ dependencies = [
 name = "rpg_club_bot"
 version = "0.1.0"
 dependencies = [
+ "rpg_club_db",
  "serenity",
  "tokio",
 ]

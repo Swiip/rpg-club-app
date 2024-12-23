@@ -3,5 +3,8 @@ name = "rpg_club_db"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "rpg_club_db"
+
 [dependencies]
 rusqlite = { version = "0.32.0", features = ["bundled"] }
