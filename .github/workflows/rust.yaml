@@ -56,5 +56,5 @@ jobs:
                   file: docker/bot/Dockerfile
                   push: ${{ github.ref == 'refs/heads/main' }}
                   tags: |
-                      ghcr.io/${{ toLowerCase(github.repository_owner) }}/rpg-club-bot:latest
-                      ghcr.io/${{ toLowerCase(github.repository_owner) }}/rpg-club-bot:${{ github.sha }}
+                      ghcr.io/swiip/rpg-club-bot:latest
+                      ghcr.io/swiip/rpg-club-bot:${{ github.sha }}
