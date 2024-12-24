@@ -8,18 +8,15 @@ pub fn run(_options: &[ResolvedOption]) -> String {
             if games.is_empty() {
                 "No games found in database.".to_string()
             } else {
-                let mut response = String::from("Games list:\n");
+                let mut response = String::from("📚 **Games Library**\n\n");
+
                 for game in games {
-                    response.push_str(&format!(
-                        "• {} (ID: {}){}\n",
-                        game.name,
-                        game.id,
-                        if !game.illustration.is_empty() {
-                            format!(" [{}]", game.illustration)
-                        } else {
-                            String::new()
-                        }
-                    ));
+                    response.push_str(&format!("🎲 **{}**\n", game.name));
+                    response.push_str(&format!("   ID: {}\n", game.id));
+                    if !game.illustration.is_empty() {
+                        response.push_str(&format!("   🖼️ {}\n", game.illustration));
+                    }
+                    response.push('\n');
                 }
                 response
             }

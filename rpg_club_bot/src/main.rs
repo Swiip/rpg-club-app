@@ -1,4 +1,5 @@
 mod commands;
+mod utils;
 
 use std::env;
 
@@ -6,44 +7,21 @@ use serenity::all::{
     Command, CreateInteractionResponse, CreateInteractionResponseMessage, Interaction, Ready,
 };
 use serenity::async_trait;
-use serenity::model::channel::Message;
 use serenity::prelude::*;
 
 struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
-    // Set a handler for the `message` event. This is called whenever a new message is received.
-    //
-    // Event handlers are dispatched through a threadpool, and so multiple events can be
-    // dispatched simultaneously.
-    async fn message(&self, ctx: Context, msg: Message) {
-        println!("Messges received! {} {}", msg.content, msg.author.name);
-
-        if msg.content == "!ping" {
-            // Sending a message can fail, due to a network error, an authentication error, or lack
-            // of permissions to post in the channel, so log to stdout when some error happens,
-            // with a description of it.
-            if let Err(why) = msg.channel_id.say(&ctx.http, "Pong!").await {
-                println!("Error sending message: {why:?}");
-            }
-        }
-    }
-
     async fn interaction_create(&self, ctx: Context, interaction: Interaction) {
         if let Interaction::Command(command) = interaction {
-            println!("Received command interaction: {command:#?}");
+            println!("Received command interaction: {}", &command.data.name);
 
             let content = match command.data.name.as_str() {
                 "ping" => Some(commands::ping::run(&command.data.options())),
                 "addgame" => Some(commands::add_game::run(&command.data.options())),
                 "listgames" => Some(commands::list_games::run(&command.data.options())),
-                // "id" => Some(commands::id::run(&command.data.options())),
-                // "attachmentinput" => Some(commands::attachmentinput::run(&command.data.options())),
-                // "modal" => {
-                //     commands::modal::run(&ctx, &command).await.unwrap();
-                //     None
-                // }
+                "updategame" => Some(commands::update_game::run(&command.data.options())),
                 _ => Some("not implemented :(".to_string()),
             };
 
@@ -57,16 +35,11 @@ impl EventHandler for Handler {
         }
     }
 
-    // Set a handler to be called on the `ready` event. This is called when a shard is booted, and
-    // a READY payload is sent by Discord. This payload contains data like the current user's guild
-    // Ids, current user data, private channels, and more.
-    //
-    // In this case, just print what the current user's username is.
     async fn ready(&self, ctx: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
         println!("Bot ID: {}", ready.user.id);
-        println!("Connected to {} guilds", ready.guilds.len());
         println!("Bot Display name {}", ready.user.display_name());
+        println!("Connected to {} guilds", ready.guilds.len());
         for guild in &ready.guilds {
             println!("Connected to guild ID: {}", guild.id);
         }
@@ -75,14 +48,13 @@ impl EventHandler for Handler {
             commands::ping::register(),
             commands::add_game::register(),
             commands::list_games::register(),
+            commands::update_game::register(),
         ];
 
         for command in &commands {
             let cmd = Command::create_global_command(&ctx.http, command.clone()).await;
-            println!("Created command: {cmd:#?}");
+            println!("Created command: {}", cmd.unwrap().name);
         }
-
-        println!("I created the following global slash command: {commands:#?}");
     }
 }
 
@@ -90,6 +62,7 @@ impl EventHandler for Handler {
 async fn main() {
     // Configure the client with your Discord bot token in the environment.
     let token = env::var("DISCORD_TOKEN").expect("Expected a token in the environment");
+
     // Set gateway intents, which decides what events the bot will be notified about
     let intents = GatewayIntents::GUILD_MESSAGES
         | GatewayIntents::DIRECT_MESSAGES

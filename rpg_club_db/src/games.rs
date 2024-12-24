@@ -29,14 +29,27 @@ pub fn get_games() -> Result<Vec<Game>> {
 pub fn add_game(name: &str, illustration: &str) -> Result<Game> {
     let conn = db::new()?;
 
-    // Insérer le nouveau jeu
     conn.execute(
         "INSERT INTO games (name, illustration) VALUES (?1, ?2)",
         [name, illustration],
     )?;
 
-    // Récupérer l'id du jeu qui vient d'être inséré
     let id = conn.last_insert_rowid() as usize;
+
+    Ok(Game {
+        id,
+        name: name.to_string(),
+        illustration: illustration.to_string(),
+    })
+}
+
+pub fn update_game(id: usize, name: &str, illustration: &str) -> Result<Game> {
+    let conn = db::new()?;
+
+    conn.execute(
+        "UPDATE games SET name = ?, illustration = ? WHERE id = ?",
+        [name, illustration, &id.to_string()],
+    )?;
 
     Ok(Game {
         id,
