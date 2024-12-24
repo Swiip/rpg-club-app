@@ -25,7 +25,7 @@ RUN mkdir -p /app/db
 
 # Copy only the bot binary and necessary files
 COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_bot /app/
-COPY --from=builder /usr/src/rpg-club-app/db/init.sql /app/db/
+COPY --from=builder /usr/src/rpg-club-app/rpg_club_db/db/init.sql /app/db/
 
 WORKDIR /app
 

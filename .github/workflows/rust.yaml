@@ -33,7 +33,7 @@ jobs:
               run: cargo build
 
     docker:
-        name: Build Docker image
+        name: Docker
         needs: [check, build]
         runs-on: ubuntu-latest
         steps:
