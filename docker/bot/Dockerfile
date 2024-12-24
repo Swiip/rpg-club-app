@@ -1,5 +1,5 @@
 # Builder stage
-FROM rust:1.75-slim as builder
+FROM rust:latest as builder
 
 # Install necessary build dependencies
 RUN apt-get update && \
@@ -34,6 +34,8 @@ RUN useradd -r -u 1001 -g root bot
 USER bot
 
 ENV DISCORD_TOKEN=""
+ENV DB_PATH=/app/db/rpg_club.db
+ENV DB_CLUB_INIT_SCRIPT_PATH=/app/db/init.sql
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD ps aux | grep rpg_club_bot || exit 1
