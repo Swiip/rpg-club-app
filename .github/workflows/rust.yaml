@@ -10,14 +10,12 @@ env:
     CARGO_TERM_COLOR: always
 
 jobs:
-    setup:
-        uses: ./.github/workflows/setup.yaml
-
     check:
         name: Check
         needs: setup
         runs-on: ubuntu-latest
         steps:
+            - uses: ./.github/actions/setup
             - name: Check format
               run: cargo fmt --all -- --check
             - name: Check clippy
@@ -30,5 +28,6 @@ jobs:
         needs: setup
         runs-on: ubuntu-latest
         steps:
+            - uses: ./.github/actions/setup
             - name: Build
               run: cargo build
