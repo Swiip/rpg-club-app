@@ -60,5 +60,8 @@ jobs:
                   file: docker/bot/Dockerfile
                   push: ${{ github.ref == 'refs/heads/main' }}
                   tags: |
-                      ghcr.io/swiip/rpg-club-bot:latest
-                      ghcr.io/swiip/rpg-club-bot:${{ github.sha }}
+                      ghcr.io/swiip/rpg-club-app-bot:latest
+                      ghcr.io/swiip/rpg-club-app-bot:${{ github.sha }}
+                  labels: |
+                      org.opencontainers.image.source=https://github.com/rpg-club-app
+                      org.opencontainers.image.description=RPG Club App Bot service
