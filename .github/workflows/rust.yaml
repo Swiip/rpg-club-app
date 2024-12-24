@@ -63,5 +63,5 @@ jobs:
                       ghcr.io/swiip/rpg-club-app-bot:latest
                       ghcr.io/swiip/rpg-club-app-bot:${{ github.sha }}
                   labels: |
-                      org.opencontainers.image.source=https://github.com/rpg-club-app
+                      org.opencontainers.image.source=https://github.com/swiip/rpg-club-app
                       org.opencontainers.image.description=RPG Club App Bot service
