@@ -10,21 +10,15 @@ WORKDIR /usr/src/rpg-club-app
 
 # Cache dependencies
 COPY Cargo.toml Cargo.lock ./
-# Copier tous les Cargo.toml des sous-projets
-COPY rpg_club_api/Cargo.toml rpg_club_api/
-COPY rpg_club_bot/Cargo.toml rpg_club_bot/
-COPY rpg_club_db/Cargo.toml rpg_club_db/
-COPY rpg_club_types/Cargo.toml rpg_club_types/
-
-# Create fake sources
-RUN mkdir -p rpg_club_api/src && \
-    mkdir -p rpg_club_bot/src && \
-    mkdir -p rpg_club_db/src && \
-    mkdir -p rpg_club_types/src && \
-    echo "fn main() {}" > rpg_club_bot/src/main.rs && \
-    echo "pub fn dummy() {}" > rpg_club_api/src/lib.rs && \
-    echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
-    echo "pub fn dummy() {}" > rpg_club_types/src/lib.rs
+COPY rpg_club_*/Cargo.toml ./
+RUN for mod in rpg_club_*; do \
+    mkdir -p "$mod/src"; \
+    if echo "$mod" | grep -q "bot"; then \
+    echo "fn main() {}" > "$mod/src/main.rs"; \
+    else \
+    echo "pub fn dummy() {}" > "$mod/src/lib.rs"; \
+    fi; \
+    done
 
 # Build dependencies only
 RUN cargo build --release
