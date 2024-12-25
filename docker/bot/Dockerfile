@@ -20,8 +20,10 @@ RUN apt-get update && \
     apt-get install -y libssl-dev sqlite3 && \
     rm -rf /var/lib/apt/lists/*
 
-# Create directory for database
-RUN mkdir -p /app/db
+# Create directory for database and set permissions
+RUN mkdir -p /app/db && \
+    chown -R 1001:root /app && \
+    chmod -R 755 /app
 
 # Copy only the bot binary and necessary files
 COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_bot /app/
