@@ -55,6 +55,10 @@ RUN mkdir -p /app/db && \
 COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_bot /app/
 COPY --from=builder /usr/src/rpg-club-app/rpg_club_db/db/init.sql /app/db/
 
+RUN chown -R 1001:root /app/db && \
+    chown 1001:root /app/db/init.sql && \
+    chmod 644 /app/db/init.sql
+
 WORKDIR /app
 
 # Create non-root user
