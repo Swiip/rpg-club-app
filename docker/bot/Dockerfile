@@ -8,17 +8,23 @@ RUN apt-get update && \
 
 WORKDIR /usr/src/rpg-club-app
 
-# Cache dependencies
 COPY Cargo.toml Cargo.lock ./
-COPY rpg_club_*/Cargo.toml ./
-RUN for mod in rpg_club_*; do \
-    mkdir -p "$mod/src"; \
-    if echo "$mod" | grep -q "bot"; then \
-    echo "fn main() {}" > "$mod/src/main.rs"; \
-    else \
-    echo "pub fn dummy() {}" > "$mod/src/lib.rs"; \
-    fi; \
-    done
+COPY rpg_club_api/Cargo.toml rpg_club_api/
+COPY rpg_club_bot/Cargo.toml rpg_club_bot/
+COPY rpg_club_db/Cargo.toml rpg_club_db/
+COPY rpg_club_types/Cargo.toml rpg_club_types/
+COPY rpg_club_core/Cargo.toml rpg_club_core/
+
+RUN mkdir -p rpg_club_bot/src && \
+    echo "fn main() {}" > rpg_club_bot/src/main.rs && \
+    mkdir -p rpg_club_api/src && \
+    echo "pub fn dummy() {}" > rpg_club_api/src/lib.rs && \
+    mkdir -p rpg_club_db/src && \
+    echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
+    mkdir -p rpg_club_types/src && \
+    echo "pub fn dummy() {}" > rpg_club_types/src/lib.rs && \
+    mkdir -p rpg_club_core/src && \
+    echo "pub fn dummy() {}" > rpg_club_core/src/lib.rs
 
 # Build dependencies only
 RUN cargo build --release
