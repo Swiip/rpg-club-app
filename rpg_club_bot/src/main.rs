@@ -78,8 +78,11 @@ async fn main() {
 
     if let Err(why) = rpg_club_db::init() {
         println!("DB error: {why:?}");
+        // Soit sortir complètement
+        std::process::exit(1);
+        // Ou retourner une erreur
+        // return Err(why.into());
     }
-
     println!("Database initialized successfully");
 
     println!("Creating client...");
