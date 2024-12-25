@@ -7,9 +7,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/rpg-club-app
-COPY . .
 
-# Build the bot specifically
+# Cache dependencies
+COPY Cargo.toml Cargo.lock ./
+RUN mkdir src && \
+    echo "fn main() {}" > src/main.rs && \
+    cargo build --release && \
+    rm -rf src
+
+# Build the application
+COPY . .
 RUN cargo build --release --bin rpg_club_bot
 
 # Runtime stage
