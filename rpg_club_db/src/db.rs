@@ -24,7 +24,7 @@ pub fn new() -> Result<Connection> {
         println!("Parent directory: {}", parent.display());
         if !parent.exists() {
             println!("Creating parent directory");
-            fs::create_dir_all(parent);
+            let _ = fs::create_dir_all(parent);
         }
 
         // Vérifier les permissions
