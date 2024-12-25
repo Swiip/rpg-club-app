@@ -10,13 +10,32 @@ WORKDIR /usr/src/rpg-club-app
 
 # Cache dependencies
 COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && \
-    echo "fn main() {}" > src/main.rs && \
-    cargo build --release && \
-    rm -rf src
+# Copier tous les Cargo.toml des sous-projets
+COPY rpg_club_api/Cargo.toml rpg_club_api/
+COPY rpg_club_bot/Cargo.toml rpg_club_bot/
+COPY rpg_club_db/Cargo.toml rpg_club_db/
+COPY rpg_club_types/Cargo.toml rpg_club_types/
 
-# Build the application
+# Create fake sources
+RUN mkdir -p rpg_club_api/src && \
+    mkdir -p rpg_club_bot/src && \
+    mkdir -p rpg_club_db/src && \
+    mkdir -p rpg_club_types/src && \
+    echo "fn main() {}" > rpg_club_bot/src/main.rs && \
+    echo "pub fn dummy() {}" > rpg_club_api/src/lib.rs && \
+    echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
+    echo "pub fn dummy() {}" > rpg_club_types/src/lib.rs
+
+# Build dependencies only
+RUN cargo build --release
+
+# Remove the dummy src directories
+RUN rm -rf rpg_club_*/src
+
+# Now copy the real source code
 COPY . .
+
+# Build the final application
 RUN cargo build --release --bin rpg_club_bot
 
 # Runtime stage
