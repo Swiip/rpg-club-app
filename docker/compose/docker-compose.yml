@@ -4,8 +4,6 @@ services:
         container_name: rpg-club-bot
         environment:
             - DISCORD_TOKEN=${DISCORD_TOKEN}
-            - DB_PATH=/app/db/rpg_club.db
-            - DB_CLUB_INIT_SCRIPT_PATH=/app/db/init.sql
         volumes:
             - bot-data:/app/db:rw
         user: "1001:0"
@@ -14,19 +12,13 @@ services:
             - "com.centurylabs.watchtower.enable=true"
 
     watchtower:
-        image: containrrr/watchtower
+        image: containrrr/watchtower:arm64v8-latest
         container_name: watchtower
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        environment:
-            - WATCHTOWER_CLEANUP=true
-            - WATCHTOWER_LABEL_ENABLE=true
-            - WATCHTOWER_INCLUDE_STOPPED=true
-            - WATCHTOWER_POLL_INTERVAL=60
         restart: unless-stopped
+        command: --interval 30 --cleanup --debug
 
 volumes:
     bot-data:
         name: rpg-club-bot-data
-    lazydocker-config:
-        name: lazydocker-config

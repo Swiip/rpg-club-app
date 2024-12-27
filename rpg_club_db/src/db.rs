@@ -85,14 +85,14 @@ pub fn init() -> Result<()> {
     }
 
     // Test d'écriture
-    println!("Testing write permissions...");
-    match conn.execute(
-        "CREATE TABLE IF NOT EXISTS _test (id INTEGER PRIMARY KEY)",
-        [],
-    ) {
-        Ok(_) => println!("Write test successful"),
-        Err(e) => println!("Write test failed: {}", e),
-    }
+    // println!("Testing write permissions...");
+    // match conn.execute(
+    //     "CREATE TABLE IF NOT EXISTS _test (id INTEGER PRIMARY KEY)",
+    //     [],
+    // ) {
+    //     Ok(_) => println!("Write test successful"),
+    //     Err(e) => println!("Write test failed: {}", e),
+    // }
 
     Ok(())
 }
