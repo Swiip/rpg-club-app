@@ -35,6 +35,11 @@ RUN rm -rf rpg_club_*/src
 # Now copy the real source code
 COPY . .
 
+# Add a build-time argument for cache busting
+ARG BUILD_DATE=unknown
+
+RUN ls -la rpg_club_bot/src
+
 # Build the final application
 RUN cargo build --release --bin rpg_club_bot
 
