@@ -8,8 +8,6 @@ services:
             - bot-data:/app/db:rw
         user: "1001:0"
         restart: unless-stopped
-        labels:
-            - "com.centurylabs.watchtower.enable=true"
 
     watchtower:
         image: containrrr/watchtower:arm64v8-latest
@@ -17,7 +15,7 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         restart: unless-stopped
-        command: --interval 30 --cleanup --debug
+        command: --interval 30 --cleanup
 
 volumes:
     bot-data:

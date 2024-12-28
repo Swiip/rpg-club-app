@@ -35,13 +35,10 @@ RUN rm -rf rpg_club_*/src
 # Now copy the real source code
 COPY . .
 
-# Add a build-time argument for cache busting
-ARG BUILD_DATE=unknown
-
-RUN ls -la rpg_club_bot/src
-
 # Build the final application
-RUN cargo build --release --bin rpg_club_bot
+RUN rm -f target/release/deps/librpg_club_* && \
+    rm -f target/release/deps/rpg_club_* && \
+    cargo build --release --bin rpg_club_bot
 
 # Runtime stage
 FROM debian:bookworm-slim
@@ -59,6 +56,8 @@ RUN mkdir -p /app/db && \
 # Copy only the bot binary and necessary files
 COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_bot /app/
 COPY --from=builder /usr/src/rpg-club-app/rpg_club_db/db/init.sql /app/db/
+
+RUN sha256sum /app/rpg_club_bot
 
 RUN chown -R 1001:root /app/db && \
     chown 1001:root /app/db/init.sql && \
