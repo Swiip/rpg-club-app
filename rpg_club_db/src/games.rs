@@ -1,16 +1,16 @@
-use crate::db;
 use rusqlite::Result;
+use serde::{Deserialize, Serialize};
 
-#[derive(Default, Debug)]
+use crate::DbConnection;
+
+#[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Game {
     pub id: usize,
     pub name: String,
     pub illustration: String,
 }
 
-pub fn get_games() -> Result<Vec<Game>> {
-    let conn = db::new()?;
-
+pub fn get_games(conn: &DbConnection) -> Result<Vec<Game>> {
     let mut stmt = conn.prepare("SELECT id, name, illustration FROM games")?;
 
     let games: Result<Vec<Game>> = stmt
@@ -26,9 +26,7 @@ pub fn get_games() -> Result<Vec<Game>> {
     games
 }
 
-pub fn add_game(name: &str, illustration: &str) -> Result<Game> {
-    let conn = db::new()?;
-
+pub fn add_game(conn: &DbConnection, name: &str, illustration: &str) -> Result<Game> {
     conn.execute(
         "INSERT INTO games (name, illustration) VALUES (?1, ?2)",
         [name, illustration],
@@ -43,9 +41,7 @@ pub fn add_game(name: &str, illustration: &str) -> Result<Game> {
     })
 }
 
-pub fn update_game(id: usize, name: &str, illustration: &str) -> Result<Game> {
-    let conn = db::new()?;
-
+pub fn update_game(conn: &DbConnection, id: usize, name: &str, illustration: &str) -> Result<Game> {
     conn.execute(
         "UPDATE games SET name = ?, illustration = ? WHERE id = ?",
         [name, illustration, &id.to_string()],

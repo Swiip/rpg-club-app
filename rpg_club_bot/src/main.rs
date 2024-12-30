@@ -2,14 +2,18 @@ mod commands;
 mod utils;
 
 use std::env;
+use std::sync::Arc;
 
+use rpg_club_db::DbConnection;
 use serenity::all::{
     Command, CreateInteractionResponse, CreateInteractionResponseMessage, Interaction, Ready,
 };
 use serenity::async_trait;
 use serenity::prelude::*;
 
-struct Handler;
+struct Handler {
+    conn: Arc<DbConnection>,
+}
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -19,9 +23,15 @@ impl EventHandler for Handler {
 
             let content = match command.data.name.as_str() {
                 "ping" => Some(commands::ping::run(&command.data.options())),
-                "addgame" => Some(commands::add_game::run(&command.data.options())),
-                "listgames" => Some(commands::list_games::run(&command.data.options())),
-                "updategame" => Some(commands::update_game::run(&command.data.options())),
+                "addgame" => Some(commands::add_game::run(&self.conn, &command.data.options())),
+                "listgames" => Some(commands::list_games::run(
+                    &self.conn,
+                    &command.data.options(),
+                )),
+                "updategame" => Some(commands::update_game::run(
+                    &self.conn,
+                    &command.data.options(),
+                )),
                 _ => Some("not implemented :(".to_string()),
             };
 
@@ -65,24 +75,19 @@ async fn main() {
     // Configure the client with your Discord bot token in the environment.
     let token = env::var("DISCORD_TOKEN").expect("Expected a token in the environment");
 
-    println!("Token loaded");
-
     // Set gateway intents, which decides what events the bot will be notified about
     let intents = GatewayIntents::GUILD_MESSAGES
         | GatewayIntents::DIRECT_MESSAGES
         | GatewayIntents::MESSAGE_CONTENT;
 
-    println!("Intents configured");
+    let conn = match rpg_club_db::init() {
+        Ok(conn) => Arc::new(conn),
+        Err(why) => {
+            println!("Failed to initialize database: {why}");
+            std::process::exit(1);
+        }
+    };
 
-    println!("Client created successfully {}", token);
-
-    if let Err(why) = rpg_club_db::init() {
-        println!("DB error: {why:?}");
-        // Soit sortir complètement
-        std::process::exit(1);
-        // Ou retourner une erreur
-        // return Err(why.into());
-    }
     println!("Database initialized successfully");
 
     println!("Creating client...");
@@ -90,14 +95,13 @@ async fn main() {
     // Create a new instance of the Client, logging in as a bot. This will automatically prepend
     // your bot token with "Bot ", which is a requirement by Discord for bot users.
     let mut client = Client::builder(&token, intents)
-        .event_handler(Handler)
+        .event_handler(Handler { conn })
         .await
         .expect("Err creating client");
 
     println!("Starting client...");
 
     // Finally, start a single shard, and start listening to events.
-    //
     // Shards will automatically attempt to reconnect, and will perform exponential backoff until
     // it reconnects.
     if let Err(why) = client.start().await {

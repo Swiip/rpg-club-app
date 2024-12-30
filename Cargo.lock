@@ -1577,6 +1577,7 @@ dependencies = [
  "rocket_codegen",
  "rocket_http",
  "serde",
+ "serde_json",
  "state",
  "tempfile",
  "time",
@@ -1637,6 +1638,8 @@ name = "rpg_club_api"
 version = "0.1.0"
 dependencies = [
  "rocket",
+ "rpg_club_db",
+ "serde",
 ]
 
 [[package]]
@@ -1654,6 +1657,7 @@ version = "0.1.0"
 dependencies = [
  "crux_core",
  "lazy_static",
+ "rpg_club_db",
  "serde",
  "wasm-bindgen",
 ]
@@ -1663,6 +1667,7 @@ name = "rpg_club_db"
 version = "0.1.0"
 dependencies = [
  "rusqlite",
+ "serde",
 ]
 
 [[package]]

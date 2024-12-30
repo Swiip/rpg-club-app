@@ -1,9 +1,11 @@
-use rpg_club_db::get_games;
+use std::sync::Arc;
+
+use rpg_club_db::{get_games, DbConnection};
 use serenity::builder::CreateCommand;
 use serenity::model::application::ResolvedOption;
 
-pub fn run(_options: &[ResolvedOption]) -> String {
-    match get_games() {
+pub fn run(conn: &Arc<DbConnection>, _options: &[ResolvedOption]) -> String {
+    match get_games(conn) {
         Ok(games) => {
             if games.is_empty() {
                 "No games found in database.".to_string()

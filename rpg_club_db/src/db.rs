@@ -3,6 +3,8 @@ use std::env;
 use std::fs;
 use std::os::unix::fs::PermissionsExt;
 
+use crate::DbConnection;
+
 const DEFAULT_PATH: &str = "../rpg_club_db/db/rpg_club.db";
 const DEFAULT_INIT_SCRIPT_PATH: &str = "../rpg_club_db/db/init.sql";
 
@@ -14,14 +16,14 @@ fn get_init_script_path() -> String {
     env::var("DB_INIT_SCRIPT_PATH").unwrap_or_else(|_| DEFAULT_INIT_SCRIPT_PATH.to_string())
 }
 
-pub fn new() -> Result<Connection> {
+pub fn new() -> Result<DbConnection> {
     let db_path = get_db_path();
     println!("Attempting to connect to DB at: {}", db_path);
 
     match Connection::open(&db_path) {
         Ok(conn) => {
             println!("Successfully opened DB connection");
-            Ok(conn)
+            Ok(DbConnection(conn))
         }
         Err(e) => {
             println!("Failed to open DB: {}", e);
@@ -34,7 +36,7 @@ pub fn new() -> Result<Connection> {
     }
 }
 
-pub fn init() -> Result<()> {
+pub fn init() -> Result<DbConnection> {
     println!("Starting DB initialization...");
     let db_path = get_db_path();
     let init_script_path = get_init_script_path();
@@ -57,5 +59,5 @@ pub fn init() -> Result<()> {
         Err(e) => println!("Failed to read init script: {}", e),
     }
 
-    Ok(())
+    Ok(conn)
 }

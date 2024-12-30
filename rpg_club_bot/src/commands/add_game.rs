@@ -1,8 +1,11 @@
+use std::sync::Arc;
+
 use crate::utils::games;
+use rpg_club_db::DbConnection;
 use serenity::builder::CreateCommand;
 use serenity::model::application::ResolvedOption;
 
-pub fn run(options: &[ResolvedOption]) -> String {
+pub fn run(conn: &Arc<DbConnection>, options: &[ResolvedOption]) -> String {
     let name = games::get_game_name(options);
     let illustration = games::get_game_illustration(options);
 
@@ -10,7 +13,7 @@ pub fn run(options: &[ResolvedOption]) -> String {
         return "Error: All fields (name, and illustration) are required".to_string();
     }
 
-    let result = rpg_club_db::add_game(name.unwrap(), illustration.unwrap());
+    let result = rpg_club_db::add_game(conn, name.unwrap(), illustration.unwrap());
 
     match result {
         Ok(game) => format!("Game added successfully: {} (id: {})", game.name, game.id),

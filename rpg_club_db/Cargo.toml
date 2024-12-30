@@ -8,3 +8,4 @@ name = "rpg_club_db"
 
 [dependencies]
 rusqlite = { version = "0.32.0", features = ["bundled"] }
+serde = { version = "1.0", features = ["derive"] }
