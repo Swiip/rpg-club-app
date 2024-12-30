@@ -27,6 +27,7 @@ fn rocket() -> _ {
     let conn = new().expect("Failed to initialize database");
 
     rocket::build()
+        .configure(rocket::Config::figment().merge(("address", "0.0.0.0")))
         .manage(conn)
         .mount("/", routes![index])
         .mount("/api", routes![get_games])

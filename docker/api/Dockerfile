@@ -15,10 +15,10 @@ COPY rpg_club_db/Cargo.toml rpg_club_db/
 COPY rpg_club_types/Cargo.toml rpg_club_types/
 COPY rpg_club_core/Cargo.toml rpg_club_core/
 
-RUN mkdir -p rpg_club_bot/src && \
-    echo "fn main() {}" > rpg_club_bot/src/main.rs && \
-    mkdir -p rpg_club_api/src && \
-    echo "pub fn dummy() {}" > rpg_club_api/src/lib.rs && \
+RUN mkdir -p rpg_club_api/src && \
+    echo "fn main() {}" > rpg_club_api/src/main.rs && \
+    mkdir -p rpg_club_bot/src && \
+    echo "pub fn dummy() {}" > rpg_club_bot/src/lib.rs && \
     mkdir -p rpg_club_db/src && \
     echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
     mkdir -p rpg_club_types/src && \
@@ -38,7 +38,7 @@ COPY . .
 # Build the final application
 RUN rm -f target/release/deps/librpg_club_* && \
     rm -f target/release/deps/rpg_club_* && \
-    cargo build --release --bin rpg_club_bot
+    cargo build --release --bin rpg_club_api
 
 # Runtime stage
 FROM debian:bookworm-slim
@@ -54,7 +54,7 @@ RUN mkdir -p /app/db && \
     chmod -R 755 /app
 
 # Copy only the bot binary and necessary files
-COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_bot /app/
+COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_api /app/
 COPY --from=builder /usr/src/rpg-club-app/rpg_club_db/db/init.sql /app/db/
 
 RUN chown -R 1001:root /app/db && \
@@ -64,14 +64,14 @@ RUN chown -R 1001:root /app/db && \
 WORKDIR /app
 
 # Create non-root user
-RUN useradd -r -u 1001 -g root bot
-USER bot
+RUN useradd -r -u 1001 -g root api
+USER api
 
 ENV DISCORD_TOKEN=""
 ENV DB_PATH=/app/db/rpg_club.db
 ENV DB_INIT_SCRIPT_PATH=/app/db/init.sql
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD ps aux | grep rpg_club_bot || exit 1
+    CMD ps aux | grep rpg_club_api || exit 1
 
-CMD ["./rpg_club_bot"]
+CMD ["./rpg_club_api"]

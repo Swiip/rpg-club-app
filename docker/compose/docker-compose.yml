@@ -1,9 +1,21 @@
 services:
     bot:
         image: ghcr.io/swiip/rpg-club-app-bot:latest
-        container_name: rpg-club-bot
+        container_name: rpg-club-app-bot
         environment:
             - DISCORD_TOKEN=${DISCORD_TOKEN}
+        volumes:
+            - bot-data:/app/db:rw
+        user: "1001:0"
+        restart: unless-stopped
+
+    api:
+        image: ghcr.io/swiip/rpg-club-app-api:latest
+        container_name: rpg-club-app-api
+        environment:
+            - DISCORD_TOKEN=${DISCORD_TOKEN}
+        ports:
+            - "8000:8000"
         volumes:
             - bot-data:/app/db:rw
         user: "1001:0"
