@@ -8,7 +8,7 @@ pub use crux_core::{bridge::Bridge, Core, Request};
 pub use app::*;
 
 lazy_static! {
-    static ref CORE: Bridge<Effect, Counter> = Bridge::new(Core::new());
+    static ref CORE: Bridge<Effect, RpgClubCore> = Bridge::new(Core::new());
 }
 
 #[wasm_bindgen]

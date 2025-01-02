@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "type": "module",
     "scripts": {
+        "wasm:build": "cd ../rpg_club_core && wasm-pack build --target web",
         "start": "vite dev",
         "dev": "vite dev",
         "build": "vite build",

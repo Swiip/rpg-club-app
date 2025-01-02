@@ -8,4 +8,5 @@ edition = "2021"
 [build-dependencies]
 anyhow.workspace = true
 crux_core = { workspace = true, features = ["typegen"] }
+crux_http = { workspace = true, features = ["typegen"] }
 rpg_club_core = { path = "../rpg_club_core", features = ["typegen"] }

@@ -8,11 +8,13 @@ crate-type = ["lib", "cdylib"]
 name = "rpg_club_core"
 
 [features]
-typegen = ["crux_core/typegen"]
+default = []
+typegen = ["crux_core/typegen", "crux_http/typegen"]
 
 [dependencies]
-crux_core.workspace = true
+rpg_club_model = { path = "../rpg_club_model" }
+crux_core = { workspace = true, features = ["typegen"] }
+crux_http = { workspace = true, features = ["typegen"] }
 serde = { workspace = true, features = ["derive"] }
 lazy_static = "1.5.0"
 wasm-bindgen = "0.2.95"
-rpg_club_db = { path = "../rpg_club_db" }

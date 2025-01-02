@@ -1,14 +1,6 @@
-use rusqlite::Result;
-use serde::{Deserialize, Serialize};
-
 use crate::DbConnection;
-
-#[derive(Default, Debug, Serialize, Deserialize)]
-pub struct Game {
-    pub id: usize,
-    pub name: String,
-    pub illustration: String,
-}
+use rpg_club_model::Game;
+use rusqlite::Result;
 
 pub fn get_games(conn: &DbConnection) -> Result<Vec<Game>> {
     let mut stmt = conn.prepare("SELECT id, name, illustration FROM games")?;

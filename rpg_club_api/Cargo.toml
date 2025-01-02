@@ -5,5 +5,7 @@ edition = "2021"
 
 [dependencies]
 rocket = { version = "0.5", features = ["json"] }
+rocket_cors = "0.6"
 serde = { version = "1.0", features = ["derive"] }
 rpg_club_db = { path = "../rpg_club_db" }
+rpg_club_model = { path = "../rpg_club_model" }

@@ -1,33 +1,42 @@
-use crux_core::{render::Render, App};
+use crux_core::{macros::Effect, render::Render, App};
+use crux_http::{Http, Response, Result};
+use rpg_club_model::Game;
 use serde::{Deserialize, Serialize};
+
+const API_URL: &str = "http://localhost:8000";
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum Event {
-    Increment,
-    Decrement,
-    Reset,
+    // events from the shell
+    Get,
+
+    // events local to the core
+    #[serde(skip)]
+    Set(Result<Response<Vec<Game>>>),
 }
 
 #[derive(Default)]
 pub struct Model {
-    count: isize,
+    games: Vec<Game>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Default)]
 pub struct ViewModel {
-    pub count: String,
+    pub games: Vec<Game>,
 }
 
 #[cfg_attr(feature = "typegen", derive(crux_core::macros::Export))]
-#[derive(crux_core::macros::Effect)]
+#[derive(Effect)]
 pub struct Capabilities {
     render: Render<Event>,
+    http: Http<Event>,
 }
 
-#[derive(Default)]
-pub struct Counter;
+// #[cfg_attr(feature = "typegen", derive(crux_core::macros::Export))]
+#[derive(Default, Debug)]
+pub struct RpgClubCore;
 
-impl App for Counter {
+impl App for RpgClubCore {
     type Event = Event;
     type Model = Model;
     type ViewModel = ViewModel;
@@ -35,9 +44,19 @@ impl App for Counter {
 
     fn update(&self, event: Self::Event, model: &mut Self::Model, caps: &Self::Capabilities) {
         match event {
-            Event::Increment => model.count += 1,
-            Event::Decrement => model.count -= 1,
-            Event::Reset => model.count = 0,
+            Event::Get => {
+                let url = format!("{}/api/games", API_URL);
+                println!("Event::Get {}", url);
+                caps.http.get(url).expect_json().send(Event::Set);
+            }
+            Event::Set(Ok(mut response)) => {
+                model.games = response.take_body().unwrap();
+                println!("Event::Set {:#?}", model.games);
+                caps.render.render();
+            }
+            Event::Set(Err(e)) => {
+                panic!("Oh no something went wrong: {e:?}");
+            }
         };
 
         caps.render.render();
@@ -45,93 +64,7 @@ impl App for Counter {
 
     fn view(&self, model: &Self::Model) -> Self::ViewModel {
         ViewModel {
-            count: format!("Count is: {}", model.count),
+            games: model.games.clone(),
         }
-    }
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-    use crux_core::{assert_effect, testing::AppTester};
-
-    #[test]
-    fn renders() {
-        let app = AppTester::<Counter, _>::default();
-        let mut model = Model::default();
-
-        let update = app.update(Event::Reset, &mut model);
-
-        // Check update asked us to `Render`
-        assert_effect!(update, Effect::Render(_));
-    }
-
-    #[test]
-    fn shows_initial_count() {
-        let app = AppTester::<Counter, _>::default();
-        let model = Model::default();
-
-        let actual_view = app.view(&model).count;
-        let expected_view = "Count is: 0";
-        assert_eq!(actual_view, expected_view);
-    }
-
-    #[test]
-    fn increments_count() {
-        let app = AppTester::<Counter, _>::default();
-        let mut model = Model::default();
-
-        let update = app.update(Event::Increment, &mut model);
-
-        let actual_view = app.view(&model).count;
-        let expected_view = "Count is: 1";
-        assert_eq!(actual_view, expected_view);
-
-        // Check update asked us to `Render`
-        assert_effect!(update, Effect::Render(_));
-    }
-
-    #[test]
-    fn decrements_count() {
-        let app = AppTester::<Counter, _>::default();
-        let mut model = Model::default();
-
-        let update = app.update(Event::Decrement, &mut model);
-
-        let actual_view = app.view(&model).count;
-        let expected_view = "Count is: -1";
-        assert_eq!(actual_view, expected_view);
-
-        // Check update asked us to `Render`
-        assert_effect!(update, Effect::Render(_));
-    }
-
-    #[test]
-    fn resets_count() {
-        let app = AppTester::<Counter, _>::default();
-        let mut model = Model::default();
-
-        let _ = app.update(Event::Increment, &mut model);
-        let _ = app.update(Event::Reset, &mut model);
-
-        let actual_view = app.view(&model).count;
-        let expected_view = "Count is: 0";
-        assert_eq!(actual_view, expected_view);
-    }
-
-    #[test]
-    fn counts_up_and_down() {
-        let app = AppTester::<Counter, _>::default();
-        let mut model = Model::default();
-
-        let _ = app.update(Event::Increment, &mut model);
-        let _ = app.update(Event::Reset, &mut model);
-        let _ = app.update(Event::Decrement, &mut model);
-        let _ = app.update(Event::Increment, &mut model);
-        let _ = app.update(Event::Increment, &mut model);
-
-        let actual_view = app.view(&model).count;
-        let expected_view = "Count is: 1";
-        assert_eq!(actual_view, expected_view);
     }
 }

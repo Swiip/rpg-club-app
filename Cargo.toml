@@ -16,5 +16,6 @@ profile = "minimal"
 
 [workspace.dependencies]
 anyhow = "1.0.86"
-crux_core = "0.8"
+crux_core = "0.10"
+crux_http = "0.10"
 serde = "1.0.203"
