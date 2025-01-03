@@ -6,3 +6,8 @@ target/
 README.md
 docker/
 docker-compose.yml
+**/node_modules/
+**/target/
+**/.git
+**/.gitignore
+**/*.log

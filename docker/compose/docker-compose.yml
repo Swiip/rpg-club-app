@@ -21,6 +21,18 @@ services:
         user: "1001:0"
         restart: unless-stopped
 
+    web:
+        image: ghcr.io/swiip/rpg-club-app-web:latest
+        container_name: rpg-club-app-web
+        environment:
+            - API_URL=http://api:8000
+        ports:
+            - "3000:3000"
+        user: "1001:0"
+        depends_on:
+            - api
+        restart: unless-stopped
+
     watchtower:
         image: containrrr/watchtower:arm64v8-latest
         container_name: watchtower

@@ -1,44 +1,45 @@
 # Builder stage
-FROM rust:latest as builder
+FROM ghcr.io/swiip/rpg-club-app-rust-builder:latest AS builder
 
 # Install necessary build dependencies
-RUN apt-get update && \
-    apt-get install -y pkg-config libssl-dev && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && \
+#     apt-get install -y pkg-config libssl-dev && \
+#     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/src/rpg-club-app
+# WORKDIR /usr/src/rpg-club-app
 
-COPY Cargo.toml Cargo.lock ./
-COPY rpg_club_api/Cargo.toml rpg_club_api/
-COPY rpg_club_bot/Cargo.toml rpg_club_bot/
-COPY rpg_club_db/Cargo.toml rpg_club_db/
-COPY rpg_club_types/Cargo.toml rpg_club_types/
-COPY rpg_club_core/Cargo.toml rpg_club_core/
+# COPY Cargo.toml Cargo.lock ./
+# COPY rpg_club_api/Cargo.toml rpg_club_api/
+# COPY rpg_club_bot/Cargo.toml rpg_club_bot/
+# COPY rpg_club_db/Cargo.toml rpg_club_db/
+# COPY rpg_club_types/Cargo.toml rpg_club_types/
+# COPY rpg_club_core/Cargo.toml rpg_club_core/
+# COPY rpg_club_model/Cargo.toml rpg_club_model/
 
-RUN mkdir -p rpg_club_api/src && \
-    echo "fn main() {}" > rpg_club_api/src/main.rs && \
-    mkdir -p rpg_club_bot/src && \
-    echo "pub fn dummy() {}" > rpg_club_bot/src/lib.rs && \
-    mkdir -p rpg_club_db/src && \
-    echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
-    mkdir -p rpg_club_types/src && \
-    echo "pub fn dummy() {}" > rpg_club_types/src/lib.rs && \
-    mkdir -p rpg_club_core/src && \
-    echo "pub fn dummy() {}" > rpg_club_core/src/lib.rs
+# RUN mkdir -p rpg_club_api/src && \
+#     echo "fn main() {}" > rpg_club_api/src/main.rs && \
+#     mkdir -p rpg_club_bot/src && \
+#     echo "pub fn dummy() {}" > rpg_club_bot/src/lib.rs && \
+#     mkdir -p rpg_club_db/src && \
+#     echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
+#     mkdir -p rpg_club_types/src && \
+#     echo "pub fn dummy() {}" > rpg_club_types/src/lib.rs && \
+#     mkdir -p rpg_club_core/src && \
+#     echo "pub fn dummy() {}" > rpg_club_core/src/lib.rs && \
+#     mkdir -p rpg_club_model/src && \
+#     echo "pub fn dummy() {}" > rpg_club_model/src/lib.rs
 
-# Build dependencies only
-RUN cargo build --release
+# # Build dependencies only
+# RUN cargo build --release
 
-# Remove the dummy src directories
-RUN rm -rf rpg_club_*/src
+# # Remove the dummy src directories
+# RUN rm -rf rpg_club_*/src
 
 # Now copy the real source code
 COPY . .
 
 # Build the final application
-RUN rm -f target/release/deps/librpg_club_* && \
-    rm -f target/release/deps/rpg_club_* && \
-    cargo build --release --bin rpg_club_api
+RUN cargo build --release --bin rpg_club_api
 
 # Runtime stage
 FROM debian:bookworm-slim
