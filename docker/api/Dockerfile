@@ -1,44 +1,8 @@
 # Builder stage
 FROM ghcr.io/swiip/rpg-club-app-rust-builder:latest AS builder
 
-# Install necessary build dependencies
-# RUN apt-get update && \
-#     apt-get install -y pkg-config libssl-dev && \
-#     rm -rf /var/lib/apt/lists/*
-
-# WORKDIR /usr/src/rpg-club-app
-
-# COPY Cargo.toml Cargo.lock ./
-# COPY rpg_club_api/Cargo.toml rpg_club_api/
-# COPY rpg_club_bot/Cargo.toml rpg_club_bot/
-# COPY rpg_club_db/Cargo.toml rpg_club_db/
-# COPY rpg_club_types/Cargo.toml rpg_club_types/
-# COPY rpg_club_core/Cargo.toml rpg_club_core/
-# COPY rpg_club_model/Cargo.toml rpg_club_model/
-
-# RUN mkdir -p rpg_club_api/src && \
-#     echo "fn main() {}" > rpg_club_api/src/main.rs && \
-#     mkdir -p rpg_club_bot/src && \
-#     echo "pub fn dummy() {}" > rpg_club_bot/src/lib.rs && \
-#     mkdir -p rpg_club_db/src && \
-#     echo "pub fn dummy() {}" > rpg_club_db/src/lib.rs && \
-#     mkdir -p rpg_club_types/src && \
-#     echo "pub fn dummy() {}" > rpg_club_types/src/lib.rs && \
-#     mkdir -p rpg_club_core/src && \
-#     echo "pub fn dummy() {}" > rpg_club_core/src/lib.rs && \
-#     mkdir -p rpg_club_model/src && \
-#     echo "pub fn dummy() {}" > rpg_club_model/src/lib.rs
-
-# # Build dependencies only
-# RUN cargo build --release
-
-# # Remove the dummy src directories
-# RUN rm -rf rpg_club_*/src
-
-# Now copy the real source code
 COPY . .
 
-# Build the final application
 RUN cargo build --release --bin rpg_club_api
 
 # Runtime stage
@@ -55,8 +19,8 @@ RUN mkdir -p /app/db && \
     chmod -R 755 /app
 
 # Copy only the bot binary and necessary files
-COPY --from=builder /usr/src/rpg-club-app/target/release/rpg_club_api /app/
-COPY --from=builder /usr/src/rpg-club-app/rpg_club_db/db/init.sql /app/db/
+COPY --from=builder /usr/src/rust-builder/target/release/rpg_club_api /app/
+COPY --from=builder /usr/src/rust-builder/rpg_club_db/db/init.sql /app/db/
 
 RUN chown -R 1001:root /app/db && \
     chown 1001:root /app/db/init.sql && \

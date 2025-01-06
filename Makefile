@@ -89,6 +89,7 @@ docker-web:
 		--label org.opencontainers.image.description="RPG Club App API service" \
 		--file $(DOCKERFILE_WEB) \
 		--push \
+		--no-cache \
 		.
 
 # Build and push Docker image

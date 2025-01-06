@@ -14,7 +14,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 # Copy Cargo.toml files
-WORKDIR /usr/src/rpg-club-app
+WORKDIR /usr/src/rust-builder
 
 COPY Cargo.toml Cargo.lock ./
 COPY rpg_club_api/Cargo.toml rpg_club_api/
@@ -49,7 +49,9 @@ RUN rm -rf rpg_club_*/src
 
 # Clean up compiled libs
 RUN rm -f target/release/deps/librpg_club_* && \
-    rm -f target/release/deps/rpg_club_*
+    rm -f target/release/deps/rpg_club_* && \
+    rm -rf rpg_club_types/generated && \
+    rm -rf rpg_club_core/pkg
 
 # Cache cargo registry
 RUN mkdir -p /usr/local/cargo/registry && chmod -R 777 /usr/local/cargo/registry
