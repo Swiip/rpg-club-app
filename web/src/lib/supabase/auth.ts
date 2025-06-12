@@ -1,14 +1,5 @@
 import type { Session, SupabaseClient } from '@supabase/supabase-js';
-
-const fetchMember = async (supabase: SupabaseClient, discordId: string) => {
-	const result = await supabase
-		.from('member')
-		.select(`id, handle, avatar, authorized`)
-		.eq('discord_id', discordId)
-		.single();
-
-	return result.data;
-};
+import { fetchMemberByDiscordId } from './members';
 
 export const authGuard = async (
 	session: Session | null,
@@ -19,9 +10,9 @@ export const authGuard = async (
 		throw redirect(303, '/auth');
 	}
 
-	let member = await fetchMember(supabase, session.user.id);
+	let result = await fetchMemberByDiscordId(supabase, session.user.id);
 
-	if (!member) {
+	if (!result.data) {
 		await supabase.from('member').insert({
 			discord_id: session.user.id,
 			handle:
@@ -30,12 +21,12 @@ export const authGuard = async (
 			avatar: session.user.user_metadata.avatar_url
 		});
 
-		member = await fetchMember(supabase, session.user.id);
+		result = await fetchMemberByDiscordId(supabase, session.user.id);
 	}
 
-	if (!member?.authorized) {
+	if (!result.data?.authorized) {
 		throw redirect(303, '/auth/waiting');
 	}
 
-	return { member };
+	return { member: result.data };
 };
