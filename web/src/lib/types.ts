@@ -10,3 +10,19 @@ export type Game = {
 	name: string;
 	illustration: string;
 };
+
+export type Event = {
+	id: string;
+	date: string;
+	start: string;
+	end: string;
+	location: string;
+};
+
+export type Os = {
+	id: string;
+	title: string;
+	game: string;
+	gm: string;
+	event: string;
+};

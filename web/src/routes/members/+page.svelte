@@ -3,6 +3,10 @@
 
 	const { data } = $props();
 	const { members } = data;
+
+	const handleStopPropagation = (event: MouseEvent) => {
+		event.stopPropagation();
+	};
 </script>
 
 <div class="table-wrap mx-auto max-w-4xl">
@@ -25,7 +29,7 @@
 						<td>
 							{member.authorized ? 'Yes' : 'No'}
 						</td>
-						<td>
+						<td onclick={handleStopPropagation}>
 							<form method="POST">
 								<input type="hidden" name="id" value={member.id} />
 								{#if member.authorized}
