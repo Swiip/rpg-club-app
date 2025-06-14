@@ -26,3 +26,13 @@ export type Os = {
 	gm: string;
 	event: string;
 };
+
+export type Registration = {
+	id: string;
+	member: {
+		id: string;
+		handle: string;
+	};
+	os: string;
+	campaign: string;
+};

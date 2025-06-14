@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import ConfirmRegistrationButton from '$lib/components/registration/confirm-registration-button.svelte';
+	import SignoutRegistrationButton from '$lib/components/registration/signout-registration-button.svelte';
+	import SignupRegistrationButton from '$lib/components/registration/signup-registration-button.svelte';
+	import UnconfirmRegistrationButton from '$lib/components/registration/unconfirm-registration-button.svelte';
+	import { computeRegistrations } from '$lib/logic/registrations.js';
 	import type { Os } from '$lib/types';
 
 	const { data } = $props();
@@ -13,23 +18,7 @@
 		event.stopPropagation();
 	};
 
-	const registrations = $derived.by(() => {
-		const registrations: Record<string, { confirmed: string; pending: string; up: boolean }> = {};
-		oses?.forEach((os) => {
-			const confirmed = os.registration
-				.filter((r) => r.confirmation)
-				.map((r) => r.member.handle)
-				.join(', ');
-			const pending = os.registration
-				.filter((r) => !r.confirmation)
-				.map((r) => r.member.handle)
-				.join(', ');
-			const up = !!os.registration.find((r) => r.member.id === member.id);
-
-			registrations[os.id] = { confirmed, pending, up };
-		});
-		return registrations;
-	});
+	const registrations = $derived(computeRegistrations(oses, member));
 </script>
 
 <div class="table-wrap mx-auto max-w-4xl">
@@ -61,15 +50,27 @@
 							{/if}
 						</td>
 						<td onclick={handleStopPropagation}>
-							<form method="POST">
-								<input type="hidden" name="id" value={os.id} />
-								<input type="hidden" name="memberId" value={member.id} />
-								{#if registrations[os.id]?.up}
-									<button class="btn preset-tonal-error" formaction="?/signout">Sign Out</button>
-								{:else}
-									<button class="btn preset-tonal-primary" formaction="?/signup">Sign Up</button>
-								{/if}
-							</form>
+							{#if registrations[os.id]?.role === 'gm'}
+								{#each os.registration as registration (registration.id)}
+									{#if registration.confirmation}
+										<UnconfirmRegistrationButton
+											targetId={os.id}
+											memberId={registration.member.id}
+											memberHandle={registration.member.handle}
+										/>
+									{:else}
+										<ConfirmRegistrationButton
+											targetId={os.id}
+											memberId={registration.member.id}
+											memberHandle={registration.member.handle}
+										/>
+									{/if}
+								{/each}
+							{:else if registrations[os.id]?.role === 'registered'}
+								<SignoutRegistrationButton targetId={os.id} memberId={member.id} />
+							{:else}
+								<SignupRegistrationButton targetId={os.id} memberId={member.id} />
+							{/if}
 						</td>
 					</tr>
 				{/each}

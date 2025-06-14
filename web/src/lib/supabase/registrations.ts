@@ -14,3 +14,12 @@ export const deleteRegistration = async (
 	type: 'os' | 'campaign' | 'session',
 	targetId: string
 ) => supabase.from('registration').delete().eq('member', memberId).eq(type, targetId);
+
+export const updateRegistrationConfirmation = async (
+	supabase: SupabaseClient,
+	memberId: string,
+	type: 'os' | 'campaign' | 'session',
+	targetId: string,
+	confirmation: boolean
+) =>
+	supabase.from('registration').update({ confirmation }).eq('member', memberId).eq(type, targetId);

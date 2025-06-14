@@ -3,8 +3,11 @@ import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import { fetchOses } from '$lib/supabase/os';
 import type { Actions } from '../games/[id]/edit/$types';
-import { createRegistration, deleteRegistration } from '$lib/supabase/registrations';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import {
+	createRegistration,
+	deleteRegistration,
+	updateRegistrationConfirmation
+} from '$lib/supabase/registrations';
 
 export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
@@ -14,36 +17,42 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	const result = await fetchOses(supabase);
 
 	return {
-		oses: result.data,
+		oses: result.data || undefined,
 		member
 	};
 };
 
-const changeRegistration = async (
-	supabase: SupabaseClient,
-	request: Request,
-	operation: typeof createRegistration
-) => {
+const readFormData = async (request: Request) => {
 	const formData = await request.formData();
-	const id = formData.get('id');
+	const targetId = formData.get('targetId');
 	const memberId = formData.get('memberId');
 
-	if (!id || typeof id !== 'string') {
-		return fail(400, { id, missing: true });
+	if (!targetId || typeof targetId !== 'string') {
+		throw fail(400, { targetId, missing: true });
 	}
 
 	if (!memberId || typeof memberId !== 'string') {
-		return fail(400, { id, missing: true });
+		throw fail(400, { memberId, missing: true });
 	}
 
-	return operation(supabase, memberId, 'os', id);
+	return { targetId, memberId };
 };
 
 export const actions = {
 	signup: async ({ locals: { supabase }, request }) => {
-		return changeRegistration(supabase, request, createRegistration);
+		const { targetId, memberId } = await readFormData(request);
+		return createRegistration(supabase, memberId, 'os', targetId);
 	},
 	signout: async ({ locals: { supabase }, request }) => {
-		return changeRegistration(supabase, request, deleteRegistration);
+		const { targetId, memberId } = await readFormData(request);
+		return deleteRegistration(supabase, memberId, 'os', targetId);
+	},
+	confirm: async ({ locals: { supabase }, request }) => {
+		const { targetId, memberId } = await readFormData(request);
+		return updateRegistrationConfirmation(supabase, memberId, 'os', targetId, true);
+	},
+	unconfirm: async ({ locals: { supabase }, request }) => {
+		const { targetId, memberId } = await readFormData(request);
+		return updateRegistrationConfirmation(supabase, memberId, 'os', targetId, false);
 	}
 } satisfies Actions;
