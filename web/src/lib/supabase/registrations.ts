@@ -3,7 +3,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 export const createRegistration = async (
 	supabase: SupabaseClient,
 	memberId: string,
-	type: 'os' | 'campaign' | 'session',
+	type: 'os' | 'campaign',
 	targetId: string
 ) =>
 	supabase.from('registration').insert({ member: memberId, confirmation: false, [type]: targetId });
@@ -11,14 +11,14 @@ export const createRegistration = async (
 export const deleteRegistration = async (
 	supabase: SupabaseClient,
 	memberId: string,
-	type: 'os' | 'campaign' | 'session',
+	type: 'os' | 'campaign',
 	targetId: string
 ) => supabase.from('registration').delete().eq('member', memberId).eq(type, targetId);
 
 export const updateRegistrationConfirmation = async (
 	supabase: SupabaseClient,
 	memberId: string,
-	type: 'os' | 'campaign' | 'session',
+	type: 'os' | 'campaign',
 	targetId: string,
 	confirmation: boolean
 ) =>

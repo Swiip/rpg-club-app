@@ -27,6 +27,13 @@ export type Os = {
 	event: string;
 };
 
+export type Campaign = {
+	id: string;
+	title: string;
+	game: string;
+	gm: string;
+};
+
 export type Registration = {
 	id: string;
 	member: {
