@@ -7,6 +7,18 @@ export const fetchEvents = async (supabase: SupabaseClient) =>
 		.select(`id, date, start, end, location`)
 		.order('date', { ascending: true });
 
+export const fetchEventsForCalendar = async (supabase: SupabaseClient) =>
+	supabase
+		.from('event')
+		.select(
+			`
+		    id, date, start, end, location,
+			os ( id, title, game ( name ), gm ( handle ), registration ( member ( handle ) ) ),
+			session ( id, campaign ( id, title, game ( name ), gm ( handle ), registration ( member ( handle ) ) ) )
+		`
+		)
+		.order('date', { ascending: true });
+
 export const fetchEvent = async (supabase: SupabaseClient, id: string) =>
 	supabase.from('event').select(`id, date, start, end, location`).eq('id', id).single();
 
