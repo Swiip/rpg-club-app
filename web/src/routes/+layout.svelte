@@ -4,7 +4,6 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
-	import House from '@lucide/svelte/icons/house';
 	import Calendar from '@lucide/svelte/icons/calendar';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
 	import Dices from '@lucide/svelte/icons/dices';
@@ -39,9 +38,9 @@
 	trailSpaceX="space-x-2"
 >
 	{#snippet lead()}
-		<MenuItem tooltip="Accueil" link="/">
-			<House size={24} />
-		</MenuItem>
+		<a href="/">
+			<img src="/assets/ROCKNOLISTES-logo.png" alt="RPG Club App Logo" class="size-8 rounded-lg" />
+		</a>
 	{/snippet}
 	{#snippet trail()}
 		<MenuItem tooltip="Membres" link="/members">

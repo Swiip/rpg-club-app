@@ -23,7 +23,7 @@
 	arrow
 >
 	{#snippet trigger()}
-		<a class="btn-icon preset-tonal-secondary" href={link}>
+		<a class="btn-icon" href={link}>
 			{@render children()}
 		</a>
 	{/snippet}
