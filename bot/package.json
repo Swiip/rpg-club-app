@@ -7,9 +7,8 @@
     "type": "module",
     "scripts": {
         "start": "discraft start",
-        "build": "discraft build",
-        "dev": "discraft dev",
-        "vercel-build:": "discraft vercel build"
+        "build": "discraft vercel build",
+        "dev": "discraft dev"
     },
     "devDependencies": {
         "discraft": "^1.7.8",
