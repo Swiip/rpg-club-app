@@ -1,5 +1,4 @@
 dist
-api
 node_modules
 bun.lockb
 bun.lock
@@ -8,4 +7,3 @@ yarn.lock
 pnpm-lock.yaml
 .env
 .discraft
-.vercel
