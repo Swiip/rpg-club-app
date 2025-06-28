@@ -6,4 +6,4 @@
 - Tailwind CSS
 - Skeleton UI
 - Supabase
-- Discraft
+- Discord

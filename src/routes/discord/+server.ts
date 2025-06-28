@@ -37,11 +37,7 @@ export const POST = async ({ request }) => {
 			return new Response('Invalid request signature', { status: 401 });
 		}
 
-		const bodyString = new TextDecoder().decode(body);
-
-		console.warn('Request', { signature, timestamp, bodyString, isValidRequest });
-
-		const message = JSON.parse(bodyString);
+		const message = JSON.parse(new TextDecoder().decode(body));
 		console.debug('Parsed message', { message });
 
 		if (message.type === InteractionType.PING) {
