@@ -8,6 +8,7 @@ export type Member = {
 export type Game = {
 	id: string;
 	name: string;
+	description: string;
 	illustration: string;
 };
 

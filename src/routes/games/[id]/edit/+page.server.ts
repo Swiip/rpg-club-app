@@ -22,9 +22,16 @@ export const actions = {
 	save: async ({ locals: { supabase }, request, params }) => {
 		const data = await request.formData();
 		const name = data.get('name');
+		const description = data.get('description');
 		const illustration = data.get('illustration');
 
+		console.log('save', { name, description, illustration });
+
 		if (!name || typeof name !== 'string') {
+			return fail(400, { name, missing: true });
+		}
+
+		if (!description || typeof description !== 'string') {
 			return fail(400, { name, missing: true });
 		}
 
@@ -34,7 +41,7 @@ export const actions = {
 
 		const id = params.id === 'new' ? undefined : params.id;
 
-		const result = await upsertGame(supabase, { id, name, illustration });
+		const result = await upsertGame(supabase, { id, name, description, illustration });
 
 		if (result.error) {
 			console.error('Error on saving', result.error.message);
