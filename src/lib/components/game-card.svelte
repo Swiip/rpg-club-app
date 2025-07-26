@@ -44,9 +44,9 @@
 			onclick={() => (showDetails = !showDetails)}
 		>
 			{#if showDetails}
-				Less <ChevronUp size={16} />
+				Moins <ChevronUp size={16} />
 			{:else}
-				More <ChevronDown size={16} />
+				Plus <ChevronDown size={16} />
 			{/if}
 		</button>
 	</header>
