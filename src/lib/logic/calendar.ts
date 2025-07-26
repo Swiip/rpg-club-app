@@ -3,9 +3,9 @@ import type { Campaign, Os } from '$lib/types';
 
 type EventData = NonNullable<Awaited<ReturnType<typeof fetchEventsForCalendar>>['data']>[number];
 
-type Table = Os | Campaign;
+type Table = (Os & { type: 'os' }) | (Campaign & { type: 'campaign' });
 
-type Event = {
+export type Event = {
 	date: string;
 	location: string;
 	tables: Table[];
@@ -39,10 +39,12 @@ export const computeCalendar = (events: EventData[]): Calendar => {
 		}
 
 		if (eventData.os) {
-			event.tables.push(...eventData.os);
+			event.tables.push(...eventData.os.map((os) => ({ ...os, type: 'os' })));
 		}
 		if (eventData.session) {
-			event.tables.push(...eventData.session.map((session) => session.campaign));
+			event.tables.push(
+				...eventData.session.map((session) => ({ ...session.campaign, type: 'campaign' }))
+			);
 		}
 	});
 

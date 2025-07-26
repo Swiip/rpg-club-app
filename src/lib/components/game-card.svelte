@@ -21,7 +21,7 @@
 	};
 </script>
 
-<div
+<section
 	class="card preset-filled-surface-100-900 border-surface-200-800 card-hover divide-surface-200-800 block w-full divide-y overflow-hidden rounded-xl border"
 >
 	<!-- Header -->
@@ -59,4 +59,4 @@
 			<SvelteMarkdown source={game.description || ''} />
 		</p>
 	</article>
-</div>
+</section>

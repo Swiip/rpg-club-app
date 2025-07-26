@@ -13,8 +13,8 @@ export const fetchEventsForCalendar = async (supabase: SupabaseClient) =>
 		.select(
 			`
 		    id, date, start, end, location,
-			os ( id, title, game ( name ), gm ( handle ), registration ( member ( handle ) ) ),
-			session ( id, campaign ( id, title, game ( name ), gm ( handle ), registration ( member ( handle ) ) ) )
+			os ( id, title, game ( name, illustration ), gm ( handle ), registration ( member ( handle ) ) ),
+			session ( id, campaign ( id, title, game ( name, illustration ), gm ( handle ), registration ( member ( handle ) ) ) )
 		`
 		)
 		.order('date', { ascending: true });
