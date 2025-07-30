@@ -10,11 +10,8 @@
 	const { text, className }: Props = $props();
 </script>
 
-<CardSection
-	as="article"
-	className={`prose dark:prose-invert prose-sm mx-auto opacity-60 ${className}`}
->
-	<p class="">
+<CardSection as="article" className={`p-4 ${className}`}>
+	<div class="prose dark:prose-invert prose-sm mx-auto opacity-60">
 		<SvelteMarkdown source={text || ''} />
-	</p>
+	</div>
 </CardSection>
