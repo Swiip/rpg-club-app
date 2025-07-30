@@ -10,5 +10,5 @@
 </script>
 
 <RegistrationForm {targetId} {memberId}>
-	<button class="btn preset-tonal-error" formaction="?/signout">Sign Out</button>
+	<button class="btn preset-tonal-error" formaction="?/signout">Se désinscrire</button>
 </RegistrationForm>

@@ -4,7 +4,7 @@
 	type Props = {
 		targetId: string;
 		memberId: string;
-		memberHandle: string;
+		memberHandle?: string;
 	};
 
 	const { targetId, memberId, memberHandle }: Props = $props();
@@ -12,6 +12,6 @@
 
 <RegistrationForm {targetId} {memberId}>
 	<button class="btn preset-tonal-primary" formaction="?/confirm">
-		Confirm {memberHandle}
+		Valider {memberHandle}
 	</button>
 </RegistrationForm>

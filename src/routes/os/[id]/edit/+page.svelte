@@ -16,6 +16,10 @@
 		<input class="input" name="title" type="text" value={os?.title} required />
 	</label>
 	<label class="label">
+		<span class="label-text">Description</span>
+		<textarea class="textarea" name="description" value={os?.description}></textarea>
+	</label>
+	<label class="label">
 		<span class="label-text">Game</span>
 		<select class="select" name="game" value={os?.game} required>
 			{#if games && games.length > 0}

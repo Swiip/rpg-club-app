@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import GameCard from '$lib/components/game-card.svelte';
 
 	const { data } = $props();
@@ -13,7 +14,9 @@
 
 <div class="mx-auto flex w-4/5 flex-col items-center gap-8 pb-20 md:w-3xl">
 	<div class="flex w-full justify-end">
-		<button class="btn preset-filled-primary-500">Ajouter +</button>
+		<button class="btn preset-filled-primary-500" onclick={() => goto(`/games/new/edit`)}>
+			Ajouter +
+		</button>
 	</div>
 
 	<label class="label">

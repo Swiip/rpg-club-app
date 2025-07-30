@@ -10,5 +10,5 @@
 </script>
 
 <RegistrationForm {targetId} {memberId}>
-	<button class="btn preset-tonal-primary" formaction="?/signup">Sign Up</button>
+	<button class="btn preset-tonal-primary" formaction="?/signup">S'inscrire</button>
 </RegistrationForm>

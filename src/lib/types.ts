@@ -23,6 +23,7 @@ export type Event = {
 export type Os = {
 	id: string;
 	title: string;
+	description: string;
 	game: string;
 	gm: string;
 	event: string;

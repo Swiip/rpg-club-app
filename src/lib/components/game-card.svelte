@@ -55,7 +55,7 @@
 		<div>
 			<h3 class="h3">{game.name}</h3>
 		</div>
-		<p class="prose prose-invert prose-sm opacity-60">
+		<p class="prose prose-invert prose-sm mx-auto opacity-60">
 			<SvelteMarkdown source={game.description || ''} />
 		</p>
 	</article>
