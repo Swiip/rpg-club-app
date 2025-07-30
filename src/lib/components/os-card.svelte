@@ -1,17 +1,17 @@
 <script lang="ts">
-	import SupabaseImage from '$lib/components/image/supabase-image.svelte';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import ChevronUp from '@lucide/svelte/icons/chevron-up';
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import type { Member, Os } from '$lib/types';
 	import type { RegistrionModel } from '$lib/logic/registrations';
-	import Pen from '@lucide/svelte/icons/pen';
 	import { goto } from '$app/navigation';
 	import SvelteMarkdown from 'svelte-markdown';
 	import UnconfirmRegistrationButton from './registration/unconfirm-registration-button.svelte';
 	import ConfirmRegistrationButton from './registration/confirm-registration-button.svelte';
 	import SignoutRegistrationButton from './registration/signout-registration-button.svelte';
 	import SignupRegistrationButton from './registration/signup-registration-button.svelte';
+	import CardContainer from './card/card-container.svelte';
+	import CardImage from './card/card-image.svelte';
+	import CardSection from './card/card-section.svelte';
+	import CardMoreButton from './card/card-more-button.svelte';
 
 	type Props = {
 		member: Member;
@@ -28,43 +28,27 @@
 	};
 </script>
 
-<section
-	class="card preset-filled-surface-100-900 border-surface-200-800 card-hover divide-surface-200-800 block w-full divide-y overflow-hidden rounded-xl border"
->
-	<header class="flex items-center justify-between gap-4">
-		<div class="relative w-full">
-			<SupabaseImage
-				{supabase}
-				bucket="game-banners"
-				url={os.game.illustration}
-				alt={os.game.name}
-				className="aspect-[21/9] w-full object-cover"
-			/>
-			<p class="absolute top-2 left-2 rounded-lg bg-black/60 px-2 py-1 text-lg">
-				{os.title}
-			</p>
-			<button
-				class="btn-icon preset-tonal-primary absolute top-4 right-4"
-				onclick={handleClick(os)}
-			>
-				<Pen size={16} />
-			</button>
-		</div>
-	</header>
+<CardContainer>
+	<CardImage
+		{supabase}
+		bucket="game-banners"
+		url={os.game.illustration}
+		alt={os.game.name}
+		title={os.title}
+		onClick={handleClick(os)}
+	/>
+	<CardSection as="article" className="p-4 items-center justify-between">
+		<span class="opacity-60">MJ: {os.gm.handle}</span>
+		<small class="opacity-60">
+			{new Date(os.event.date).toLocaleString(navigator.language, {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric',
+				weekday: 'long'
+			})}
+		</small>
+	</CardSection>
 	<article class="flex flex-col gap-4 p-4">
-		<!-- <p class="mx-4">MJ: {os.gm.handle}</p> -->
-		<div class="flex items-center justify-between gap-4">
-			<span class="opacity-60">MJ: {os.gm.handle}</span>
-			<small class="opacity-60">
-				{new Date(os.event.date).toLocaleString(navigator.language, {
-					year: 'numeric',
-					month: 'long',
-					day: 'numeric',
-					weekday: 'long'
-				})}
-			</small>
-		</div>
-
 		{#if !showDetails || registration.role !== 'gm'}
 			{#if registration.confirmed}
 				<p>PJs confirmés: {registration.confirmed}</p>
@@ -129,16 +113,6 @@
 				<p class="prose prose-invert prose-sm m-auto w-full">Pas de description</p>
 			{/if}
 		{/if}
-
-		<button
-			class="btn preset-tonal-primary self-center justify-self-center"
-			onclick={() => (showDetails = !showDetails)}
-		>
-			{#if showDetails}
-				Moins <ChevronUp size={16} />
-			{:else}
-				Plus <ChevronDown size={16} />
-			{/if}
-		</button>
 	</article>
-</section>
+	<CardMoreButton more={!showDetails} onClick={() => (showDetails = !showDetails)} />
+</CardContainer>

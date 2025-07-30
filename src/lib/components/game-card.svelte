@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import SupabaseImage from '$lib/components/image/supabase-image.svelte';
 	import type { Game } from '$lib/types';
-	import SvelteMarkdown from 'svelte-markdown';
-	import Pen from '@lucide/svelte/icons/pen';
+
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import ChevronUp from '@lucide/svelte/icons/chevron-up';
 	import type { SupabaseClient } from '@supabase/supabase-js';
+	import CardContainer from './card/card-container.svelte';
+	import CardImage from './card/card-image.svelte';
+	import CardMoreButton from './card/card-more-button.svelte';
+	import CardSection from './card/card-section.svelte';
+	import CardText from './card/card-text.svelte';
 
 	type Props = {
 		game: Game;
@@ -21,42 +23,31 @@
 	};
 </script>
 
-<section
-	class="card preset-filled-surface-100-900 border-surface-200-800 card-hover divide-surface-200-800 block w-full divide-y overflow-hidden rounded-xl border"
->
-	<!-- Header -->
-	<header class="relative">
-		<SupabaseImage
-			{supabase}
-			bucket="game-banners"
-			url={game.illustration}
-			alt={game.name}
-			className="aspect-[21/9] w-full object-cover"
-		/>
-		<button
-			class="btn-icon preset-tonal-primary absolute top-4 right-4"
-			onclick={handleClick(game)}
-		>
-			<Pen size={16} />
-		</button>
-		<button
-			class="btn preset-tonal-primary absolute bottom-2 left-1/2 -translate-x-1/2 transform"
-			onclick={() => (showDetails = !showDetails)}
-		>
-			{#if showDetails}
-				Moins <ChevronUp size={16} />
-			{:else}
+<CardContainer>
+	<CardImage
+		{supabase}
+		bucket="game-banners"
+		url={game.illustration}
+		alt={game.name}
+		onClick={handleClick(game)}
+	>
+		{#if !showDetails}
+			<button
+				class="btn preset-tonal-primary absolute bottom-2 left-1/2 -translate-x-1/2 transform"
+				onclick={() => (showDetails = !showDetails)}
+			>
 				Plus <ChevronDown size={16} />
-			{/if}
-		</button>
-	</header>
-	<!-- Article -->
-	<article class={`space-y-4 p-4 ${showDetails ? 'block' : 'hidden'}`}>
-		<div>
+			</button>
+		{/if}
+	</CardImage>
+
+	{#if showDetails}
+		<CardSection as="article" className="flex-col gap-4 p-4">
 			<h3 class="h3">{game.name}</h3>
-		</div>
-		<p class="prose prose-invert prose-sm mx-auto opacity-60">
-			<SvelteMarkdown source={game.description || ''} />
-		</p>
-	</article>
-</section>
+		</CardSection>
+
+		<CardText text={game.description} />
+
+		<CardMoreButton more={!showDetails} onClick={() => (showDetails = !showDetails)} />
+	{/if}
+</CardContainer>
