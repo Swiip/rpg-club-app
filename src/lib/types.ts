@@ -44,4 +44,5 @@ export type Registration = {
 	};
 	os: string;
 	campaign: string;
+	confirmation: boolean;
 };

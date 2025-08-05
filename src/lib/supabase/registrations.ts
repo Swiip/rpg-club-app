@@ -1,5 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+export type RegistrationAction = 'confirm' | 'unconfirm' | 'delete' | 'add';
+
 export const createRegistration = async (
 	supabase: SupabaseClient,
 	memberId: string,

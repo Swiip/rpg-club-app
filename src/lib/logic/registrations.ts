@@ -1,7 +1,7 @@
 import type { Member } from '$lib/types';
 
 export type RegistrionModel = {
-	role: 'gm' | 'registered' | 'none';
+	// role: 'gm' | 'registered' | 'none';
 	confirmed: string | undefined;
 	pending: string | undefined;
 };
@@ -11,7 +11,7 @@ export type WithRegistration = {
 	gm: { id: string };
 	registration: {
 		id: string;
-		confirmation: string;
+		confirmation: boolean;
 		member: { id: string; handle: string };
 	}[];
 };
@@ -28,8 +28,7 @@ const computeRole = (withRegistration: WithRegistration, member: Member) => {
 };
 
 export const computeRegistrations = (
-	withRegistrations: WithRegistration[] = [],
-	member: Member
+	withRegistrations: WithRegistration[] = []
 ): Record<string, RegistrionModel> => {
 	const registrations: Record<string, RegistrionModel> = {};
 
@@ -38,7 +37,7 @@ export const computeRegistrations = (
 	}
 
 	withRegistrations.forEach((r) => {
-		const role = computeRole(r, member);
+		// const role = computeRole(r, member);
 		const confirmed = r.registration
 			.filter((r) => r.confirmation)
 			.map((r) => r.member.handle)
@@ -48,7 +47,7 @@ export const computeRegistrations = (
 			.map((r) => r.member.handle)
 			.join(', ');
 
-		registrations[r.id] = { role, confirmed, pending };
+		registrations[r.id] = { confirmed, pending };
 	});
 
 	return registrations;

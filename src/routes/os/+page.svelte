@@ -4,13 +4,9 @@
 	import { computeRegistrations } from '$lib/logic/registrations.js';
 
 	const { data } = $props();
-	const { member, oses, supabase } = data;
+	const { members, oses, supabase } = data;
 
-	const handleClick = () => {
-		goto(`/os/new/edit`);
-	};
-
-	const registrations = $derived(computeRegistrations(oses, member));
+	const registrations = $derived(computeRegistrations(oses));
 </script>
 
 <div class="mx-auto flex w-4/5 flex-col items-center gap-8 pb-20 md:w-3xl">
@@ -22,7 +18,7 @@
 
 	{#if oses && oses.length > 0}
 		{#each oses as os (os.id)}
-			<OsCard {member} {os} registration={registrations[os.id]} {supabase} />
+			<OsCard {members} {os} registration={registrations[os.id]} {supabase} />
 		{/each}
 	{/if}
 </div>

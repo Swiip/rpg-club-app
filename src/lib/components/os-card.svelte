@@ -3,24 +3,21 @@
 	import type { Member, Os } from '$lib/types';
 	import type { RegistrionModel } from '$lib/logic/registrations';
 	import { goto } from '$app/navigation';
-	import SvelteMarkdown from 'svelte-markdown';
-	import UnconfirmRegistrationButton from './registration/unconfirm-registration-button.svelte';
-	import ConfirmRegistrationButton from './registration/confirm-registration-button.svelte';
-	import SignoutRegistrationButton from './registration/signout-registration-button.svelte';
-	import SignupRegistrationButton from './registration/signup-registration-button.svelte';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
 	import CardSection from './card/card-section.svelte';
 	import CardMoreButton from './card/card-more-button.svelte';
+	import CardText from './card/card-text.svelte';
+	import RegistrationsTable from './registration/registrations-table.svelte';
 
 	type Props = {
-		member: Member;
+		members: Member[];
 		os: Os;
 		registration: RegistrionModel;
 		supabase: SupabaseClient;
 	};
 
-	const { member, os, registration, supabase }: Props = $props();
+	const { members, os, registration, supabase }: Props = $props();
 	let showDetails = $state(false);
 
 	const handleClick = (os: Os | undefined) => () => {
@@ -37,6 +34,7 @@
 		title={os.title}
 		onClick={handleClick(os)}
 	/>
+
 	<CardSection as="article" className="p-4 items-center justify-between">
 		<span class="opacity-60">MJ: {os.gm.handle}</span>
 		<small class="opacity-60">
@@ -48,7 +46,28 @@
 			})}
 		</small>
 	</CardSection>
-	<article class="flex flex-col gap-4 p-4">
+
+	{#if showDetails}
+		<CardText text={os.description || 'Pas de description'} />
+	{/if}
+
+	<CardSection as="article" className="p-4 items-start flex-col gap-4">
+		{#if showDetails}
+			<RegistrationsTable targetId={os.id} registrations={os.registration} {members} />
+		{:else}
+			{#if registration.confirmed}
+				<p>PJs confirmés: {registration.confirmed}</p>
+			{/if}
+			{#if registration.pending}
+				<p>PJs en attente: {registration.pending}</p>
+			{/if}
+			{#if !registration.confirmed && !registration.pending}
+				<p>Encore aucune inscription</p>
+			{/if}
+		{/if}
+	</CardSection>
+
+	<!-- <article class="flex flex-col gap-4 p-4">
 		{#if !showDetails || registration.role !== 'gm'}
 			{#if registration.confirmed}
 				<p>PJs confirmés: {registration.confirmed}</p>
@@ -103,16 +122,7 @@
 				</div>
 			{/if}
 		{/if}
+	</article> -->
 
-		{#if showDetails}
-			{#if os.description}
-				<p class="prose prose-invert prose-sm m-auto w-full">
-					<SvelteMarkdown source={os.description || ''} />
-				</p>
-			{:else}
-				<p class="prose prose-invert prose-sm m-auto w-full">Pas de description</p>
-			{/if}
-		{/if}
-	</article>
 	<CardMoreButton more={!showDetails} onClick={() => (showDetails = !showDetails)} />
 </CardContainer>
