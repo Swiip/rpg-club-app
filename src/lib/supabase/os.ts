@@ -13,7 +13,7 @@ export const fetchOses = async (supabase: SupabaseClient) =>
 			registration ( id, confirmation, member ( id, handle ) )
 		`
 		)
-		.order('event( date )', { ascending: true });
+		.order('event ( date )', { ascending: true });
 
 export const fetchOs = async (supabase: SupabaseClient, id: string) =>
 	supabase.from('os').select(`id, title, description, game, gm, event`).eq('id', id).single();

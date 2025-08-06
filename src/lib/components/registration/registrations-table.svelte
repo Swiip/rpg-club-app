@@ -13,7 +13,10 @@
 		members: Member[];
 	};
 
-	const { targetId, registrations, members }: Props = $props();
+	let { targetId, registrations: unorderedRegistrations, members }: Props = $props();
+	let registrations = $derived(
+		unorderedRegistrations.sort((a, b) => a.member.handle.localeCompare(b.member.handle))
+	);
 	let memberId = $state<string | undefined>();
 	let action = $state<RegistrationAction | undefined>();
 	let newMemberId = $state<string | undefined>();
@@ -21,7 +24,6 @@
 	const handleClick = (newAction: RegistrationAction, id: string | undefined) => () => {
 		action = newAction;
 		memberId = id;
-		console.log('click', { action, id });
 	};
 </script>
 

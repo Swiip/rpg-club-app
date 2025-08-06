@@ -56,73 +56,16 @@
 			<RegistrationsTable targetId={os.id} registrations={os.registration} {members} />
 		{:else}
 			{#if registration.confirmed}
-				<p>PJs confirmés: {registration.confirmed}</p>
+				<p>PJs confirmés : {registration.confirmed}</p>
 			{/if}
 			{#if registration.pending}
-				<p>PJs en attente: {registration.pending}</p>
+				<p>PJs en attente : {registration.pending}</p>
 			{/if}
 			{#if !registration.confirmed && !registration.pending}
 				<p>Encore aucune inscription</p>
 			{/if}
 		{/if}
 	</CardSection>
-
-	<!-- <article class="flex flex-col gap-4 p-4">
-		{#if !showDetails || registration.role !== 'gm'}
-			{#if registration.confirmed}
-				<p>PJs confirmés: {registration.confirmed}</p>
-			{/if}
-			{#if registration.pending}
-				<p>PJs en attente: {registration.pending}</p>
-			{/if}
-		{/if}
-
-		{#if showDetails}
-			{#if registration.role === 'gm'}
-				{#if os.registration.length === 0}
-					<p class="text-center">Aucune inscription pour le moment</p>
-				{:else}
-					<div class="table-wrap mx-auto max-w-4xl">
-						<table class="table caption-bottom">
-							<thead>
-								<tr>
-									<th>Membre</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody class="[&>tr]:hover:preset-tonal-primary">
-								{#each os.registration as registration (registration.id)}
-									<tr>
-										<td>{registration.member.handle}</td>
-										<td>
-											{#if registration.confirmation}
-												<UnconfirmRegistrationButton
-													targetId={os.id}
-													memberId={registration.member.id}
-												/>
-											{:else}
-												<ConfirmRegistrationButton
-													targetId={os.id}
-													memberId={registration.member.id}
-												/>
-											{/if}
-										</td>
-									</tr>
-								{/each}
-							</tbody>
-						</table>
-					</div>{/if}
-			{:else if registration.role === 'registered'}
-				<div class="mx-auto">
-					<SignoutRegistrationButton targetId={os.id} memberId={member.id} />
-				</div>
-			{:else}
-				<div class="mx-auto">
-					<SignupRegistrationButton targetId={os.id} memberId={member.id} />
-				</div>
-			{/if}
-		{/if}
-	</article> -->
 
 	<CardMoreButton more={!showDetails} onClick={() => (showDetails = !showDetails)} />
 </CardContainer>

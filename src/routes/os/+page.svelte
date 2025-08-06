@@ -3,8 +3,8 @@
 	import OsCard from '$lib/components/os-card.svelte';
 	import { computeRegistrations } from '$lib/logic/registrations.js';
 
-	const { data } = $props();
-	const { members, oses, supabase } = data;
+	let { data } = $props();
+	let { members, oses, supabase } = $derived(data);
 
 	const registrations = $derived(computeRegistrations(oses));
 </script>
