@@ -6,8 +6,8 @@ export const fetchCampaigns = async (supabase: SupabaseClient) =>
 		.from('campaign')
 		.select(
 			`
-			id, title,
-			game ( id, name ),
+			id, title, description,
+			game ( id, name, illustration ),
 			gm ( id, handle ),
 			session ( id, event ( id, date ) ),
 			registration ( id, confirmation, member ( id, handle ) )

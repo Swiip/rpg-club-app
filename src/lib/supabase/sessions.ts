@@ -1,5 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+export type SessionAction = 'delete' | 'add';
+
 export const createSession = async (
 	supabase: SupabaseClient,
 	campaignId: string,

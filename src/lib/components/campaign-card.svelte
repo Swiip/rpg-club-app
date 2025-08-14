@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SupabaseClient } from '@supabase/supabase-js';
-	import type { Member, Os } from '$lib/types';
+	import type { Campaign, Member, Event } from '$lib/types';
 	import type { RegistrionModel } from '$lib/logic/registrations';
 	import { goto } from '$app/navigation';
 	import CardContainer from './card/card-container.svelte';
@@ -9,49 +9,43 @@
 	import CardMoreButton from './card/card-more-button.svelte';
 	import CardText from './card/card-text.svelte';
 	import RegistrationsTable from './forms/registrations-table.svelte';
+	import SessionsTable from './forms/sessions-table.svelte';
 
 	type Props = {
 		members: Member[];
-		os: Os;
+		events: Event[];
+		campaign: Campaign;
 		registration: RegistrionModel;
 		supabase: SupabaseClient;
 	};
 
-	const { members, os, registration, supabase }: Props = $props();
+	const { members, events, campaign, registration, supabase }: Props = $props();
 	let showDetails = $state(false);
 
-	const handleClick = (os: Os) => () => goto(`/os/${os.id}/edit`);
+	const handleClick = (campaign: Campaign) => () => goto(`/campaigns/${campaign.id}/edit`);
 </script>
 
 <CardContainer>
 	<CardImage
 		{supabase}
 		bucket="game-banners"
-		url={os.game.illustration}
-		alt={os.game.name}
-		title={os.title}
-		onClick={handleClick(os)}
+		url={campaign.game.illustration}
+		alt={campaign.game.name}
+		title={campaign.title}
+		onClick={handleClick(campaign)}
 	/>
 
 	<CardSection as="article" className="p-4 items-center justify-between">
-		<span class="opacity-60">MJ: {os.gm.handle}</span>
-		<small class="opacity-60">
-			{new Date(os.event.date).toLocaleString(navigator.language, {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-				weekday: 'long'
-			})}
-		</small>
+		<span class="opacity-60">MJ: {campaign.gm.handle}</span>
 	</CardSection>
 
 	{#if showDetails}
-		<CardText text={os.description || 'Pas de description'} />
+		<CardText text={campaign.description || 'Pas de description'} />
 	{/if}
 
 	<CardSection as="article" className="p-4 items-start flex-col gap-4">
 		{#if showDetails}
-			<RegistrationsTable targetId={os.id} registrations={os.registration} {members} />
+			<RegistrationsTable targetId={campaign.id} registrations={campaign.registration} {members} />
 		{:else}
 			{#if registration.confirmed}
 				<p>PJs confirmés : {registration.confirmed}</p>
@@ -64,6 +58,12 @@
 			{/if}
 		{/if}
 	</CardSection>
+
+	{#if showDetails}
+		<CardSection as="article" className="p-4 items-start flex-col gap-4">
+			<SessionsTable targetId={campaign.id} sessions={campaign.session} {events} />
+		</CardSection>
+	{/if}
 
 	<CardMoreButton more={!showDetails} onClick={() => (showDetails = !showDetails)} />
 </CardContainer>

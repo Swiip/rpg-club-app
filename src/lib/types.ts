@@ -32,6 +32,7 @@ export type Os = {
 export type Campaign = {
 	id: string;
 	title: string;
+	description: string;
 	game: string;
 	gm: string;
 };

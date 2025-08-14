@@ -5,87 +5,63 @@ import type { Actions } from '../games/[id]/edit/$types';
 import {
 	createRegistration,
 	deleteRegistration,
-	updateRegistrationConfirmation
+	updateRegistrationConfirmation,
+	type RegistrationAction
 } from '$lib/supabase/registrations';
 import { fetchCampaigns } from '$lib/supabase/campaigns';
 import { fetchEvents } from '$lib/supabase/events';
-import { createSession, deleteSession } from '$lib/supabase/sessions';
+import { createSession, deleteSession, type SessionAction } from '$lib/supabase/sessions';
+import { fetchMembers } from '$lib/supabase/members';
 
 export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
 
-	const { member } = await authGuard(session, supabase, redirect);
+	await authGuard(session, supabase, redirect);
 
+	const campaignsResult = await fetchCampaigns(supabase);
 	const eventsResult = await fetchEvents(supabase);
-
-	const result = await fetchCampaigns(supabase);
-
-	console.log('coucou', result);
+	const membersResult = await fetchMembers(supabase);
 
 	return {
-		campaigns: result.data || undefined,
+		campaigns: campaignsResult.data || undefined,
 		events: eventsResult.data || undefined,
-		member
+		members: membersResult.data || undefined
 	};
 };
 
-const readRegistrationFormData = async (request: Request) => {
-	const formData = await request.formData();
-	const targetId = formData.get('targetId');
-	const memberId = formData.get('memberId');
-
-	if (!targetId || typeof targetId !== 'string') {
-		throw fail(400, { targetId, missing: true });
-	}
-
-	if (!memberId || typeof memberId !== 'string') {
-		throw fail(400, { memberId, missing: true });
-	}
-
-	return { targetId, memberId };
-};
-
-const readSessionFormData = async (request: Request) => {
-	const formData = await request.formData();
-	const campaignId = formData.get('campaign');
-	const eventId = formData.get('event');
-
-	if (!campaignId || typeof campaignId !== 'string') {
-		throw fail(400, { campaignId, missing: true });
-	}
-
-	if (!eventId || typeof eventId !== 'string') {
-		throw fail(400, { eventId, missing: true });
-	}
-
-	return { campaignId, eventId };
-};
-
 export const actions = {
-	signup: async ({ locals: { supabase }, request }) => {
-		const { targetId, memberId } = await readRegistrationFormData(request);
-		return createRegistration(supabase, memberId, 'campaign', targetId);
+	registration: async ({ locals: { supabase }, request }) => {
+		const formData = await request.formData();
+		const targetId = formData.get('targetId') as string;
+		const memberId = formData.get('memberId') as string;
+		const action = formData.get('action') as RegistrationAction;
+
+		switch (action) {
+			case 'add':
+				return createRegistration(supabase, memberId, 'campaign', targetId);
+			case 'delete':
+				return deleteRegistration(supabase, memberId, 'campaign', targetId);
+			case 'confirm':
+				return updateRegistrationConfirmation(supabase, memberId, 'campaign', targetId, true);
+			case 'unconfirm':
+				return updateRegistrationConfirmation(supabase, memberId, 'campaign', targetId, false);
+			default:
+				throw fail(400, { action, missing: true });
+		}
 	},
-	signout: async ({ locals: { supabase }, request }) => {
-		const { targetId, memberId } = await readRegistrationFormData(request);
-		return deleteRegistration(supabase, memberId, 'campaign', targetId);
-	},
-	confirm: async ({ locals: { supabase }, request }) => {
-		const { targetId, memberId } = await readRegistrationFormData(request);
-		return updateRegistrationConfirmation(supabase, memberId, 'campaign', targetId, true);
-	},
-	unconfirm: async ({ locals: { supabase }, request }) => {
-		const { targetId, memberId } = await readRegistrationFormData(request);
-		return updateRegistrationConfirmation(supabase, memberId, 'campaign', targetId, false);
-	},
-	'add-session': async ({ locals: { supabase }, request }) => {
-		const { campaignId, eventId } = await readSessionFormData(request);
-		const result = await createSession(supabase, campaignId, eventId);
-		console.log('add session', result);
-		return result;
-	},
-	'delete-session': async ({ locals: { supabase }, request }) => {
-		const { campaignId, eventId } = await readSessionFormData(request);
-		return deleteSession(supabase, campaignId, eventId);
+	session: async ({ locals: { supabase }, request }) => {
+		const formData = await request.formData();
+		const targetId = formData.get('targetId') as string;
+		const eventId = formData.get('eventId') as string;
+		const action = formData.get('action') as SessionAction;
+
+		switch (action) {
+			case 'add':
+				return createSession(supabase, targetId, eventId);
+			case 'delete':
+				return deleteSession(supabase, targetId, eventId);
+			default:
+				throw fail(400, { action, missing: true });
+		}
 	}
 } satisfies Actions;
