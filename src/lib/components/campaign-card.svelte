@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { SupabaseClient } from '@supabase/supabase-js';
-	import type { Campaign, Member, Event } from '$lib/types';
 	import type { RegistrionModel } from '$lib/logic/registrations';
 	import { goto } from '$app/navigation';
 	import CardContainer from './card/card-container.svelte';
@@ -10,11 +8,15 @@
 	import CardText from './card/card-text.svelte';
 	import RegistrationsTable from './forms/registrations-table.svelte';
 	import SessionsTable from './forms/sessions-table.svelte';
+	import type { Member } from '$lib/supabase/members';
+	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
+	import type { Event } from '$lib/supabase/events';
+	import type { SupabaseClient } from '$lib/supabase/types';
 
 	type Props = {
 		members: Member[];
 		events: Event[];
-		campaign: Campaign;
+		campaign: CampaignWithJoins;
 		registration: RegistrionModel;
 		supabase: SupabaseClient;
 	};
@@ -22,7 +24,7 @@
 	const { members, events, campaign, registration, supabase }: Props = $props();
 	let showDetails = $state(false);
 
-	const handleClick = (campaign: Campaign) => () => goto(`/campaigns/${campaign.id}/edit`);
+	const handleClick = (campaign: CampaignWithJoins) => () => goto(`/campaigns/${campaign.id}/edit`);
 </script>
 
 <CardContainer>

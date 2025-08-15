@@ -1,16 +1,15 @@
-import type { Game } from '$lib/types';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
-export const fetchGames = async (supabase: SupabaseClient) =>
+export type Game = UnwrapQuery<typeof fetchGames>[number];
+
+export const fetchGames = (supabase: SupabaseClient) =>
 	supabase
 		.from('game')
 		.select(`id, name, description,illustration`)
 		.order('name', { ascending: true });
 
-export const fetchGame = async (supabase: SupabaseClient, id: string) =>
+export const fetchGame = (supabase: SupabaseClient, id: number) =>
 	supabase.from('game').select(`id, name, description, illustration`).eq('id', id).single();
 
-export const upsertGame = async (
-	supabase: SupabaseClient,
-	game: Partial<Pick<Game, 'id'>> | Omit<Game, 'id'>
-) => supabase.from('game').upsert(game);
+export const upsertGame = (supabase: SupabaseClient, game: PartialSome<Game, 'id'>) =>
+	supabase.from('game').upsert(game);

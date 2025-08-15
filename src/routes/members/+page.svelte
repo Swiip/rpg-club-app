@@ -24,7 +24,9 @@
 					<tr>
 						<td>{member.handle}</td>
 						<td>
-							<Avatar src={member?.avatar} name={member?.handle} />
+							{#if member.avatar}
+								<Avatar src={member.avatar} name={member.handle} />
+							{/if}
 						</td>
 						<td>
 							{member.authorized ? 'Yes' : 'No'}

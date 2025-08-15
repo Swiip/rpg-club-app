@@ -1,16 +1,8 @@
+import type { WithRegistration } from '$lib/supabase/types';
+
 export type RegistrionModel = {
 	confirmed: string | undefined;
 	pending: string | undefined;
-};
-
-export type WithRegistration = {
-	id: string;
-	gm: { id: string };
-	registration: {
-		id: string;
-		confirmation: boolean;
-		member: { id: string; handle: string };
-	}[];
 };
 
 export const computeRegistrations = (

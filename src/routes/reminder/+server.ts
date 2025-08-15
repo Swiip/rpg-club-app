@@ -1,6 +1,6 @@
 import { sendMessage } from '$lib/discord/send.js';
 import { fetchGames } from '$lib/supabase/games';
-import { createServerClient } from '$lib/supabase/server-client.js';
+import { createPrivateClient } from '$lib/supabase/clients';
 
 export const GET = async ({ request }) => {
 	if (
@@ -10,7 +10,7 @@ export const GET = async ({ request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 
-	const supabase = createServerClient();
+	const supabase = createPrivateClient();
 
 	const games = await fetchGames(supabase);
 

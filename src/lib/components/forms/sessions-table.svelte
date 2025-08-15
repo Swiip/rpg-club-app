@@ -1,23 +1,24 @@
 <script lang="ts">
-	import type { Event } from '$lib/types';
 	import Trash from '@lucide/svelte/icons/trash';
 	import Plus from '@lucide/svelte/icons/plus';
 	import { enhance } from '$app/forms';
 	import type { SessionAction } from '$lib/supabase/sessions';
+	import type { Event } from '$lib/supabase/events';
+	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
 
 	type Props = {
-		targetId: string;
-		sessions: Event[];
+		targetId: number;
+		sessions: CampaignWithJoins['session'];
 		events: Event[];
 	};
 
 	let { targetId, sessions, events }: Props = $props();
 
-	let eventId = $state<string | undefined>();
-	let action = $state<SessionAction | undefined>();
-	let newEventId = $state<string | undefined>();
+	let eventId = $state<number>();
+	let action = $state<SessionAction>();
+	let newEventId = $state<number>();
 
-	const handleClick = (newAction: SessionAction, id: string | undefined) => () => {
+	const handleClick = (newAction: SessionAction, id: number | undefined) => () => {
 		action = newAction;
 		eventId = id;
 	};

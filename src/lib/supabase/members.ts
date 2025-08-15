@@ -1,20 +1,22 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
-export const fetchMemberByDiscordId = async (supabase: SupabaseClient, discordId: string) =>
+export type Member = UnwrapQuery<typeof fetchMembers>[number];
+
+export const fetchMemberByDiscordId = (supabase: SupabaseClient, discordId: string) =>
 	supabase
 		.from('member')
 		.select(`id, handle, avatar, authorized`)
 		.eq('discord_id', discordId)
 		.single();
 
-export const fetchMembers = async (supabase: SupabaseClient) =>
+export const fetchMembers = (supabase: SupabaseClient) =>
 	supabase
 		.from('member')
 		.select(`id, handle, avatar, authorized`)
 		.order('handle', { ascending: true });
 
-export const updateMemberAuthorization = async (
+export const updateMemberAuthorization = (
 	supabase: SupabaseClient,
-	memberId: string,
+	memberId: number,
 	authorized: boolean
 ) => supabase.from('member').update({ authorized }).eq('id', memberId).single();

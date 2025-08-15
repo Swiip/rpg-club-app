@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Event } from '$lib/types';
+	import type { Event } from '$lib/supabase/events';
 
 	const { data } = $props();
 	const { events } = data;

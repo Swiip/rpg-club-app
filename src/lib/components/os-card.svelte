@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { SupabaseClient } from '@supabase/supabase-js';
-	import type { Member, Os } from '$lib/types';
 	import type { RegistrionModel } from '$lib/logic/registrations';
 	import { goto } from '$app/navigation';
 	import CardContainer from './card/card-container.svelte';
@@ -9,10 +8,13 @@
 	import CardMoreButton from './card/card-more-button.svelte';
 	import CardText from './card/card-text.svelte';
 	import RegistrationsTable from './forms/registrations-table.svelte';
+	import type { OsWithJoins } from '$lib/supabase/os';
+	import type { Member } from '$lib/supabase/members';
+	import { formatDate } from '$lib/logic/dates';
 
 	type Props = {
 		members: Member[];
-		os: Os;
+		os: OsWithJoins;
 		registration: RegistrionModel;
 		supabase: SupabaseClient;
 	};
@@ -20,7 +22,7 @@
 	const { members, os, registration, supabase }: Props = $props();
 	let showDetails = $state(false);
 
-	const handleClick = (os: Os) => () => goto(`/os/${os.id}/edit`);
+	const handleClick = (os: OsWithJoins) => () => goto(`/os/${os.id}/edit`);
 </script>
 
 <CardContainer>
@@ -34,15 +36,8 @@
 	/>
 
 	<CardSection as="article" className="p-4 items-center justify-between">
-		<span class="opacity-60">MJ: {os.gm.handle}</span>
-		<small class="opacity-60">
-			{new Date(os.event.date).toLocaleString(navigator.language, {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric',
-				weekday: 'long'
-			})}
-		</small>
+		<span class="opacity-60">MJ: {os.gm?.handle}</span>
+		<small class="opacity-60">{formatDate(os.event?.date)} </small>
 	</CardSection>
 
 	{#if showDetails}

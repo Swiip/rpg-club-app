@@ -1,7 +1,8 @@
-import type { Campaign } from '$lib/types';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Campaign, PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
-export const fetchCampaigns = async (supabase: SupabaseClient) =>
+export type CampaignWithJoins = UnwrapQuery<typeof fetchCampaigns>[number];
+
+export const fetchCampaigns = (supabase: SupabaseClient) =>
 	supabase
 		.from('campaign')
 		.select(
@@ -15,10 +16,10 @@ export const fetchCampaigns = async (supabase: SupabaseClient) =>
 		)
 		.order('title', { ascending: true });
 
-export const fetchCampaign = async (supabase: SupabaseClient, id: string) =>
-	supabase.from('campaign').select(`id, title, game, gm`).eq('id', id).single();
+export const fetchCampaign = (supabase: SupabaseClient, id: number) =>
+	supabase.from('campaign').select(`id, title, description, game, gm`).eq('id', id).single();
 
-export const upsertCampaign = async (
+export const upsertCampaign = (
 	supabase: SupabaseClient,
-	os: Partial<Pick<Campaign, 'id'>> | Omit<Campaign, 'id'>
-) => supabase.from('campaign').upsert(os);
+	campaign: PartialSome<Campaign, 'id' | 'created_at'>
+) => supabase.from('campaign').upsert(campaign);

@@ -1,5 +1,6 @@
-import type { Session, SupabaseClient } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
 import { fetchMemberByDiscordId } from './members';
+import type { SupabaseClient } from '$lib/supabase/types';
 
 export const authGuard = async (
 	session: Session | null,

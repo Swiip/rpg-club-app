@@ -1,13 +1,16 @@
-import type { Event } from '$lib/types';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
-export const fetchEvents = async (supabase: SupabaseClient) =>
+export type Event = UnwrapQuery<typeof fetchEvents>[number];
+
+export type EventWithJoins = UnwrapQuery<typeof fetchEventsForCalendar>[number];
+
+export const fetchEvents = (supabase: SupabaseClient) =>
 	supabase
 		.from('event')
 		.select(`id, date, start, end, location`)
 		.order('date', { ascending: true });
 
-export const fetchEventsForCalendar = async (supabase: SupabaseClient) =>
+export const fetchEventsForCalendar = (supabase: SupabaseClient) =>
 	supabase
 		.from('event')
 		.select(
@@ -19,10 +22,8 @@ export const fetchEventsForCalendar = async (supabase: SupabaseClient) =>
 		)
 		.order('date', { ascending: true });
 
-export const fetchEvent = async (supabase: SupabaseClient, id: string) =>
+export const fetchEvent = (supabase: SupabaseClient, id: number) =>
 	supabase.from('event').select(`id, date, start, end, location`).eq('id', id).single();
 
-export const upsertEvent = async (
-	supabase: SupabaseClient,
-	event: Partial<Pick<Event, 'id'>> | Omit<Event, 'id'>
-) => supabase.from('event').upsert(event);
+export const upsertEvent = (supabase: SupabaseClient, event: PartialSome<Event, 'id'>) =>
+	supabase.from('event').upsert(event);

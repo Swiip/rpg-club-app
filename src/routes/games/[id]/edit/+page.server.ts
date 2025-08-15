@@ -10,7 +10,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 
 	const { member } = await authGuard(session, supabase, redirect);
 
-	const result = params.id === 'new' ? { data: undefined } : await fetchGame(supabase, params.id);
+	const result =
+		params.id === 'new' ? { data: undefined } : await fetchGame(supabase, Number(params.id));
 
 	return {
 		game: result.data,
@@ -21,25 +22,11 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 export const actions = {
 	save: async ({ locals: { supabase }, request, params }) => {
 		const data = await request.formData();
-		const name = data.get('name');
-		const description = data.get('description');
-		const illustration = data.get('illustration');
+		const name = String(data.get('name'));
+		const description = String(data.get('description'));
+		const illustration = String(data.get('illustration'));
 
-		console.log('save', { name, description, illustration });
-
-		if (!name || typeof name !== 'string') {
-			return fail(400, { name, missing: true });
-		}
-
-		if (!description || typeof description !== 'string') {
-			return fail(400, { name, missing: true });
-		}
-
-		if (!illustration || typeof illustration !== 'string') {
-			return fail(400, { illustration, missing: true });
-		}
-
-		const id = params.id === 'new' ? undefined : params.id;
+		const id = params.id === 'new' ? undefined : Number(params.id);
 
 		const result = await upsertGame(supabase, { id, name, description, illustration });
 

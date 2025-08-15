@@ -1,4 +1,4 @@
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import { fetchMembers, updateMemberAuthorization } from '$lib/supabase/members';
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	const result = await fetchMembers(supabase);
 
 	return {
-		members: result.data,
+		members: result.data || [],
 		member
 	};
 };
@@ -23,11 +23,7 @@ const changeAuthorization = async (
 	authorized: boolean
 ) => {
 	const formData = await request.formData();
-	const id = formData.get('id');
-
-	if (!id || typeof id !== 'string') {
-		return fail(400, { id, missing: true });
-	}
+	const id = Number(formData.get('id'));
 
 	await updateMemberAuthorization(supabase, id, authorized);
 };

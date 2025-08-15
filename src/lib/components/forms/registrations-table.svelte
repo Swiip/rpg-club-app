@@ -1,15 +1,16 @@
 <script lang="ts">
-	import type { Member, Registration } from '$lib/types';
 	import Check from '@lucide/svelte/icons/check';
 	import X from '@lucide/svelte/icons/x';
 	import Trash from '@lucide/svelte/icons/trash';
 	import Plus from '@lucide/svelte/icons/plus';
 	import type { RegistrationAction } from '$lib/supabase/registrations';
 	import { enhance } from '$app/forms';
+	import type { RegistrationWithJoin } from '$lib/supabase/types';
+	import type { Member } from '$lib/supabase/members';
 
 	type Props = {
-		targetId: string;
-		registrations: Registration[];
+		targetId: number;
+		registrations: RegistrationWithJoin[];
 		members: Member[];
 	};
 
@@ -17,11 +18,11 @@
 	let registrations = $derived(
 		unorderedRegistrations.sort((a, b) => a.member.handle.localeCompare(b.member.handle))
 	);
-	let memberId = $state<string | undefined>();
-	let action = $state<RegistrationAction | undefined>();
-	let newMemberId = $state<string | undefined>();
+	let memberId = $state<number>();
+	let action = $state<RegistrationAction>();
+	let newMemberId = $state<number>();
 
-	const handleClick = (newAction: RegistrationAction, id: string | undefined) => () => {
+	const handleClick = (newAction: RegistrationAction, id: number | undefined) => () => {
 		action = newAction;
 		memberId = id;
 	};

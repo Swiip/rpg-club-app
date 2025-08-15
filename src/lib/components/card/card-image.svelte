@@ -2,8 +2,8 @@
 	import type { Snippet } from 'svelte';
 	import SupabaseImage from '../image/supabase-image.svelte';
 	import Pen from '@lucide/svelte/icons/pen';
-	import type { SupabaseClient } from '@supabase/supabase-js';
 	import CardSection from './card-section.svelte';
+	import type { SupabaseClient } from '$lib/supabase/types';
 
 	type Props = {
 		supabase: SupabaseClient;

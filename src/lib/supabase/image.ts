@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '$lib/supabase/types';
 
 export const downloadImage = async (supabase: SupabaseClient, bucket: string, path: string) => {
 	try {
@@ -25,7 +25,7 @@ export const uploadImage = async (supabase: SupabaseClient, bucket: string, file
 		const fileExt = file.name.split('.').pop();
 		const filePath = `${Math.random()}.${fileExt}`;
 
-		let { data, error } = await supabase.storage.from(bucket).upload(filePath, file);
+		const { data, error } = await supabase.storage.from(bucket).upload(filePath, file);
 
 		if (error) {
 			throw error;

@@ -1,7 +1,8 @@
-import type { Os } from '$lib/types';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, UnwrapQuery, Os, PartialSome } from '$lib/supabase/types';
 
-export const fetchOses = async (supabase: SupabaseClient) =>
+export type OsWithJoins = UnwrapQuery<typeof fetchOses>[number];
+
+export const fetchOses = (supabase: SupabaseClient) =>
 	supabase
 		.from('os')
 		.select(
@@ -15,10 +16,8 @@ export const fetchOses = async (supabase: SupabaseClient) =>
 		)
 		.order('event ( date )', { ascending: true });
 
-export const fetchOs = async (supabase: SupabaseClient, id: string) =>
+export const fetchOs = (supabase: SupabaseClient, id: number) =>
 	supabase.from('os').select(`id, title, description, game, gm, event`).eq('id', id).single();
 
-export const upsertOs = async (
-	supabase: SupabaseClient,
-	os: Partial<Pick<Os, 'id'>> | Omit<Os, 'id'>
-) => supabase.from('os').upsert(os);
+export const upsertOs = (supabase: SupabaseClient, os: PartialSome<Os, 'id' | 'created_at'>) =>
+	supabase.from('os').upsert(os);

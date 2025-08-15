@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { Game } from '$lib/types';
-
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
-	import type { SupabaseClient } from '@supabase/supabase-js';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
 	import CardMoreButton from './card/card-more-button.svelte';
 	import CardSection from './card/card-section.svelte';
 	import CardText from './card/card-text.svelte';
+	import type { SupabaseClient } from '$lib/supabase/types';
+	import type { Game } from '$lib/supabase/games';
 
 	type Props = {
 		game: Game;
@@ -46,7 +45,7 @@
 			<h3 class="h3">{game.name}</h3>
 		</CardSection>
 
-		<CardText text={game.description} />
+		<CardText text={game.description || ''} />
 
 		<CardMoreButton more={!showDetails} onClick={() => (showDetails = !showDetails)} />
 	{/if}

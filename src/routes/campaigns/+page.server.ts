@@ -2,12 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import type { Actions } from '../games/[id]/edit/$types';
-import {
-	createRegistration,
-	deleteRegistration,
-	updateRegistrationConfirmation,
-	type RegistrationAction
-} from '$lib/supabase/registrations';
+import { updateRegistration, type RegistrationAction } from '$lib/supabase/registrations';
 import { fetchCampaigns } from '$lib/supabase/campaigns';
 import { fetchEvents } from '$lib/supabase/events';
 import { createSession, deleteSession, type SessionAction } from '$lib/supabase/sessions';
@@ -23,36 +18,24 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	const membersResult = await fetchMembers(supabase);
 
 	return {
-		campaigns: campaignsResult.data || undefined,
-		events: eventsResult.data || undefined,
-		members: membersResult.data || undefined
+		campaigns: campaignsResult.data || [],
+		events: eventsResult.data || [],
+		members: membersResult.data || []
 	};
 };
 
 export const actions = {
 	registration: async ({ locals: { supabase }, request }) => {
 		const formData = await request.formData();
-		const targetId = formData.get('targetId') as string;
-		const memberId = formData.get('memberId') as string;
+		const targetId = Number(formData.get('targetId'));
+		const memberId = Number(formData.get('memberId'));
 		const action = formData.get('action') as RegistrationAction;
-
-		switch (action) {
-			case 'add':
-				return createRegistration(supabase, memberId, 'campaign', targetId);
-			case 'delete':
-				return deleteRegistration(supabase, memberId, 'campaign', targetId);
-			case 'confirm':
-				return updateRegistrationConfirmation(supabase, memberId, 'campaign', targetId, true);
-			case 'unconfirm':
-				return updateRegistrationConfirmation(supabase, memberId, 'campaign', targetId, false);
-			default:
-				throw fail(400, { action, missing: true });
-		}
+		return updateRegistration(supabase, action, memberId, 'campaign', targetId);
 	},
 	session: async ({ locals: { supabase }, request }) => {
 		const formData = await request.formData();
-		const targetId = formData.get('targetId') as string;
-		const eventId = formData.get('eventId') as string;
+		const targetId = Number(formData.get('targetId'));
+		const eventId = Number(formData.get('eventId'));
 		const action = formData.get('action') as SessionAction;
 
 		switch (action) {

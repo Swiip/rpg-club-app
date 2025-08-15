@@ -1,9 +1,8 @@
-import type { fetchEventsForCalendar } from '$lib/supabase/events';
-import type { Campaign, Os } from '$lib/types';
+import type { EventWithJoins } from '$lib/supabase/events';
 
-type EventData = NonNullable<Awaited<ReturnType<typeof fetchEventsForCalendar>>['data']>[number];
-
-type Table = (Os & { type: 'os' }) | (Campaign & { type: 'campaign' });
+type OsEvent = EventWithJoins['os'][number];
+type CampaignEvent = EventWithJoins['session'][number]['campaign'];
+type Table = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent);
 
 export type Event = {
 	date: string;
@@ -20,7 +19,7 @@ type Calendar = {
 	months: Month[];
 };
 
-export const computeCalendar = (events: EventData[]): Calendar => {
+export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 	const calendar: Calendar = { months: [] };
 
 	events.forEach((eventData) => {
@@ -39,11 +38,11 @@ export const computeCalendar = (events: EventData[]): Calendar => {
 		}
 
 		if (eventData.os) {
-			event.tables.push(...eventData.os.map((os) => ({ ...os, type: 'os' })));
+			event.tables.push(...eventData.os.map((os) => ({ type: 'os' as const, ...os })));
 		}
 		if (eventData.session) {
 			event.tables.push(
-				...eventData.session.map((session) => ({ ...session.campaign, type: 'campaign' }))
+				...eventData.session.map((session) => ({ type: 'campaign' as const, ...session.campaign }))
 			);
 		}
 	});

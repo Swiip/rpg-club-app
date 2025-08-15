@@ -1,27 +1,24 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '$lib/supabase/types';
 
 export type RegistrationAction = 'confirm' | 'unconfirm' | 'delete' | 'add';
 
-export const createRegistration = async (
+export const updateRegistration = (
 	supabase: SupabaseClient,
-	memberId: string,
+	action: RegistrationAction,
+	memberId: number,
 	type: 'os' | 'campaign',
-	targetId: string
-) =>
-	supabase.from('registration').insert({ member: memberId, confirmation: false, [type]: targetId });
+	targetId: number
+) => {
+	if (action === 'add')
+		return supabase
+			.from('registration')
+			.insert({ member: memberId, confirmation: false, [type]: targetId });
 
-export const deleteRegistration = async (
-	supabase: SupabaseClient,
-	memberId: string,
-	type: 'os' | 'campaign',
-	targetId: string
-) => supabase.from('registration').delete().eq('member', memberId).eq(type, targetId);
-
-export const updateRegistrationConfirmation = async (
-	supabase: SupabaseClient,
-	memberId: string,
-	type: 'os' | 'campaign',
-	targetId: string,
-	confirmation: boolean
-) =>
-	supabase.from('registration').update({ confirmation }).eq('member', memberId).eq(type, targetId);
+	return (
+		action === 'delete'
+			? supabase.from('registration').delete()
+			: supabase.from('registration').update({ confirmation: action === 'confirm' })
+	)
+		.eq('member', memberId)
+		.eq(type, targetId);
+};

@@ -14,5 +14,7 @@
 
 	<h2>Hello {member?.handle}!</h2>
 
-	<Avatar src={member?.avatar} name={member?.handle} />
+	{#if member.avatar}
+		<Avatar src={member.avatar} name={member.handle} />
+	{/if}
 </div>
