@@ -7,3 +7,8 @@ export const formatDate = (date: string | Date | null | undefined) =>
 				weekday: 'long'
 			})
 		: 'Date manquante';
+
+export const getCurrentDate = () => {
+	const iso = new Date().toISOString();
+	return iso.substring(0, iso.indexOf('T'));
+};

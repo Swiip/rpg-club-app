@@ -1,3 +1,4 @@
+import { getCurrentDate } from '$lib/logic/dates';
 import type { PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
 export type Event = UnwrapQuery<typeof fetchEvents>[number];
@@ -15,12 +16,27 @@ export const fetchEventsForCalendar = (supabase: SupabaseClient) =>
 		.from('event')
 		.select(
 			`
-		    id, date, start, end, location,
-			os ( id, title, game ( name, illustration ), gm ( handle ), registration ( member ( handle ) ) ),
-			session ( id, campaign ( id, title, game ( name, illustration ), gm ( handle ), registration ( member ( handle ) ) ) )
+			id, date, start, end, location,
+			os (
+				id, title, game ( name, illustration ),
+				gm ( handle, discord_id ),
+				registration ( confirmation, member ( handle, discord_id ) )
+			),
+			session (
+				id,
+				campaign (
+					id, title,
+					game ( name, illustration ),
+					gm ( handle, discord_id ),
+					registration ( confirmation, member ( handle, discord_id ) )
+				)
+			)
 		`
 		)
 		.order('date', { ascending: true });
+
+export const fetchEventsForReminder = (supabase: SupabaseClient) =>
+	fetchEventsForCalendar(supabase).eq('date', getCurrentDate()).single();
 
 export const fetchEvent = (supabase: SupabaseClient, id: number) =>
 	supabase.from('event').select(`id, date, start, end, location`).eq('id', id).single();

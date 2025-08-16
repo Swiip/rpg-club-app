@@ -15,7 +15,7 @@ export const authGuard = async (
 
 	if (!result.data) {
 		await supabase.from('member').insert({
-			discord_id: session.user.id,
+			discord_id: session.user.user_metadata.provider_id,
 			handle:
 				session.user.user_metadata.custom_claims.global_name ||
 				session.user.user_metadata.full_name,
