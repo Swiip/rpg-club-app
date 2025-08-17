@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Container from '$lib/components/container.svelte';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 
 	const { data } = $props();
@@ -9,7 +10,7 @@
 	};
 </script>
 
-<div class="table-wrap mx-auto max-w-4xl">
+<Container>
 	<table class="table caption-bottom">
 		<thead>
 			<tr>
@@ -50,4 +51,4 @@
 			{/if}
 		</tbody>
 	</table>
-</div>
+</Container>

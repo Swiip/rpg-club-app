@@ -7,13 +7,17 @@ import { type RegistrationAction } from '$lib/supabase/registrations';
 import { fetchMembers } from '$lib/supabase/members';
 import { updateRegistration } from '$lib/supabase/registrations';
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
 
 	await authGuard(session, supabase, redirect);
 
-	const result = await fetchOses(supabase);
+	const isFuture = url.searchParams.get('past') === null;
+
+	const result = await fetchOses(supabase, isFuture);
 	const membersResult = await fetchMembers(supabase);
+
+	console.log('result', result);
 
 	return {
 		oses: result.data || [],

@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 
 	const gamesResult = await fetchGames(supabase);
 	const membersResult = await fetchMembers(supabase);
-	const eventsResult = await fetchEvents(supabase);
+	const eventsResult = await fetchEvents(supabase, true);
 
 	return {
 		games: gamesResult.data,

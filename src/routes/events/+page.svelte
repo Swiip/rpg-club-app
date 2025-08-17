@@ -1,16 +1,20 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Container from '$lib/components/container.svelte';
+	import FuturePastTabs from '$lib/components/future-past-tabs.svelte';
 	import type { Event } from '$lib/supabase/events';
 
-	const { data } = $props();
-	const { events } = data;
+	let { data } = $props();
+	let { events } = $derived(data);
 
 	const handleClick = (event: Event | undefined) => () => {
 		goto(`/events/${event?.id ? event.id : 'new'}/edit`);
 	};
 </script>
 
-<div class="table-wrap mx-auto max-w-4xl">
+<Container>
+	<FuturePastTabs />
+
 	<table class="table caption-bottom">
 		<thead>
 			<tr>
@@ -36,4 +40,4 @@
 			</tr>
 		</tbody>
 	</table>
-</div>
+</Container>

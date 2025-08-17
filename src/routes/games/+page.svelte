@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Container from '$lib/components/container.svelte';
 	import GameCard from '$lib/components/game-card.svelte';
 
 	const { data } = $props();
@@ -12,7 +13,7 @@
 	);
 </script>
 
-<div class="mx-auto flex w-4/5 flex-col items-center gap-8 pb-20 md:w-3xl">
+<Container>
 	<div class="flex w-full justify-end">
 		<button class="btn preset-filled-primary-500" onclick={() => goto(`/games/new/edit`)}>
 			Ajouter +
@@ -29,4 +30,4 @@
 	{#each filteredGames as game (game.id)}
 		<GameCard {game} {supabase} />
 	{/each}
-</div>
+</Container>

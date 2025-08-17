@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import CampaignCard from '$lib/components/campaign-card.svelte';
+	import Container from '$lib/components/container.svelte';
 	import { computeRegistrations } from '$lib/logic/registrations.js';
 
 	let { data } = $props();
@@ -9,7 +10,7 @@
 	const registrations = $derived(computeRegistrations(campaigns));
 </script>
 
-<div class="mx-auto flex w-4/5 flex-col items-center gap-8 pb-20 md:w-3xl">
+<Container>
 	<div class="flex w-full justify-end">
 		<button class="btn preset-filled-primary-500" onclick={() => goto(`/campaigns/new/edit`)}>
 			Ajouter +
@@ -27,4 +28,4 @@
 			/>
 		{/each}
 	{/if}
-</div>
+</Container>

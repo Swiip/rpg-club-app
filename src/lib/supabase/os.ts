@@ -1,20 +1,24 @@
+import { getCurrentDate } from '$lib/logic/dates';
 import type { SupabaseClient, UnwrapQuery, Os, PartialSome } from '$lib/supabase/types';
 
-export type OsWithJoins = UnwrapQuery<typeof fetchOses>[number];
+export type OsWithJoins = UnwrapQuery<typeof fetchAllOses>[number];
 
-export const fetchOses = (supabase: SupabaseClient) =>
-	supabase
-		.from('os')
-		.select(
-			`
+const fetchAllOses = (supabase: SupabaseClient) =>
+	supabase.from('os').select(
+		`
 			id, title, description,
 			game ( id, name, illustration ),
 			gm ( id, handle ),
 			event ( id, date ),
 			registration ( id, confirmation, member ( id, handle ) )
 		`
-		)
-		.order('event ( date )', { ascending: true });
+	);
+
+export const fetchOses = (supabase: SupabaseClient, isFuture: boolean) =>
+	(isFuture
+		? fetchAllOses(supabase).not('event', 'is', null).gte('event.date', getCurrentDate())
+		: fetchAllOses(supabase).lte('event.date', getCurrentDate())
+	).order('event ( date )', { ascending: isFuture });
 
 export const fetchOs = (supabase: SupabaseClient, id: number) =>
 	supabase.from('os').select(`id, title, description, game, gm, event`).eq('id', id).single();

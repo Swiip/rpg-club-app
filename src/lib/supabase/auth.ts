@@ -2,6 +2,13 @@ import type { Session } from '@supabase/supabase-js';
 import { fetchMemberByDiscordId } from './members';
 import type { SupabaseClient } from '$lib/supabase/types';
 
+export const getDiscordData = (session: Session) => ({
+	id: session.user.user_metadata.provider_id,
+	handle:
+		session.user.user_metadata.custom_claims.global_name || session.user.user_metadata.full_name,
+	avatar: session.user.user_metadata.avatar_url
+});
+
 export const authGuard = async (
 	session: Session | null,
 	supabase: SupabaseClient,
@@ -11,22 +18,30 @@ export const authGuard = async (
 		throw redirect(303, '/auth');
 	}
 
-	let result = await fetchMemberByDiscordId(supabase, session.user.id);
+	const discordData = getDiscordData(session);
+
+	let result = await fetchMemberByDiscordId(supabase, discordData.id);
 
 	if (!result.data) {
 		await supabase.from('member').insert({
-			discord_id: session.user.user_metadata.provider_id,
-			handle:
-				session.user.user_metadata.custom_claims.global_name ||
-				session.user.user_metadata.full_name,
-			avatar: session.user.user_metadata.avatar_url
+			discord_id: discordData.id,
+			handle: discordData.handle,
+			avatar: discordData.avatar
 		});
 
-		result = await fetchMemberByDiscordId(supabase, session.user.id);
+		result = await fetchMemberByDiscordId(supabase, discordData.id);
 	}
 
 	if (!result.data?.authorized) {
 		throw redirect(303, '/auth/waiting');
+	}
+
+	if (result.data.handle !== discordData.handle || result.data.avatar !== discordData.avatar) {
+		await supabase.from('member').upsert({
+			discord_id: discordData.id,
+			handle: discordData.handle,
+			avatar: discordData.avatar
+		});
 	}
 
 	return { member: result.data };
