@@ -1,17 +1,20 @@
 import { getCurrentDate } from '$lib/logic/dates';
 import type { PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
-export type Event = UnwrapQuery<typeof fetchAllEvents>[number];
+export type Event = UnwrapQuery<typeof fetchEventsBase>[number];
 
 export type EventWithJoins = UnwrapQuery<typeof fetchAllEventsForCalendar>[number];
 
-const fetchAllEvents = (supabase: SupabaseClient) =>
+const fetchEventsBase = (supabase: SupabaseClient) =>
 	supabase.from('event').select(`id, date, start, end, location`);
 
 export const fetchEvents = (supabase: SupabaseClient, isFuture: boolean) =>
-	fetchAllEvents(supabase)
+	fetchEventsBase(supabase)
 		[isFuture ? 'gte' : 'lte']('date', getCurrentDate())
 		.order('date', { ascending: isFuture });
+
+export const fetchAllEvents = (supabase: SupabaseClient) =>
+	fetchEventsBase(supabase).order('date', { ascending: false });
 
 const fetchAllEventsForCalendar = (supabase: SupabaseClient) =>
 	supabase

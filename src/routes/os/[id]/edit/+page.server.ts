@@ -2,7 +2,7 @@ import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import { fetchMembers } from '$lib/supabase/members';
-import { fetchEvents } from '$lib/supabase/events';
+import { fetchAllEvents } from '$lib/supabase/events';
 import { fetchOs, upsertOs } from '$lib/supabase/os';
 import { fetchGames } from '$lib/supabase/games';
 
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 
 	const gamesResult = await fetchGames(supabase);
 	const membersResult = await fetchMembers(supabase);
-	const eventsResult = await fetchEvents(supabase, true);
+	const eventsResult = await fetchAllEvents(supabase);
 
 	return {
 		games: gamesResult.data,

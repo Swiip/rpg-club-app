@@ -4,7 +4,7 @@ import { authGuard } from '$lib/supabase/auth';
 import type { Actions } from '../games/[id]/edit/$types';
 import { updateRegistration, type RegistrationAction } from '$lib/supabase/registrations';
 import { fetchCampaigns } from '$lib/supabase/campaigns';
-import { fetchEvents } from '$lib/supabase/events';
+import { fetchAllEvents } from '$lib/supabase/events';
 import { createSession, deleteSession, type SessionAction } from '$lib/supabase/sessions';
 import { fetchMembers } from '$lib/supabase/members';
 
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	await authGuard(session, supabase, redirect);
 
 	const campaignsResult = await fetchCampaigns(supabase);
-	const eventsResult = await fetchEvents(supabase, true);
+	const eventsResult = await fetchAllEvents(supabase);
 	const membersResult = await fetchMembers(supabase);
 
 	return {
