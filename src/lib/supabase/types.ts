@@ -17,8 +17,8 @@ export type Os = Database['public']['Tables']['os']['Row'];
 export type Campaign = Database['public']['Tables']['campaign']['Row'];
 
 export type WithRegistration =
-	| Pick<OsWithJoins, 'id' | 'registration'>
-	| Pick<CampaignWithJoins, 'id' | 'registration'>;
+	| Pick<OsWithJoins, 'id' | 'gm' | 'registration'>
+	| Pick<CampaignWithJoins, 'id' | 'gm' | 'registration'>;
 
 export type RegistrationWithJoin = WithRegistration['registration'][number];
 

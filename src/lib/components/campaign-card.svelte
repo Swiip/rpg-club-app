@@ -12,6 +12,7 @@
 	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
 	import type { Event } from '$lib/supabase/events';
 	import type { SupabaseClient } from '$lib/supabase/types';
+	import AntagonismTable from './antagonism-table.svelte';
 
 	type Props = {
 		members: Member[];
@@ -19,9 +20,10 @@
 		campaign: CampaignWithJoins;
 		registration: RegistrionModel;
 		supabase: SupabaseClient;
+		campaigns: CampaignWithJoins[];
 	};
 
-	const { members, events, campaign, registration, supabase }: Props = $props();
+	let { members, events, campaign, registration, supabase, campaigns }: Props = $props();
 	let showDetails = $state(false);
 
 	const handleClick = (campaign: CampaignWithJoins) => () => goto(`/campaigns/${campaign.id}/edit`);
@@ -64,6 +66,12 @@
 	{#if showDetails}
 		<CardSection as="article" className="p-4 items-start flex-col gap-4">
 			<SessionsTable targetId={campaign.id} sessions={campaign.session} {events} />
+		</CardSection>
+	{/if}
+
+	{#if showDetails}
+		<CardSection as="article" className="p-4 items-start flex-col gap-4">
+			<AntagonismTable {campaign} {campaigns} />
 		</CardSection>
 	{/if}
 

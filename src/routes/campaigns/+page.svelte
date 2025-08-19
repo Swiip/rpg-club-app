@@ -17,15 +17,14 @@
 		</button>
 	</div>
 
-	{#if campaigns && campaigns.length > 0}
-		{#each campaigns as campaign (campaign.id)}
-			<CampaignCard
-				{members}
-				{events}
-				{campaign}
-				registration={registrations[campaign.id]}
-				{supabase}
-			/>
-		{/each}
-	{/if}
+	{#each campaigns as campaign (campaign.id)}
+		<CampaignCard
+			{members}
+			{events}
+			{campaign}
+			registration={registrations[campaign.id]}
+			{supabase}
+			{campaigns}
+		/>
+	{/each}
 </Container>
