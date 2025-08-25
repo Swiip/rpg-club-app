@@ -3,11 +3,13 @@ import type { EventWithJoins } from '$lib/supabase/events';
 type OsEvent = EventWithJoins['os'][number];
 type CampaignEvent = EventWithJoins['session'][number]['campaign'];
 type Table = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent);
+type Member = Table['registration'][number]['member'];
 
 export type Event = {
 	date: string;
 	location: string;
 	tables: Table[];
+	duplicates: Member[];
 };
 
 type Month = {
@@ -33,9 +35,10 @@ export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 
 		let event = month.events.find((event) => event.date === eventData.date);
 		if (!event) {
-			event = { date: eventData.date, location: eventData.location, tables: [] };
+			event = { date: eventData.date, location: eventData.location, tables: [], duplicates: [] };
 			month.events.push(event);
 		}
+		const members = new Set<Member>();
 
 		if (eventData.os) {
 			event.tables.push(...eventData.os.map((os) => ({ type: 'os' as const, ...os })));
@@ -45,6 +48,13 @@ export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 				...eventData.session.map((session) => ({ type: 'campaign' as const, ...session.campaign }))
 			);
 		}
+		event.tables.forEach((table) =>
+			table.registration.forEach(({ member }) =>
+				members.values().find((m) => m.discord_id === member.discord_id)
+					? event.duplicates.push(member)
+					: members.add(member)
+			)
+		);
 	});
 
 	return calendar;

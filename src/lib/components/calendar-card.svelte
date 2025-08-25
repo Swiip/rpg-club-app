@@ -28,6 +28,12 @@
 		</small>
 	</CardSection>
 
+	{#if event.duplicates.length > 0}
+		<CardSection as="article" className="flex-col p-4 gap-4 text-error-700-300">
+			<p>Attention, Doublons ! {event.duplicates.map(({ handle }) => handle).join(', ')}</p>
+		</CardSection>
+	{/if}
+
 	{#each event.tables as table (`${table.type}${table.id}`)}
 		{#if showDetails}
 			<CardImage
