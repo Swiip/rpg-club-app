@@ -5,7 +5,7 @@ export type Game = UnwrapQuery<typeof fetchGames>[number];
 export const fetchGames = (supabase: SupabaseClient) =>
 	supabase
 		.from('game')
-		.select(`id, name, description,illustration`)
+		.select(`id, name, description, illustration`)
 		.order('name', { ascending: true });
 
 export const fetchGame = (supabase: SupabaseClient, id: number) =>

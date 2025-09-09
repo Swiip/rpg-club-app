@@ -6,6 +6,7 @@
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import Calendar from '@lucide/svelte/icons/calendar';
 	import CalendarDays from '@lucide/svelte/icons/calendar-days';
+	import CalendarX from '@lucide/svelte/icons/calendar-x';
 	import Dices from '@lucide/svelte/icons/dices';
 	import CircleUser from '@lucide/svelte/icons/circle-user';
 	import Sword from '@lucide/svelte/icons/sword';
@@ -51,6 +52,9 @@
 		</MenuItem>
 		<MenuItem tooltip="Événements" link="/events">
 			<CalendarDays size={20} />
+		</MenuItem>
+		<MenuItem tooltip="Disponibilités" link="/availabilities">
+			<CalendarX size={20} />
 		</MenuItem>
 		<MenuItem tooltip="Calendrier" link="/calendar">
 			<Calendar size={20} />

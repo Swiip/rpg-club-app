@@ -19,8 +19,8 @@
 		<thead>
 			<tr>
 				<th>Date</th>
-				<th>Start</th>
-				<th>End</th>
+				<th>Début</th>
+				<th>Fin</th>
 				<th>Location</th>
 			</tr>
 		</thead>

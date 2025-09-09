@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability: {
+        Row: {
+          availability: number
+          created_at: string
+          event: number
+          id: number
+          member: number
+        }
+        Insert: {
+          availability: number
+          created_at?: string
+          event: number
+          id?: number
+          member: number
+        }
+        Update: {
+          availability?: number
+          created_at?: string
+          event?: number
+          id?: number
+          member?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "availability_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "availability_member_fkey"
+            columns: ["member"]
+            isOneToOne: false
+            referencedRelation: "member"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign: {
         Row: {
           created_at: string

@@ -5,6 +5,8 @@ export type Event = UnwrapQuery<typeof fetchEventsBase>[number];
 
 export type EventWithJoins = UnwrapQuery<typeof fetchAllEventsForCalendar>[number];
 
+export type EventWithAvailabilities = UnwrapQuery<typeof fetchAllEventsForAvailabilities>[number];
+
 const fetchEventsBase = (supabase: SupabaseClient) =>
 	supabase.from('event').select(`id, date, start, end, location`);
 
@@ -53,3 +55,24 @@ export const fetchEvent = (supabase: SupabaseClient, id: number) =>
 
 export const upsertEvent = (supabase: SupabaseClient, event: PartialSome<Event, 'id'>) =>
 	supabase.from('event').upsert(event);
+
+const fetchAllEventsForAvailabilities = (supabase: SupabaseClient) =>
+	supabase
+		.from('event')
+		.select(
+			`
+			id, date, location,
+			availability ( id, availability, member )
+		`
+		)
+		.order('date', { ascending: true });
+
+export const fetchEventsForAvailabilities = (
+	supabase: SupabaseClient,
+	memberId: number,
+	isFuture: boolean
+) =>
+	fetchAllEventsForAvailabilities(supabase)
+		.eq('availability.member', memberId)
+		[isFuture ? 'gte' : 'lte']('date', getCurrentDate())
+		.order('date', { ascending: isFuture });
