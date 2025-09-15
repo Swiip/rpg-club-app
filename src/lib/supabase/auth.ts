@@ -22,6 +22,12 @@ export const authGuard = async (
 
 	let result = await fetchMemberByDiscordId(supabase, discordData.id);
 
+	console.log('auth guard', {
+		discord_id: discordData.id,
+		result_id: result.data?.id,
+		error: result.error
+	});
+
 	if (!result.data) {
 		await supabase.from('member').insert({
 			discord_id: discordData.id,
@@ -37,11 +43,14 @@ export const authGuard = async (
 	}
 
 	if (result.data.handle !== discordData.handle || result.data.avatar !== discordData.avatar) {
-		await supabase.from('member').upsert({
-			discord_id: discordData.id,
-			handle: discordData.handle,
-			avatar: discordData.avatar
-		});
+		await supabase
+			.from('member')
+			.update({
+				discord_id: discordData.id,
+				handle: discordData.handle,
+				avatar: discordData.avatar
+			})
+			.eq('id', result.data.id);
 	}
 
 	return { member: result.data };
