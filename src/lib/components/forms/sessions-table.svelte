@@ -5,6 +5,7 @@
 	import type { SessionAction } from '$lib/supabase/sessions';
 	import type { Event } from '$lib/supabase/events';
 	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
+	import { formatDate } from '$lib/logic/dates';
 
 	type Props = {
 		targetId: number;
@@ -38,7 +39,7 @@
 		<tbody class="[&>tr]:hover:preset-tonal-primary">
 			{#each sessions as { id, event } (id)}
 				<tr>
-					<td>{event.date}</td>
+					<td>{formatDate(event.date)}</td>
 					<td>
 						<button class="btn-icon preset-tonal-error" onclick={handleClick('delete', event.id)}>
 							<Trash size={16} />
@@ -51,7 +52,7 @@
 					<select class="select" name="new" bind:value={newEventId}>
 						{#if events && events.length > 0}
 							{#each events as { id, date } (id)}
-								<option value={id}>{date}</option>
+								<option value={id}>{formatDate(date)}</option>
 							{/each}
 						{/if}
 					</select>

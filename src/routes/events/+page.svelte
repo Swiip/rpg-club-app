@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Container from '$lib/components/container.svelte';
 	import FuturePastTabs from '$lib/components/future-past-tabs.svelte';
+	import { formatDate, formatTime } from '$lib/logic/dates';
 	import type { Event } from '$lib/supabase/events';
 
 	let { data } = $props();
@@ -28,9 +29,9 @@
 			{#if events && events.length > 0}
 				{#each events as event (event.id)}
 					<tr onclick={handleClick(event)} class="cursor-pointer">
-						<td>{event.date}</td>
-						<td>{event.start}</td>
-						<td>{event.end}</td>
+						<td>{formatDate(event.date)}</td>
+						<td>{formatTime(event.start)}</td>
+						<td>{formatTime(event.end)}</td>
 						<td>{event.location}</td>
 					</tr>
 				{/each}

@@ -12,15 +12,15 @@
 
 <form method="POST" action="?/save" class="mx-auto w-full max-w-md space-y-4">
 	<label class="label">
-		<span class="label-text">Title</span>
+		<span class="label-text">Titre</span>
 		<input class="input" name="title" type="text" value={campaign?.title} required />
 	</label>
 	<label class="label">
-		<span class="label-text">Description</span>
+		<span class="label-text">Déscription</span>
 		<textarea class="textarea" name="description" value={campaign?.description}></textarea>
 	</label>
 	<label class="label">
-		<span class="label-text">Game</span>
+		<span class="label-text">Jeu</span>
 		<select class="select" name="game" value={campaign?.game} required>
 			{#if games && games.length > 0}
 				{#each games as game (game.id)}
@@ -30,7 +30,7 @@
 		</select>
 	</label>
 	<label class="label">
-		<span class="label-text">GM</span>
+		<span class="label-text">MJ</span>
 		<select class="select" name="gm" value={campaign?.gm} required>
 			{#if members && members.length > 0}
 				{#each members as member (member.id)}

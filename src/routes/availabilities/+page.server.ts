@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSes
 
 	return {
 		events: result.data || [],
+		memberId,
 		member,
 		members: membersResult.data || []
 	};

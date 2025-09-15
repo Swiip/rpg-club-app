@@ -1,10 +1,7 @@
 import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from '../../$types';
 
-export const GET = async (event) => {
-	const {
-		url,
-		locals: { supabase }
-	} = event;
+export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 	const code = url.searchParams.get('code') as string;
 	const next = url.searchParams.get('next') ?? '/';
 
@@ -15,6 +12,5 @@ export const GET = async (event) => {
 		}
 	}
 
-	// return the user to an error page with instructions
-	throw redirect(303, '/auth/auth-code-error');
+	return { url: url.href };
 };

@@ -1,12 +1,22 @@
 export const formatDate = (date: string | Date | null | undefined) =>
 	date
 		? new Date(date).toLocaleString(navigator.language, {
-				year: 'numeric',
 				month: 'long',
 				day: 'numeric',
 				weekday: 'long'
 			})
 		: 'Date manquante';
+
+export const formatTime = (time: string | Date | null | undefined) =>
+	time
+		? new Date(typeof time === 'string' ? `1-1-0-${time}` : time).toLocaleString(
+				navigator.language,
+				{
+					hour: 'numeric',
+					minute: 'numeric'
+				}
+			)
+		: 'Horaire manquant';
 
 export const getCurrentDate = () => {
 	const iso = new Date().toISOString();

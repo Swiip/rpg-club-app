@@ -4,6 +4,7 @@
 	import type { AvailabilityStatus } from '$lib/supabase/availabilities';
 	import { clsx } from 'clsx';
 	import { getStatus } from '$lib/logic/availabilities';
+	import { formatDate } from '$lib/logic/dates';
 
 	type Props = {
 		memberId: number;
@@ -40,7 +41,7 @@
 			{#if events && events.length > 0}
 				{#each events as event (event.id)}
 					<tr>
-						<td>{event.date}</td>
+						<td>{formatDate(event.date)}</td>
 						<td>{event.location}</td>
 						<td class="text-right">
 							<nav class="btn-group btn-sm preset-outlined-surface-200-800 px-1">
