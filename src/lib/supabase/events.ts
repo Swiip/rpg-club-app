@@ -37,7 +37,8 @@ const fetchAllEventsForCalendar = (supabase: SupabaseClient) =>
 					gm ( handle, discord_id ),
 					registration ( confirmation, member ( handle, discord_id ) )
 				)
-			)
+			),
+			availability ( availability, member ( handle, discord_id ) )
 		`
 		)
 		.order('date', { ascending: true });

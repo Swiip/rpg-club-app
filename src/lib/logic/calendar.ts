@@ -1,3 +1,4 @@
+import { availabilityCode } from '$lib/supabase/availabilities';
 import type { EventWithJoins } from '$lib/supabase/events';
 
 type OsEvent = EventWithJoins['os'][number];
@@ -10,6 +11,7 @@ export type Event = {
 	location: string;
 	tables: Table[];
 	duplicates: Member[];
+	unavailabilities: { unset: Member[]; off: Member[]; maybe: Member[] };
 };
 
 type Month = {
@@ -35,7 +37,13 @@ export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 
 		let event = month.events.find((event) => event.date === eventData.date);
 		if (!event) {
-			event = { date: eventData.date, location: eventData.location, tables: [], duplicates: [] };
+			event = {
+				date: eventData.date,
+				location: eventData.location,
+				tables: [],
+				duplicates: [],
+				unavailabilities: { unset: [], off: [], maybe: [] }
+			};
 			month.events.push(event);
 		}
 		const members = new Set<Member>();
@@ -55,6 +63,23 @@ export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 					: members.add(member)
 			)
 		);
+		members.forEach((member) => {
+			const availability = eventData.availability.find(
+				(availability) => availability.member.discord_id === member.discord_id
+			)?.availability;
+
+			if (availability === undefined) {
+				event.unavailabilities.unset.push(member);
+			}
+
+			if (availability === availabilityCode.off) {
+				event.unavailabilities.off.push(member);
+			}
+
+			if (availability === availabilityCode.maybe) {
+				event.unavailabilities.maybe.push(member);
+			}
+		});
 	});
 
 	return calendar;

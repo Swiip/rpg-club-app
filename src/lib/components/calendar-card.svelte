@@ -13,6 +13,15 @@
 
 	const { event, supabase }: Props = $props();
 	let showDetails = $state(false);
+	let showWarning = $derived(
+		event.duplicates.length > 0 ||
+			event.unavailabilities.unset.length > 0 ||
+			event.unavailabilities.off.length > 0 ||
+			event.unavailabilities.maybe.length > 0
+	);
+
+	const showMembers = (members: { handle: string }[]) =>
+		members.map(({ handle }) => handle).join(', ');
 </script>
 
 <CardContainer>
@@ -28,9 +37,28 @@
 		</small>
 	</CardSection>
 
-	{#if event.duplicates.length > 0}
-		<CardSection as="article" className="flex-col p-4 gap-4 text-error-700-300">
-			<p>Attention, Doublons ! {event.duplicates.map(({ handle }) => handle).join(', ')}</p>
+	{#if showWarning}
+		<CardSection as="article" className="flex-col p-4 gap-4">
+			{#if event.duplicates.length > 0}
+				<p class="text-error-700-300">
+					Attention, Doublons ! {showMembers(event.duplicates)}
+				</p>
+			{/if}
+			{#if event.unavailabilities.off.length > 0}
+				<p class="text-error-700-300">
+					Attention, Indispos ! {showMembers(event.unavailabilities.off)}
+				</p>
+			{/if}
+			{#if event.unavailabilities.maybe.length > 0}
+				<p class="text-warning-700-300">
+					Attention, Peut être ! {showMembers(event.unavailabilities.maybe)}
+				</p>
+			{/if}
+			{#if event.unavailabilities.maybe.length > 0}
+				<p>
+					Attention, Dispos non renseignées ! {showMembers(event.unavailabilities.unset)}
+				</p>
+			{/if}
 		</CardSection>
 	{/if}
 
