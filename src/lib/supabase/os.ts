@@ -25,3 +25,6 @@ export const fetchOs = (supabase: SupabaseClient, id: number) =>
 
 export const upsertOs = (supabase: SupabaseClient, os: PartialSome<Os, 'id' | 'created_at'>) =>
 	supabase.from('os').upsert(os);
+
+export const deleteOs = (supabase: SupabaseClient, id: number) =>
+	supabase.from('os').delete().eq('id', id);

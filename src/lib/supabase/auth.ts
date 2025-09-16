@@ -22,12 +22,6 @@ export const authGuard = async (
 
 	let result = await fetchMemberByDiscordId(supabase, discordData.id);
 
-	console.log('auth guard', {
-		discord_id: discordData.id,
-		result_id: result.data?.id,
-		error: result.error
-	});
-
 	if (!result.data) {
 		await supabase.from('member').insert({
 			discord_id: discordData.id,

@@ -11,6 +11,7 @@
 	import type { OsWithJoins } from '$lib/supabase/os';
 	import type { Member } from '$lib/supabase/members';
 	import { formatDate } from '$lib/logic/dates';
+	import { enhance } from '$app/forms';
 
 	type Props = {
 		members: Member[];
@@ -21,19 +22,27 @@
 
 	const { members, os, registration, supabase }: Props = $props();
 	let showDetails = $state(false);
+	let handleDelete = $derived(os.registration.length === 0 ? () => {} : null);
 
-	const handleClick = (os: OsWithJoins) => () => goto(`/os/${os.id}/edit`);
+	const handleEdit = (os: OsWithJoins) => (event: Event) => {
+		event.preventDefault();
+		goto(`/os/${os.id}/edit`);
+	};
 </script>
 
 <CardContainer>
-	<CardImage
-		{supabase}
-		bucket="game-banners"
-		url={os.game.illustration}
-		alt={os.game.name}
-		title={os.title}
-		onClick={handleClick(os)}
-	/>
+	<form method="POST" action="?/delete" use:enhance>
+		<input type="hidden" name="osId" value={os.id} />
+		<CardImage
+			{supabase}
+			bucket="game-banners"
+			url={os.game.illustration}
+			alt={os.game.name}
+			title={os.title}
+			onEdit={handleEdit(os)}
+			onDelete={handleDelete}
+		/>
+	</form>
 
 	<CardSection as="article" className="p-4 items-center justify-between">
 		<span class="opacity-60">MJ: {os.gm?.handle}</span>

@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import SupabaseImage from '../image/supabase-image.svelte';
 	import Pen from '@lucide/svelte/icons/pen';
+	import X from '@lucide/svelte/icons/x';
 	import CardSection from './card-section.svelte';
 	import type { SupabaseClient } from '$lib/supabase/types';
 
@@ -13,10 +14,12 @@
 		children?: Snippet;
 		className?: string;
 		title?: string;
-		onClick?: () => void;
+		onEdit?: ((event: Event) => void) | null;
+		onDelete?: ((event: Event) => void) | null;
 	};
 
-	const { supabase, bucket, url, alt, children, className, title, onClick }: Props = $props();
+	const { supabase, bucket, url, alt, children, className, title, onEdit, onDelete }: Props =
+		$props();
 </script>
 
 <CardSection as="illustration" className={`relative ${className}`}>
@@ -26,10 +29,19 @@
 			{title}
 		</p>
 	{/if}
-	{#if onClick}
-		<button class="btn-icon preset-tonal-primary absolute top-4 right-4" onclick={onClick}>
-			<Pen size={16} />
-		</button>
+	{#if onEdit || onDelete}
+		<div class="absolute top-4 right-4">
+			{#if onEdit}
+				<button class="btn-icon preset-tonal-primary" onclick={onEdit}>
+					<Pen size={16} />
+				</button>
+			{/if}
+			{#if onDelete}
+				<button class="btn-icon preset-tonal-error" onclick={onDelete}>
+					<X size={16} />
+				</button>
+			{/if}
+		</div>
 	{/if}
 	{@render children?.()}
 </CardSection>

@@ -28,7 +28,7 @@
 		bucket="game-banners"
 		url={game.illustration}
 		alt={game.name}
-		onClick={handleClick(game)}
+		onEdit={handleClick(game)}
 	>
 		{#if !showDetails}
 			<button

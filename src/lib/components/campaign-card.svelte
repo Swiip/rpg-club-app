@@ -36,7 +36,7 @@
 		url={campaign.game.illustration}
 		alt={campaign.game.name}
 		title={campaign.title}
-		onClick={handleClick(campaign)}
+		onEdit={handleClick(campaign)}
 	/>
 
 	<CardSection as="article" className="p-4 items-center justify-between">
