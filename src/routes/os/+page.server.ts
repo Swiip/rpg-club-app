@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSes
 };
 
 export const actions = {
-	registration,
+	registration: registration('os'),
 	delete: async ({ locals: { supabase }, request }) => {
 		const formData = await request.formData();
 		const osId = Number(formData.get('osId'));

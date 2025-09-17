@@ -20,4 +20,4 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	};
 };
 
-export const actions = { registration, session };
+export const actions = { registration: registration('campaign'), session };
