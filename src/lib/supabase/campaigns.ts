@@ -9,12 +9,15 @@ export const fetchCampaigns = (supabase: SupabaseClient) =>
 			`
 			id, title, description,
 			game ( id, name, illustration ),
-			gm ( id, handle ),
+			gm ( id, handle, discord_id ),
 			session ( id, event ( id, date ) ),
-			registration ( id, confirmation, member ( id, handle ) )
+			registration ( id, confirmation, member ( id, handle, discord_id ) )
 		`
 		)
 		.order('title', { ascending: true });
+
+export const fetchCampaignWithJoins = (supabase: SupabaseClient, id: number) =>
+	fetchCampaigns(supabase).eq('id', id).single();
 
 export const fetchCampaign = (supabase: SupabaseClient, id: number) =>
 	supabase.from('campaign').select(`id, title, description, game, gm`).eq('id', id).single();

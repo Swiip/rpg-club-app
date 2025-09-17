@@ -18,6 +18,11 @@ export const formatTime = (time: string | Date | null | undefined) =>
 			)
 		: 'Horaire manquant';
 
+export const formatMonth = (time: string | Date | null | undefined) =>
+	time
+		? new Date(time).toLocaleString(navigator.language, { year: 'numeric', month: 'long' })
+		: 'Mois manquant';
+
 export const getCurrentDate = () => {
 	const iso = new Date().toISOString();
 	return iso.substring(0, iso.indexOf('T'));

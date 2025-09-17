@@ -3,9 +3,8 @@ import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import { deleteOs, fetchOses } from '$lib/supabase/os';
 import type { Actions } from '../games/[id]/edit/$types';
-import { type RegistrationAction } from '$lib/supabase/registrations';
 import { fetchMembers } from '$lib/supabase/members';
-import { updateRegistration } from '$lib/supabase/registrations';
+import { registration } from '$lib/actions/registration';
 
 export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
@@ -24,13 +23,7 @@ export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSes
 };
 
 export const actions = {
-	registration: async ({ locals: { supabase }, request }) => {
-		const formData = await request.formData();
-		const targetId = Number(formData.get('targetId'));
-		const memberId = Number(formData.get('memberId'));
-		const action = formData.get('action') as RegistrationAction;
-		return updateRegistration(supabase, action, memberId, 'os', targetId);
-	},
+	registration,
 	delete: async ({ locals: { supabase }, request }) => {
 		const formData = await request.formData();
 		const osId = Number(formData.get('osId'));

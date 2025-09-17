@@ -1,0 +1,21 @@
+import type { Member } from '$lib/logic/calendar';
+import { computeWarnings, initWarnings, type Warnings } from '$lib/logic/warnings';
+import type { EventWithJoins } from '$lib/supabase/events';
+
+export type EventOption = {
+	id: number;
+	date: string;
+	warnings: Warnings;
+};
+
+export const computeEventOptions = (
+	allEvents: EventWithJoins[],
+	excludedEvents: { id: number }[],
+	members: Member[]
+): EventOption[] =>
+	allEvents
+		.filter((included) => !excludedEvents.find((excluded) => excluded.id === included.id))
+		.map((event) => ({
+			...event,
+			warnings: computeWarnings(event, initWarnings({ members: new Set(members) }), true)
+		}));

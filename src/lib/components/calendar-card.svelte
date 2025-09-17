@@ -5,6 +5,8 @@
 	import CardContainer from './card/card-container.svelte';
 	import CardMoreButton from './card/card-more-button.svelte';
 	import CardImage from './card/card-image.svelte';
+	import Warnings from './warnings.svelte';
+	import { getWarningFlags } from '$lib/logic/warnings';
 
 	type Props = {
 		event: Event;
@@ -13,15 +15,7 @@
 
 	const { event, supabase }: Props = $props();
 	let showDetails = $state(false);
-	let showWarning = $derived(
-		event.duplicates.length > 0 ||
-			event.unavailabilities.unset.length > 0 ||
-			event.unavailabilities.off.length > 0 ||
-			event.unavailabilities.maybe.length > 0
-	);
-
-	const showMembers = (members: { handle: string }[]) =>
-		members.map(({ handle }) => handle).join(', ');
+	let warningFlags = $derived(getWarningFlags(event.warnings));
 </script>
 
 <CardContainer>
@@ -37,28 +31,10 @@
 		</small>
 	</CardSection>
 
-	{#if showWarning}
+	{#if warningFlags.hasWarnings}
 		<CardSection as="article" className="flex-col p-4 gap-4">
-			{#if event.duplicates.length > 0}
-				<p class="text-error-700-300">
-					Attention, Doublons ! {showMembers(event.duplicates)}
-				</p>
-			{/if}
-			{#if event.unavailabilities.off.length > 0}
-				<p class="text-error-700-300">
-					Attention, Indispos ! {showMembers(event.unavailabilities.off)}
-				</p>
-			{/if}
-			{#if event.unavailabilities.maybe.length > 0}
-				<p class="text-warning-700-300">
-					Attention, Peut être ! {showMembers(event.unavailabilities.maybe)}
-				</p>
-			{/if}
-			{#if event.unavailabilities.maybe.length > 0}
-				<p>
-					Attention, Dispos non renseignées ! {showMembers(event.unavailabilities.unset)}
-				</p>
-			{/if}
+			<p>Potentiel problèmes détectés :</p>
+			<Warnings warnings={event.warnings} />
 		</CardSection>
 	{/if}
 
