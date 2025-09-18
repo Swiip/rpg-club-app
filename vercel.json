@@ -1,8 +1,12 @@
 {
 	"crons": [
 		{
-			"path": "/reminder",
+			"path": "/discord/crons/reminder",
 			"schedule": "0 7 * * *"
+		},
+		{
+			"path": "/discord/crons/calendar",
+			"schedule": "0 12 30 * *"
 		}
 	]
 }

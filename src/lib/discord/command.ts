@@ -1,7 +1,7 @@
 import { InteractionType, verifyKey } from 'discord-interactions';
 import { json } from '@sveltejs/kit';
 import { InteractionResponseType, SlashCommandBuilder } from 'discord.js';
-import ping from './commands/ping.js';
+import calendar from './commands/calendar';
 import { DISCORD_PUBLIC_KEY } from '$env/static/private';
 
 export type SlashCommand = {
@@ -10,7 +10,7 @@ export type SlashCommand = {
 	execute: (messsage: any) => Promise<{ content: string }>;
 };
 
-const commands: Record<string, SlashCommand> = { ping };
+const commands: Record<string, SlashCommand> = { calendar };
 
 export const respond = async (request: Request) => {
 	try {

@@ -1,10 +1,10 @@
 import { REST, Routes } from 'discord.js';
-import ping from './commands/ping';
+import calendar from './commands/calendar';
 import { DISCORD_TOKEN, DISCORD_APP_ID } from '$env/static/private';
 
 const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN);
 
-const commandData = [ping.data];
+const commandData = [calendar.data];
 
 export const register = async () => {
 	try {

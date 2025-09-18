@@ -2,7 +2,7 @@ import { DISCORD_WEBHOOK_URL } from '$env/static/private';
 
 type SendMessageBody = {
 	content: string;
-	allowed_mentions: {
+	allowed_mentions?: {
 		users: string[];
 	};
 };

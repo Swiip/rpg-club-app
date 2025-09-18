@@ -1,6 +1,6 @@
 export const formatDate = (date: string | Date | null | undefined) =>
 	date
-		? new Date(date).toLocaleString(navigator.language, {
+		? new Date(date).toLocaleString('fr-FR', {
 				month: 'long',
 				day: 'numeric',
 				weekday: 'long'
@@ -9,18 +9,15 @@ export const formatDate = (date: string | Date | null | undefined) =>
 
 export const formatTime = (time: string | Date | null | undefined) =>
 	time
-		? new Date(typeof time === 'string' ? `1-1-0-${time}` : time).toLocaleString(
-				navigator.language,
-				{
-					hour: 'numeric',
-					minute: 'numeric'
-				}
-			)
+		? new Date(typeof time === 'string' ? `1-1-0-${time}` : time).toLocaleString('fr-FR', {
+				hour: 'numeric',
+				minute: 'numeric'
+			})
 		: 'Horaire manquant';
 
 export const formatMonth = (time: string | Date | null | undefined) =>
 	time
-		? new Date(time).toLocaleString(navigator.language, { year: 'numeric', month: 'long' })
+		? new Date(time).toLocaleString('fr-FR', { year: 'numeric', month: 'long' })
 		: 'Mois manquant';
 
 export const getCurrentDate = () => {
