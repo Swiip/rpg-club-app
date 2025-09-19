@@ -11,6 +11,7 @@
 	import CircleUser from '@lucide/svelte/icons/circle-user';
 	import Sword from '@lucide/svelte/icons/sword';
 	import Swords from '@lucide/svelte/icons/swords';
+	import ChartNoAxesCombined from '@lucide/svelte/icons/chart-no-axes-combined';
 	import MenuItem from '$lib/components/menu-item.svelte';
 
 	const { data: propsData, children } = $props();
@@ -64,6 +65,9 @@
 		</MenuItem>
 		<MenuItem tooltip="Campagnes" link="/campaigns">
 			<Swords size={20} />
+		</MenuItem>
+		<MenuItem tooltip="Stats" link="/stats">
+			<ChartNoAxesCombined size={20} />
 		</MenuItem>
 	{/snippet}
 	{#snippet headline()}

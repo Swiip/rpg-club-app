@@ -1,4 +1,4 @@
-import { getCurrentDate } from '$lib/logic/dates';
+import { formatDateInput } from '$lib/logic/dates';
 import type { PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
 export type Event = UnwrapQuery<typeof fetchEventsBase>[number];
@@ -12,7 +12,7 @@ const fetchEventsBase = (supabase: SupabaseClient) =>
 
 export const fetchEvents = (supabase: SupabaseClient, isFuture: boolean) =>
 	fetchEventsBase(supabase)
-		[isFuture ? 'gte' : 'lte']('date', getCurrentDate())
+		[isFuture ? 'gte' : 'lte']('date', formatDateInput())
 		.order('date', { ascending: isFuture });
 
 export const fetchAllEvents = (supabase: SupabaseClient) =>
@@ -45,11 +45,14 @@ const fetchAllEventsForCalendar = (supabase: SupabaseClient) =>
 
 export const fetchEventsForCalendar = (supabase: SupabaseClient, isFuture: boolean) =>
 	fetchAllEventsForCalendar(supabase)
-		[isFuture ? 'gte' : 'lte']('date', getCurrentDate())
+		[isFuture ? 'gte' : 'lte']('date', formatDateInput())
 		.order('date', { ascending: isFuture });
 
 export const fetchEventsForReminder = (supabase: SupabaseClient) =>
-	fetchAllEventsForCalendar(supabase).eq('date', getCurrentDate()).single();
+	fetchAllEventsForCalendar(supabase).eq('date', formatDateInput()).single();
+
+export const fetchEventsForStats = (supabase: SupabaseClient, start: string, end: string) =>
+	fetchAllEventsForCalendar(supabase).gte('date', start).lte('date', end);
 
 export const fetchEvent = (supabase: SupabaseClient, id: number) =>
 	supabase.from('event').select(`id, date, start, end, location`).eq('id', id).single();
@@ -75,5 +78,5 @@ export const fetchEventsForAvailabilities = (
 ) =>
 	fetchAllEventsForAvailabilities(supabase)
 		.eq('availability.member', memberId)
-		[isFuture ? 'gte' : 'lte']('date', getCurrentDate())
+		[isFuture ? 'gte' : 'lte']('date', formatDateInput())
 		.order('date', { ascending: isFuture });

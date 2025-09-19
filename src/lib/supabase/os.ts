@@ -1,4 +1,4 @@
-import { getCurrentDate } from '$lib/logic/dates';
+import { formatDateInput } from '$lib/logic/dates';
 import type { SupabaseClient, UnwrapQuery, Os, PartialSome } from '$lib/supabase/types';
 
 export type OsWithJoins = UnwrapQuery<typeof fetchAllOses>[number];
@@ -16,8 +16,8 @@ const fetchAllOses = (supabase: SupabaseClient) =>
 
 export const fetchOses = (supabase: SupabaseClient, isFuture: boolean) =>
 	(isFuture
-		? fetchAllOses(supabase).not('event', 'is', null).gte('event.date', getCurrentDate())
-		: fetchAllOses(supabase).lte('event.date', getCurrentDate())
+		? fetchAllOses(supabase).not('event', 'is', null).gte('event.date', formatDateInput())
+		: fetchAllOses(supabase).lte('event.date', formatDateInput())
 	).order('event ( date )', { ascending: isFuture });
 
 export const fetchOs = (supabase: SupabaseClient, id: number) =>
