@@ -1,21 +1,39 @@
 <script lang="ts">
 	import Container from '$lib/components/container.svelte';
 	import { computeStats } from '$lib/logic/stats.js';
+	import { gotoWithParam } from '$lib/logic/urls.js';
 
 	let { data } = $props();
-	let { events, start, end } = $derived(data);
+	let { events } = $derived(data);
+	let start = $state(data.start);
+	let end = $state(data.end);
 	let stats = $derived(computeStats(events));
+
+	const handleDateChange = (type: 'start' | 'end') => () =>
+		gotoWithParam(type, type === 'start' ? start : end);
 </script>
 
 <Container>
 	<div class="flex w-full justify-end gap-4">
 		<label class="label">
 			<span class="label-text">Début</span>
-			<input class="input" name="date" type="date" value={start} />
+			<input
+				class="input"
+				name="date"
+				type="date"
+				bind:value={start}
+				onchange={handleDateChange('start')}
+			/>
 		</label>
 		<label class="label">
 			<span class="label-text">Fin</span>
-			<input class="input" name="date" type="date" value={end} />
+			<input
+				class="input"
+				name="date"
+				type="date"
+				bind:value={end}
+				onchange={handleDateChange('end')}
+			/>
 		</label>
 	</div>
 
