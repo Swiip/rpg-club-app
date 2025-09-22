@@ -49,7 +49,7 @@ export const fetchEventsForCalendar = (supabase: SupabaseClient, isFuture: boole
 		.order('date', { ascending: isFuture });
 
 export const fetchEventsForReminder = (supabase: SupabaseClient) =>
-	fetchAllEventsForCalendar(supabase).eq('date', formatDateInput()).single();
+	fetchAllEventsForCalendar(supabase).eq('date', formatDateInput());
 
 export const fetchEventsForStats = (supabase: SupabaseClient, start: string, end: string) =>
 	fetchAllEventsForCalendar(supabase).gte('date', start).lte('date', end);

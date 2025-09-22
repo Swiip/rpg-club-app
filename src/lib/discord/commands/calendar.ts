@@ -30,7 +30,7 @@ const calendar: SlashCommand = {
 			messageBuilder.push(`__**${capitalize(formatMonth(month.name))}**__`, '');
 
 			month.events.forEach((event) => {
-				const date = `- **${capitalize(formatDate(event.date))}** :`;
+				const date = `- **${capitalize(formatDate(event.date))} ${event.location}** :`;
 
 				const lineBuilder: string[] = [];
 
