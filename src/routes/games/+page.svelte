@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import AddButton from '$lib/components/add-button.svelte';
 	import Container from '$lib/components/container.svelte';
 	import GameCard from '$lib/components/game-card.svelte';
 
@@ -14,11 +14,7 @@
 </script>
 
 <Container>
-	<div class="flex w-full justify-end">
-		<button class="btn preset-filled-primary-500" onclick={() => goto(`/games/new/edit`)}>
-			Ajouter +
-		</button>
-	</div>
+	<AddButton url="/games/new/edit" />
 
 	<label class="label">
 		<span class="label-text">Filtre</span>

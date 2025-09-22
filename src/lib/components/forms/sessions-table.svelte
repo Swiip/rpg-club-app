@@ -43,7 +43,10 @@
 		<tbody class="[&>tr]:hover:preset-tonal-primary">
 			{#each sessions as { id, event } (id)}
 				<tr>
-					<td>{formatDate(event.date)}</td>
+					<td>
+						<p>{formatDate(event.date)}</p>
+						<p>{event.location}</p>
+					</td>
 					<td>
 						<button class="btn-icon preset-tonal-error" onclick={handleClick('delete', event.id)}>
 							<Trash size={16} />

@@ -8,6 +8,7 @@ type Table = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent)
 export type Member = Table['registration'][number]['member'];
 
 export type Event = {
+	id: number;
 	date: string;
 	location: string;
 	tables: Table[];
@@ -35,10 +36,11 @@ export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 			calendar.months.push(month);
 		}
 
-		let event = month.events.find((event) => event.date === eventData.date);
+		let event = month.events.find((event) => event.id === eventData.id);
 
 		if (!event) {
 			event = {
+				id: eventData.id,
 				date: eventData.date,
 				location: eventData.location,
 				tables: [],

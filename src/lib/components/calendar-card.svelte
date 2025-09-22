@@ -7,6 +7,8 @@
 	import CardImage from './card/card-image.svelte';
 	import Warnings from './warnings.svelte';
 	import { getWarningFlags } from '$lib/logic/warnings';
+	import Pen from '@lucide/svelte/icons/pen';
+	import { goto } from '$app/navigation';
 
 	type Props = {
 		event: Event;
@@ -16,18 +18,26 @@
 	const { event, supabase }: Props = $props();
 	let showDetails = $state(false);
 	let warningFlags = $derived(getWarningFlags(event.warnings));
+
+	const handleEdit = () => {
+		goto(`/calendar/${event.id}/edit`);
+	};
 </script>
 
 <CardContainer>
 	<CardSection as="header" className="p-4 items-center justify-between">
 		<small class="opacity-60">{event.location}</small>
-		<small class="opacity-60">
+		<small class="flex items-center gap-4 opacity-60">
 			{new Date(event.date).toLocaleString(navigator.language, {
 				year: 'numeric',
 				month: 'long',
 				day: 'numeric',
 				weekday: 'long'
 			})}
+
+			<button class="btn-icon preset-tonal-primary" onclick={handleEdit}>
+				<Pen size={16} />
+			</button>
 		</small>
 	</CardSection>
 

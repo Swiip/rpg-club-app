@@ -17,6 +17,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 		return redirect(307, '/campaigns');
 	}
 
+	result.data.session.sort((a, b) => a.event.date.localeCompare(b.event.date));
+
 	return { campaign: result.data, member, events: eventsResult.data || [] };
 };
 

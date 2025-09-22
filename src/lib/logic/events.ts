@@ -5,6 +5,7 @@ import type { EventWithJoins } from '$lib/supabase/events';
 export type EventOption = {
 	id: number;
 	date: string;
+	location: string;
 	warnings: Warnings;
 };
 

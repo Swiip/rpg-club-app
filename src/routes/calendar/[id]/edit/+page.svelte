@@ -6,7 +6,7 @@
 
 	const handleCancel = (event: MouseEvent) => {
 		event.preventDefault();
-		goto('/events');
+		goto('/calendar');
 	};
 </script>
 

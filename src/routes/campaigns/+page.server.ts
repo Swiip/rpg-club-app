@@ -14,6 +14,10 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	const campaignsResult = await fetchCampaigns(supabase);
 	const membersResult = await fetchMembers(supabase);
 
+	campaignsResult.data?.forEach((campaign) => {
+		campaign.session.sort((a, b) => a.event.date.localeCompare(b.event.date));
+	});
+
 	return {
 		campaigns: campaignsResult.data || [],
 		members: membersResult.data || []

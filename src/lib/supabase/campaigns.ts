@@ -10,7 +10,7 @@ export const fetchCampaigns = (supabase: SupabaseClient) =>
 			id, title, description,
 			game ( id, name, illustration ),
 			gm ( id, handle, discord_id ),
-			session ( id, event ( id, date ) ),
+			session ( id, event ( id, date, location ) ),
 			registration ( id, confirmation, member ( id, handle, discord_id ) )
 		`
 		)

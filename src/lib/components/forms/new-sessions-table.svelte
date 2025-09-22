@@ -44,7 +44,10 @@
 		<tbody class="[&>tr]:hover:preset-tonal-primary">
 			{#each eventOptions as event (event.id)}
 				<tr>
-					<td>{formatDate(event.date)}</td>
+					<td>
+						<p>{formatDate(event.date)}</p>
+						<p>{event.location}</p>
+					</td>
 					<td><Warnings warnings={event.warnings} /></td>
 					<td>
 						<button class="btn-icon preset-tonal-primary" onclick={handleClick(event.id)}>
