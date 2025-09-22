@@ -45,7 +45,7 @@
 		<select class="select" name="event" value={os?.event} required>
 			{#if events && events.length > 0}
 				{#each events as event (event.id)}
-					<option value={event.id}>{formatDate(event.date)}</option>
+					<option value={event.id}>{formatDate(event.date)} / {event.location}</option>
 				{/each}
 			{/if}
 		</select>
