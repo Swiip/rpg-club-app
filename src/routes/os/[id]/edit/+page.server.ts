@@ -1,10 +1,11 @@
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import { fetchMembers } from '$lib/supabase/members';
 import { fetchAllEvents } from '$lib/supabase/events';
-import { fetchOs, upsertOs } from '$lib/supabase/os';
+import { fetchOs } from '$lib/supabase/os';
 import { fetchGames } from '$lib/supabase/games';
+import { save } from '$lib/actions/os';
 
 export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession }, params }) => {
 	const { session } = await safeGetSession();
@@ -27,24 +28,4 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	};
 };
 
-export const actions = {
-	save: async ({ locals: { supabase }, request, params }) => {
-		const data = await request.formData();
-		const title = String(data.get('title'));
-		const description = String(data.get('description'));
-		const game = Number(data.get('game'));
-		const gm = Number(data.get('gm'));
-		const event = Number(data.get('event'));
-
-		const id = params.id === 'new' ? undefined : Number(params.id);
-
-		const result = await upsertOs(supabase, { id, title, description, game, gm, event });
-
-		if (result.error) {
-			console.error('Error on saving', result.error.message);
-			return fail(500, { error: result.error.message });
-		}
-
-		redirect(303, '/os');
-	}
-} satisfies Actions;
+export const actions = { save } satisfies Actions;

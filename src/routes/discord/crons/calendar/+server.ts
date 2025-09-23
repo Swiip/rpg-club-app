@@ -1,5 +1,5 @@
 import { sendMessage } from '$lib/discord/send';
-import calendarCommand from '$lib/discord/commands/calendar';
+import { createCalendarMessage } from '$lib/discord/messages/calendar';
 
 export const GET = async ({ request }) => {
 	if (
@@ -9,7 +9,7 @@ export const GET = async ({ request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 
-	const message = await calendarCommand.execute('');
+	const message = await createCalendarMessage();
 
 	await sendMessage(message);
 

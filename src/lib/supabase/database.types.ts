@@ -181,6 +181,8 @@ export type Database = {
           game: number
           gm: number
           id: number
+          message_id: string | null
+          thread_id: string | null
           title: string
         }
         Insert: {
@@ -190,6 +192,8 @@ export type Database = {
           game: number
           gm: number
           id?: number
+          message_id?: string | null
+          thread_id?: string | null
           title: string
         }
         Update: {
@@ -199,6 +203,8 @@ export type Database = {
           game?: number
           gm?: number
           id?: number
+          message_id?: string | null
+          thread_id?: string | null
           title?: string
         }
         Relationships: [

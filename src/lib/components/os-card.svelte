@@ -22,12 +22,13 @@
 
 	const { members, os, registration, supabase }: Props = $props();
 	let showDetails = $state(false);
-	let handleDelete = $derived(os.registration.length === 0 ? () => {} : null);
 
 	const handleEdit = (os: OsWithJoins) => (event: Event) => {
 		event.preventDefault();
 		goto(`/os/${os.id}/edit`);
 	};
+
+	let onDelete = $derived(os.registration.length === 0 ? () => {} : null);
 </script>
 
 <CardContainer>
@@ -40,7 +41,7 @@
 			alt={os.game.name}
 			title={os.title}
 			onEdit={handleEdit(os)}
-			onDelete={handleDelete}
+			{onDelete}
 		/>
 	</form>
 

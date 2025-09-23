@@ -1,10 +1,11 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
-import { deleteOs, fetchOses } from '$lib/supabase/os';
+import { fetchOses } from '$lib/supabase/os';
 import type { Actions } from '../games/[id]/edit/$types';
 import { fetchMembers } from '$lib/supabase/members';
 import { registration } from '$lib/actions/registration';
+import { deleteAction } from '$lib/actions/os';
 
 export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
@@ -24,9 +25,5 @@ export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSes
 
 export const actions = {
 	registration: registration('os'),
-	delete: async ({ locals: { supabase }, request }) => {
-		const formData = await request.formData();
-		const osId = Number(formData.get('osId'));
-		return deleteOs(supabase, osId);
-	}
+	delete: deleteAction
 } satisfies Actions;
