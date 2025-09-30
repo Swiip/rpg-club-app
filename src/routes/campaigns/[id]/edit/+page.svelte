@@ -16,7 +16,7 @@
 		<input class="input" name="title" type="text" value={campaign?.title} required />
 	</label>
 	<label class="label">
-		<span class="label-text">Déscription</span>
+		<span class="label-text">Description</span>
 		<textarea class="textarea" name="description" value={campaign?.description}></textarea>
 	</label>
 	<label class="label">

@@ -44,6 +44,6 @@ export const actions = {
 			return fail(500, { error: result.error.message });
 		}
 
-		redirect(303, '/events');
+		redirect(303, '/calendar');
 	}
 } satisfies Actions;
