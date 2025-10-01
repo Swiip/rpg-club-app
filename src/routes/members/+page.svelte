@@ -14,9 +14,9 @@
 	<table class="table caption-bottom">
 		<thead>
 			<tr>
-				<th>Handle</th>
+				<th>Discord</th>
 				<th>Avatar</th>
-				<th>Authorized</th>
+				<th>Autorisé</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -30,19 +30,15 @@
 							{/if}
 						</td>
 						<td>
-							{member.authorized ? 'Yes' : 'No'}
+							{member.authorized ? 'Ok' : 'Non'}
 						</td>
 						<td onclick={handleStopPropagation}>
 							<form method="POST">
 								<input type="hidden" name="id" value={member.id} />
 								{#if member.authorized}
-									<button class="btn preset-tonal-error" formaction="?/unauthorize">
-										Unauthorize
-									</button>
+									<button class="btn-icon preset-tonal-error" formaction="?/unauthorize">X</button>
 								{:else}
-									<button class="btn preset-tonal-primary" formaction="?/authorize">
-										Authorize
-									</button>
+									<button class="btn-icon preset-tonal-primary" formaction="?/authorize">✓</button>
 								{/if}
 							</form>
 						</td>

@@ -28,10 +28,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>RPG Club App</title>
-</svelte:head>
-
 <AppBar
 	headlineClasses="sm:hidden"
 	centerClasses="hidden sm:flex items-center justify-center"
@@ -40,7 +36,11 @@
 >
 	{#snippet lead()}
 		<a href="/">
-			<img src="/assets/ROCKNOLISTES-logo.png" alt="RPG Club App Logo" class="size-8 rounded-lg" />
+			<img
+				src="/assets/ROCKNOLISTES-logo.png"
+				alt="Rock'n'Rôlistes App Logo"
+				class="size-8 rounded-lg"
+			/>
 		</a>
 	{/snippet}
 	{#snippet trail()}
@@ -67,9 +67,9 @@
 		</MenuItem>
 	{/snippet}
 	{#snippet headline()}
-		<h2 class="h2">RPG Club App</h2>
+		<h2 class="h2">Rock'n'Rôlistes App</h2>
 	{/snippet}
-	<span>RPG Club App</span>
+	<span>Rock'n'Rôlistes App</span>
 </AppBar>
 
 {@render children()}

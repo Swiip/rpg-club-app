@@ -13,10 +13,6 @@
 		});
 </script>
 
-<svelte:head>
-	<title>RPG Club App - Login</title>
-</svelte:head>
-
 <div class="flex min-h-48 flex-col items-center justify-center">
 	<button type="button" class="btn preset-filled-primary-500" onclick={handleSignInWithDiscord}>
 		<span>Login with Discord</span>
