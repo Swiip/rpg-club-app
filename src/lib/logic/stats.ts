@@ -1,6 +1,15 @@
 import type { Member } from '$lib/logic/calendar';
 import type { EventWithJoins } from '$lib/supabase/events';
 
+export type Sort = 'member' | 'gm' | 'pc' | 'bg';
+export type Dir = 'asc' | 'desc';
+
+const fieldMap = {
+	gm: 'asGm',
+	pc: 'asPc',
+	bg: 'bg'
+} as const;
+
 type StatEntry = {
 	member: Member;
 	asGm: number;
@@ -8,7 +17,7 @@ type StatEntry = {
 	bg: number;
 };
 
-export const computeStats = (events: EventWithJoins[]) => {
+export const computeStats = (events: EventWithJoins[], sort: Sort, dir: Dir) => {
 	const stats: Record<string, StatEntry> = {};
 
 	const getEntry = (member: Member) => {
@@ -41,5 +50,12 @@ export const computeStats = (events: EventWithJoins[]) => {
 		});
 	});
 
-	return Object.values(stats).sort((a, b) => a.member.handle.localeCompare(b.member.handle));
+	return Object.values(stats).sort((a, b) => {
+		const dirModifier = dir === 'asc' ? 1 : -1;
+		if (sort === 'member') {
+			return a.member.handle.localeCompare(b.member.handle) * dirModifier;
+		}
+		const field = fieldMap[sort];
+		return (a[field] - b[field]) * dirModifier;
+	});
 };

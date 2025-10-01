@@ -2,7 +2,8 @@ import { createAnonClient } from '$lib/supabase/clients';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.supabase = createAnonClient(event);
+	const supabase = createAnonClient(event);
+	event.locals.supabase = supabase;
 
 	/**
 	 * Unlike `supabase.auth.getSession()`, which returns the session _without_
@@ -10,24 +11,31 @@ export const handle: Handle = async ({ event, resolve }) => {
 	 * JWT before returning the session.
 	 */
 	event.locals.safeGetSession = async () => {
-		const {
-			data: { session }
-		} = await event.locals.supabase.auth.getSession();
-		if (!session) {
-			return { session: null, user: null };
+		// Silent getSession warning until better solution
+		const warn = console.warn;
+		try {
+			console.warn = () => {};
+			const {
+				data: { session }
+			} = await supabase.auth.getSession();
+			if (!session) {
+				return { session: null, user: null };
+			}
+
+			const {
+				data: { user },
+				error
+			} = await supabase.auth.getUser();
+
+			if (error) {
+				// JWT validation has failed
+				return { session: null, user: null };
+			}
+
+			return { session, user };
+		} finally {
+			console.warn = warn;
 		}
-
-		const {
-			data: { user },
-			error
-		} = await event.locals.supabase.auth.getUser();
-
-		if (error) {
-			// JWT validation has failed
-			return { session: null, user: null };
-		}
-
-		return { session, user };
 	};
 
 	return resolve(event, {

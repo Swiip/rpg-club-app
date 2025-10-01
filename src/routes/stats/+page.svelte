@@ -1,16 +1,24 @@
 <script lang="ts">
 	import Container from '$lib/components/container.svelte';
-	import { computeStats } from '$lib/logic/stats.js';
-	import { gotoWithParam } from '$lib/logic/urls.js';
+	import TableHead from '$lib/components/table-head.svelte';
+	import { computeStats, type Sort } from '$lib/logic/stats.js';
+	import { gotoWithParam, gotoWithParams } from '$lib/logic/urls.js';
 
 	let { data } = $props();
-	let { events } = $derived(data);
-	let start = $state(data.start);
-	let end = $state(data.end);
-	let stats = $derived(computeStats(events));
+	let { events, start, end, sort, dir } = $derived(data);
+	let stats = $derived(computeStats(events, sort, dir));
 
 	const handleDateChange = (type: 'start' | 'end') => () =>
 		gotoWithParam(type, type === 'start' ? start : end);
+
+	const getDir = (newSort: Sort) => {
+		if (newSort === sort) {
+			return dir === 'asc' ? 'desc' : 'asc';
+		}
+		return 'desc';
+	};
+
+	const handleSortChange = (sort: Sort) => () => gotoWithParams({ sort, dir: getDir(sort) });
 </script>
 
 <Container>
@@ -41,10 +49,21 @@
 		<table class="table caption-bottom">
 			<thead>
 				<tr>
-					<th>Membre</th>
-					<th>MJ</th>
-					<th>Joueur</th>
-					<th>JdS</th>
+					<TableHead
+						onClick={handleSortChange('member')}
+						sort={sort === 'member' ? dir : undefined}
+					>
+						Member
+					</TableHead>
+					<TableHead onClick={handleSortChange('gm')} sort={sort === 'gm' ? dir : undefined}>
+						MJ
+					</TableHead>
+					<TableHead onClick={handleSortChange('pc')} sort={sort === 'pc' ? dir : undefined}>
+						Joueur
+					</TableHead>
+					<TableHead onClick={handleSortChange('bg')} sort={sort === 'bg' ? dir : undefined}>
+						JdS
+					</TableHead>
 				</tr>
 			</thead>
 			<tbody class="[&>tr]:hover:preset-tonal-primary">
