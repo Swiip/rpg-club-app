@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
 	import { conputeAntagonisms } from '$lib/logic/registrations';
+	import Avatars from '../avatars.svelte';
 
 	type Props = {
 		campaign: CampaignWithJoins;
@@ -23,7 +24,11 @@
 			{#each antagonisms as antagonism (antagonism.other.id)}
 				<tr>
 					<td>{antagonism.other.title}</td>
-					<td>{antagonism.members.map((member) => member.handle).join(', ')}</td>
+					<td>
+						<div class="flex flex-wrap gap-1">
+							<Avatars mode="avatar-and-handle" members={antagonism.members} />
+						</div>
+					</td>
 				</tr>
 			{/each}
 		</tbody>

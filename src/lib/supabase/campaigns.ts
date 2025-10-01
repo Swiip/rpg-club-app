@@ -1,3 +1,4 @@
+import { memberView } from '$lib/supabase/members';
 import type { Campaign, PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
 export type CampaignWithJoins = UnwrapQuery<typeof fetchCampaigns>[number];
@@ -9,9 +10,9 @@ export const fetchCampaigns = (supabase: SupabaseClient) =>
 			`
 			id, title, description,
 			game ( id, name, illustration ),
-			gm ( id, handle, discord_id ),
+			gm ${memberView},
 			session ( id, event ( id, date, location ) ),
-			registration ( id, confirmation, member ( id, handle, discord_id ) )
+			registration ( id, confirmation, member ${memberView} )
 		`
 		)
 		.order('title', { ascending: true });

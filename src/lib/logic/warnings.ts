@@ -1,11 +1,11 @@
-import type { Member } from '$lib/logic/calendar';
 import type { EventWithJoins } from '$lib/supabase/events';
 import { availabilityCode } from '$lib/supabase/availabilities';
+import type { MemberView } from '$lib/supabase/members';
 
 export type Warnings = {
-	members: Set<Member>;
-	duplicates: Set<Member>;
-	unavailabilities: { unset: Set<Member>; off: Set<Member>; maybe: Set<Member> };
+	members: Set<MemberView>;
+	duplicates: Set<MemberView>;
+	unavailabilities: { unset: Set<MemberView>; off: Set<MemberView>; maybe: Set<MemberView> };
 };
 
 export const initWarnings = (input: Partial<Warnings> = {}): Warnings => ({

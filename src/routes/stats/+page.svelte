@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Avatar from '$lib/components/avatar.svelte';
 	import Container from '$lib/components/container.svelte';
 	import TableHead from '$lib/components/table-head.svelte';
 	import { computeStats, type Sort } from '$lib/logic/stats.js';
@@ -69,7 +70,7 @@
 			<tbody class="[&>tr]:hover:preset-tonal-primary">
 				{#each stats as stat (stat.member.discord_id)}
 					<tr>
-						<td>{stat.member.handle}</td>
+						<td><Avatar mode="avatar-and-handle" member={stat.member} /></td>
 						<td>{stat.asGm}</td>
 						<td>{stat.asPc}</td>
 						<td>{stat.bg}</td>

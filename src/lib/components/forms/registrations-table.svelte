@@ -7,6 +7,7 @@
 	import { enhance } from '$app/forms';
 	import type { RegistrationWithJoin } from '$lib/supabase/types';
 	import type { Member } from '$lib/supabase/members';
+	import Avatar from '../avatar.svelte';
 
 	type Props = {
 		targetId: number;
@@ -43,7 +44,7 @@
 		<tbody class="[&>tr]:hover:preset-tonal-primary">
 			{#each registrations as { id, confirmation, member } (id)}
 				<tr>
-					<td>{member.handle}</td>
+					<td><Avatar mode="avatar-and-handle" {member} /></td>
 					<td>{confirmation ? 'Confirmé' : 'Non confirmé'}</td>
 					<td>
 						{#if confirmation}

@@ -1,6 +1,6 @@
 <script lang="ts">
+	import Avatar from '$lib/components/avatar.svelte';
 	import Container from '$lib/components/container.svelte';
-	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 
 	const { data } = $props();
 	const { members } = data;
@@ -25,12 +25,10 @@
 					<tr>
 						<td>{member.handle}</td>
 						<td>
-							{#if member.avatar}
-								<Avatar src={member.avatar} name={member.handle} />
-							{/if}
+							<Avatar mode="big-avatar" {member} />
 						</td>
 						<td>
-							{member.authorized ? 'Ok' : 'Non'}
+							{member.authorized ? 'Autorisé' : 'Non autorisé'}
 						</td>
 						<td onclick={handleStopPropagation}>
 							<form method="POST">

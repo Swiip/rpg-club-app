@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Avatar } from '@skeletonlabs/skeleton-svelte';
+	import Avatar from '$lib/components/avatar.svelte';
 
 	const { data } = $props();
 	const { member } = data;
@@ -15,6 +15,6 @@
 	<h2>Hello {member?.handle}!</h2>
 
 	{#if member.avatar}
-		<Avatar src={member.avatar} name={member.handle} />
+		<Avatar mode="big-avatar" {member} />
 	{/if}
 </div>

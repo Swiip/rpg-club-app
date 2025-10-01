@@ -1,4 +1,5 @@
 import { formatDateInput } from '$lib/logic/dates';
+import { memberView } from '$lib/supabase/members';
 import type { SupabaseClient, UnwrapQuery, Os, PartialSome } from '$lib/supabase/types';
 
 export type OsWithJoins = UnwrapQuery<typeof fetchAllOses>[number];
@@ -8,9 +9,9 @@ const fetchAllOses = (supabase: SupabaseClient) =>
 		`
 			id, title, description, message_id, thread_id,
 			game ( id, name, illustration ),
-			gm ( id, handle, discord_id ),
+			gm ${memberView},
 			event ( id, date ),
-			registration ( id, confirmation, member ( id, handle ) )
+			registration ( id, confirmation, member ${memberView} )
 		`
 	);
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { RegistrionModel } from '$lib/logic/registrations';
 	import { goto } from '$app/navigation';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
@@ -11,17 +10,17 @@
 	import type { Member } from '$lib/supabase/members';
 	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
 	import type { SupabaseClient } from '$lib/supabase/types';
-	import AntagonismTable from './antagonism-table.svelte';
+	import AntagonismTable from './tables/antagonism-table.svelte';
+	import RegistrationTable from './tables/registration-table.svelte';
 
 	type Props = {
 		members: Member[];
 		campaign: CampaignWithJoins;
-		registration: RegistrionModel;
 		supabase: SupabaseClient;
 		campaigns: CampaignWithJoins[];
 	};
 
-	let { members, campaign, registration, supabase, campaigns }: Props = $props();
+	let { members, campaign, supabase, campaigns }: Props = $props();
 	let showDetails = $state(false);
 
 	const handleClick = (campaign: CampaignWithJoins) => () => goto(`/campaigns/${campaign.id}/edit`);
@@ -45,19 +44,11 @@
 		<CardText text={campaign.description || 'Pas de description'} />
 	{/if}
 
-	<CardSection as="article" className="p-4 items-start flex-col gap-4">
+	<CardSection as="article" className="p-4 items-start flex-col gap-2">
 		{#if showDetails}
 			<RegistrationsTable targetId={campaign.id} registrations={campaign.registration} {members} />
 		{:else}
-			{#if registration.confirmed}
-				<p>PJs confirmés : {registration.confirmed}</p>
-			{/if}
-			{#if registration.pending}
-				<p>PJs en attente : {registration.pending}</p>
-			{/if}
-			{#if !registration.confirmed && !registration.pending}
-				<p>Encore aucune inscription</p>
-			{/if}
+			<RegistrationTable withRegistration={campaign} />
 		{/if}
 	</CardSection>
 

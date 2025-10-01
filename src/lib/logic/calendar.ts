@@ -4,8 +4,7 @@ import type { EventWithJoins } from '$lib/supabase/events';
 
 type OsEvent = EventWithJoins['os'][number];
 type CampaignEvent = EventWithJoins['session'][number]['campaign'];
-type Table = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent);
-export type Member = Table['registration'][number]['member'];
+export type Table = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent);
 
 export type Event = {
 	id: number;

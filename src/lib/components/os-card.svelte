@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { SupabaseClient } from '@supabase/supabase-js';
-	import type { RegistrionModel } from '$lib/logic/registrations';
 	import { goto } from '$app/navigation';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
@@ -12,15 +11,15 @@
 	import type { Member } from '$lib/supabase/members';
 	import { formatDate } from '$lib/logic/dates';
 	import { enhance } from '$app/forms';
+	import RegistrationTable from './tables/registration-table.svelte';
 
 	type Props = {
 		members: Member[];
 		os: OsWithJoins;
-		registration: RegistrionModel;
 		supabase: SupabaseClient;
 	};
 
-	const { members, os, registration, supabase }: Props = $props();
+	const { members, os, supabase }: Props = $props();
 	let showDetails = $state(false);
 
 	const handleEdit = (os: OsWithJoins) => (event: Event) => {
@@ -58,15 +57,7 @@
 		{#if showDetails}
 			<RegistrationsTable targetId={os.id} registrations={os.registration} {members} />
 		{:else}
-			{#if registration.confirmed}
-				<p>PJs confirmés : {registration.confirmed}</p>
-			{/if}
-			{#if registration.pending}
-				<p>PJs en attente : {registration.pending}</p>
-			{/if}
-			{#if !registration.confirmed && !registration.pending}
-				<p>Encore aucune inscription</p>
-			{/if}
+			<RegistrationTable withRegistration={os} />
 		{/if}
 	</CardSection>
 

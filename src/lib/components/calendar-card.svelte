@@ -9,6 +9,7 @@
 	import { getWarningFlags } from '$lib/logic/warnings';
 	import Pen from '@lucide/svelte/icons/pen';
 	import { goto } from '$app/navigation';
+	import CalendarTable from './tables/calendar-table.svelte';
 
 	type Props = {
 		event: Event;
@@ -57,16 +58,12 @@
 				alt={table.game.name}
 				title={`${table.type === 'os' ? 'OS' : 'Campagne'}: ${table.title}`}
 			/>
-			<CardSection as="article" className="flex-col p-4 gap-4">
-				<p>Jeu: {table.game.name}</p>
-				<p>MJ: {table.gm.handle}</p>
-				<p>
-					PJs: {table.registration.map((registration) => registration.member.handle).join(', ')}
-				</p>
+			<CardSection as="article" className="flex-col p-4 gap-2">
+				<CalendarTable {table} />
 			</CardSection>
 		{:else}
 			<CardSection as="article" className="p-4">
-				<p>{table.type === 'os' ? 'OS' : 'Campagne'}: {table.title}</p>
+				<p>{table.type === 'os' ? 'OS' : 'Campagne'} : {table.title}</p>
 			</CardSection>
 		{/if}
 	{/each}

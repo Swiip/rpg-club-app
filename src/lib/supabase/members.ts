@@ -2,6 +2,9 @@ import type { SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
 export type Member = UnwrapQuery<typeof fetchMembers>[number];
 
+export type MemberView = { id: number; handle: string; discord_id: string; avatar: string | null };
+export const memberView = '( id, handle, discord_id, avatar )' as const;
+
 export const fetchMemberByDiscordId = (supabase: SupabaseClient, discordId: string) =>
 	supabase
 		.from('member')

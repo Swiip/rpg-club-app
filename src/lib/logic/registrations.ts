@@ -1,3 +1,4 @@
+import type { MemberView } from '$lib/supabase/members';
 import type { WithRegistration } from '$lib/supabase/types';
 
 const mapRegistrations = <T>(
@@ -17,24 +18,16 @@ const hasIntersection = (a: WithRegistration, b: WithRegistration) => {
 };
 
 export type RegistrionModel = {
-	confirmed: string | undefined;
-	pending: string | undefined;
+	confirmed: MemberView[] | undefined;
+	pending: MemberView[] | undefined;
 };
 
-export const computeRegistrations = <T extends WithRegistration>(
-	withRegistrations: T[]
-): Record<string, RegistrionModel> => {
-	const registrations: Record<string, RegistrionModel> = {};
-
-	withRegistrations.forEach((withRegistration) => {
-		const confirmed = mapRegistrations(withRegistration, (r) => r.member.handle).join(', ');
-		const pending = mapRegistrations(withRegistration, (r) => r.member.handle, false).join(', ');
-
-		registrations[withRegistration.id] = { confirmed, pending };
-	});
-
-	return registrations;
-};
+export const computeRegistration = <T extends WithRegistration>(
+	withRegistration: T
+): RegistrionModel => ({
+	confirmed: mapRegistrations(withRegistration, (r) => r.member),
+	pending: mapRegistrations(withRegistration, (r) => r.member, false)
+});
 
 export type AntagonismModel<T extends WithRegistration> = {
 	other: T;

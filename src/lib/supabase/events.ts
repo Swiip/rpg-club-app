@@ -1,4 +1,5 @@
 import { formatDateInput } from '$lib/logic/dates';
+import { memberView } from '$lib/supabase/members';
 import type { PartialSome, SupabaseClient, UnwrapQuery } from '$lib/supabase/types';
 
 export type Event = UnwrapQuery<typeof fetchEventsBase>[number];
@@ -26,19 +27,19 @@ const fetchAllEventsForCalendar = (supabase: SupabaseClient) =>
 			id, date, start, end, location,
 			os (
 				id, title, game ( name, illustration ),
-				gm ( handle, discord_id ),
-				registration ( confirmation, member ( handle, discord_id ) )
+			gm ${memberView},
+				registration ( confirmation, member ${memberView} )
 			),
 			session (
 				id,
 				campaign (
 					id, title,
 					game ( name, illustration ),
-					gm ( handle, discord_id ),
-					registration ( confirmation, member ( handle, discord_id ) )
+					gm ${memberView},
+					registration ( confirmation, member ${memberView} )
 				)
 			),
-			availability ( availability, member ( handle, discord_id ) )
+			availability ( availability, member ${memberView} )
 		`
 		)
 		.order('date', { ascending: true });

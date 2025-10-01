@@ -2,12 +2,9 @@
 	import { goto } from '$app/navigation';
 	import CampaignCard from '$lib/components/campaign-card.svelte';
 	import Container from '$lib/components/container.svelte';
-	import { computeRegistrations } from '$lib/logic/registrations';
 
 	let { data } = $props();
 	let { members, campaigns, supabase } = $derived(data);
-
-	const registrations = $derived(computeRegistrations(campaigns));
 </script>
 
 <Container>
@@ -18,12 +15,6 @@
 	</div>
 
 	{#each campaigns as campaign (campaign.id)}
-		<CampaignCard
-			{members}
-			{campaign}
-			registration={registrations[campaign.id]}
-			{supabase}
-			{campaigns}
-		/>
+		<CampaignCard {members} {campaign} {supabase} {campaigns} />
 	{/each}
 </Container>
