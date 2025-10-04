@@ -56,13 +56,74 @@
 					>
 						Member
 					</TableHead>
-					<TableHead onClick={handleSortChange('gm')} sort={sort === 'gm' ? dir : undefined}>
+					<TableHead
+						onClick={handleSortChange('all')}
+						sort={sort === 'all' ? dir : undefined}
+						vertical
+					>
+						Présence
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('gm')}
+						sort={sort === 'gm' ? dir : undefined}
+						vertical
+					>
 						MJ
 					</TableHead>
-					<TableHead onClick={handleSortChange('pc')} sort={sort === 'pc' ? dir : undefined}>
+					<TableHead
+						onClick={handleSortChange('gm.os')}
+						sort={sort === 'gm.os' ? dir : undefined}
+						vertical
+					>
+						MJ / OS
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('gm.campaign')}
+						sort={sort === 'gm.campaign' ? dir : undefined}
+						vertical
+					>
+						MJ / Campagne
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('gm.campaignIds')}
+						sort={sort === 'gm.campaignIds' ? dir : undefined}
+						vertical
+					>
+						MJ / Campagne Diff
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('pc')}
+						sort={sort === 'pc' ? dir : undefined}
+						vertical
+					>
 						Joueur
 					</TableHead>
-					<TableHead onClick={handleSortChange('bg')} sort={sort === 'bg' ? dir : undefined}>
+					<TableHead
+						onClick={handleSortChange('pc.os')}
+						sort={sort === 'pc.os' ? dir : undefined}
+						vertical
+					>
+						Joueur / OS
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('pc.campaign')}
+						sort={sort === 'pc.campaign' ? dir : undefined}
+						vertical
+					>
+						Joueur / Campagne
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('pc.campaignIds')}
+						sort={sort === 'pc.campaignIds' ? dir : undefined}
+						vertical
+					>
+						Joueur / Campagne Diff
+					</TableHead>
+					<TableHead
+						onClick={handleSortChange('bg')}
+						sort={sort === 'bg' ? dir : undefined}
+						vertical
+					>
 						JdS
 					</TableHead>
 				</tr>
@@ -71,8 +132,17 @@
 				{#each stats as stat (stat.member.discord_id)}
 					<tr>
 						<td><Avatar mode="avatar-and-handle" member={stat.member} /></td>
-						<td>{stat.asGm}</td>
-						<td>{stat.asPc}</td>
+						<td>
+							{stat.asGm.os + stat.asGm.campaign + stat.asPc.os + stat.asPc.campaign + stat.bg}
+						</td>
+						<td>{stat.asGm.os + stat.asGm.campaign}</td>
+						<td>{stat.asGm.os}</td>
+						<td>{stat.asGm.campaign}</td>
+						<td>{stat.asGm.campaignIds.size}</td>
+						<td>{stat.asPc.os + stat.asPc.campaign}</td>
+						<td>{stat.asPc.os}</td>
+						<td>{stat.asPc.campaign}</td>
+						<td>{stat.asPc.campaignIds.size}</td>
 						<td>{stat.bg}</td>
 					</tr>
 				{/each}

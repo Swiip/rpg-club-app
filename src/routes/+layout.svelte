@@ -28,6 +28,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Rock'n'Rôlistes App</title>
+</svelte:head>
+
 <AppBar
 	headlineClasses="sm:hidden"
 	centerClasses="hidden sm:flex items-center justify-center"

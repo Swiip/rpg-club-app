@@ -8,7 +8,7 @@ export const memberView = '( id, handle, discord_id, avatar )' as const;
 export const fetchMemberByDiscordId = (supabase: SupabaseClient, discordId: string) =>
 	supabase
 		.from('member')
-		.select(`id, handle, avatar, authorized`)
+		.select(`id, handle, avatar, authorized, discord_id`)
 		.eq('discord_id', discordId)
 		.single();
 

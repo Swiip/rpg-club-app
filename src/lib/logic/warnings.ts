@@ -15,6 +15,13 @@ export const initWarnings = (input: Partial<Warnings> = {}): Warnings => ({
 	...input
 });
 
+type Table = EventWithJoins['os'][number] | EventWithJoins['session'][number]['campaign'];
+
+export const getTableMembers = (table: Table) => [
+	table.gm,
+	...table.registration.map(({ member }) => member)
+];
+
 export const computeWarnings = (
 	event: EventWithJoins,
 	warnings: Warnings,
@@ -24,7 +31,7 @@ export const computeWarnings = (
 	const tables = [...event.os, ...event.session.map(({ campaign }) => campaign)];
 
 	tables.forEach((table) =>
-		table.registration.forEach(({ member }) =>
+		getTableMembers(table).forEach((member) =>
 			members.values().find((m) => m.discord_id === member.discord_id)
 				? duplicates.add(member)
 				: !lockMembers && members.add(member)

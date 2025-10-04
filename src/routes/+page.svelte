@@ -5,10 +5,6 @@
 	const { member } = data;
 </script>
 
-<svelte:head>
-	<title>Rock'n'Rôlistes App</title>
-</svelte:head>
-
 <div class="flex min-h-48 flex-col items-center justify-center gap-8">
 	<img src="/assets/ROCKNOLISTES.png" alt="Rock'n'Rôlistes App Logo" class="size-98 rounded-4xl" />
 
