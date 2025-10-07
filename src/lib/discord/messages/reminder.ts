@@ -42,6 +42,10 @@ export const createReminderMessage = async () => {
 	PJs : ${players(session.campaign.registration, mentionsBuilder)}`
 			)
 		);
+
+		event.boardgame.forEach((boardgame) => {
+			messageBuilder.push(`- Jeu de société : ${players(boardgame.registration, mentionsBuilder)}`);
+		});
 	});
 
 	return {

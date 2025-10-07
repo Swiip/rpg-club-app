@@ -2,7 +2,7 @@ import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 import { authGuard } from '$lib/supabase/auth';
-import { fetchGame } from '$lib/supabase/games';
+import { fetchGame, getGameTypeFlag, type GameType } from '$lib/supabase/games';
 import { upsertGame } from '$lib/supabase/games';
 
 export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession }, params }) => {
@@ -22,13 +22,14 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 export const actions = {
 	save: async ({ locals: { supabase }, request, params }) => {
 		const data = await request.formData();
+		const type = getGameTypeFlag(data.get('type') as GameType);
 		const name = String(data.get('name'));
 		const description = String(data.get('description'));
 		const illustration = String(data.get('illustration'));
 
 		const id = params.id === 'new' ? undefined : Number(params.id);
 
-		const result = await upsertGame(supabase, { id, name, description, illustration });
+		const result = await upsertGame(supabase, { id, type, name, description, illustration });
 
 		if (result.error) {
 			console.error('Error on saving', result.error.message);

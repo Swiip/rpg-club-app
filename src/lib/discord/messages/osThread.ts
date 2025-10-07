@@ -1,11 +1,10 @@
-import { getMention } from '$lib/discord/send';
+import { getMention, getMentions } from '$lib/discord/send';
 import { formatDate } from '$lib/logic/dates';
-import { createPrivateClient } from '$lib/supabase/clients';
+import { capitalize } from '$lib/logic/strings';
 import { fetchOsDetails } from '$lib/supabase/os';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-export const osThread = async (id: number) => {
-	const supabase = createPrivateClient();
-
+export const osThread = async (supabase: SupabaseClient, id: number) => {
 	const result = await fetchOsDetails(supabase, id);
 
 	if (!result.data) {
@@ -17,12 +16,19 @@ export const osThread = async (id: number) => {
 	const mentionsBuilder = new Set<string>();
 	const messageBuilder: string[] = [];
 
-	const date = os.event?.date ? `${formatDate(os.event.date)} / ` : '';
+	const date = os.event?.date ? `${capitalize(formatDate(os.event.date))} / ` : '';
 	const threadName = `${date}${os.game.name} / ${os.title}`;
 
 	messageBuilder.push(`Jeu : ${os.game.name}`, '');
 	messageBuilder.push(`Scénario : ${os.title}`, '');
 	messageBuilder.push(`MJ : ${getMention(os.gm, mentionsBuilder)}`, '');
+	messageBuilder.push(
+		`PJs : ${getMentions(
+			os.registration.map(({ member }) => member),
+			mentionsBuilder
+		)}`,
+		''
+	);
 	if (os.description) {
 		messageBuilder.push(os.description);
 	}

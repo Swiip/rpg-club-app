@@ -1,21 +1,22 @@
-import { announceOs } from '$lib/discord/messages/announceOs';
-import { osThread } from '$lib/discord/messages/osThread';
+import { announceBg } from '$lib/discord/messages/announceBg';
+import { bgThread } from '$lib/discord/messages/bgThread';
 import { editMessage, sendMessage } from '$lib/discord/send';
-import { deleteOs, setMessage, upsertOs } from '$lib/supabase/os';
+import { deleteBoardgame, upsertBoardgame } from '$lib/supabase/boardgames';
+import { setMessage } from '$lib/supabase/boardgames';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { fail, redirect, type Action } from '@sveltejs/kit';
 
-const announceOsToDiscord = async (
+const announceBoardgameToDiscord = async (
 	supabase: SupabaseClient,
 	isNew: boolean,
 	id: number,
 	messageId: string | null,
 	threadId: string | null
 ) => {
-	const threadMessage = await osThread(supabase, id);
+	const threadMessage = await bgThread(supabase, id);
 
 	if (isNew) {
-		const message = await announceOs(supabase, id);
+		const message = await announceBg(supabase, id);
 		await sendMessage(message);
 		const { id: messageId, channel_id: threadId } = await sendMessage(threadMessage);
 		await setMessage(supabase, id, messageId, threadId);
@@ -26,23 +27,20 @@ const announceOsToDiscord = async (
 
 export const deleteAction: Action = async ({ locals: { supabase }, request }) => {
 	const formData = await request.formData();
-	const osId = Number(formData.get('osId'));
+	const osId = Number(formData.get('boardgameId'));
 
-	return deleteOs(supabase, osId);
+	return deleteBoardgame(supabase, osId);
 };
 
 export const save: Action = async ({ locals: { supabase }, request, params }) => {
 	const data = await request.formData();
-	const title = String(data.get('title'));
 	const description = String(data.get('description'));
-	const game = Number(data.get('game'));
-	const gm = Number(data.get('gm'));
 	const event = Number(data.get('event'));
 
 	const isNew = params.id === 'new';
 	const id = isNew ? undefined : Number(params.id);
 
-	const result = await upsertOs(supabase, { id, title, description, game, gm, event });
+	const result = await upsertBoardgame(supabase, { id, description, event });
 
 	if (result.error) {
 		console.error('Error on saving', result.error.message);
@@ -51,8 +49,21 @@ export const save: Action = async ({ locals: { supabase }, request, params }) =>
 
 	if (result.data) {
 		const { id, message_id: messageId, thread_id: threadId } = result.data;
-		await announceOsToDiscord(supabase, isNew, id, messageId, threadId);
+		await announceBoardgameToDiscord(supabase, isNew, id, messageId, threadId);
 	}
 
-	redirect(303, '/os');
+	redirect(303, '/boardgames');
+};
+
+export const games: Action = async ({ locals: { supabase }, request }) => {
+	const formData = await request.formData();
+	const targetId = Number(formData.get('targetId'));
+	const gameId = Number(formData.get('gameId'));
+	const action = formData.get('action') as 'add' | 'delete';
+
+	if (action === 'add')
+		return supabase.from('boardgame_games').insert({ boardgame: targetId, game: gameId });
+
+	if (action === 'delete')
+		return supabase.from('boardgame_games').delete().eq('boardgame', targetId).eq('game', gameId);
 };

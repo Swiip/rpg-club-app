@@ -6,7 +6,7 @@ export const updateRegistration = (
 	supabase: SupabaseClient,
 	action: RegistrationAction,
 	memberId: number,
-	type: 'os' | 'campaign',
+	type: 'os' | 'campaign' | 'boardgame',
 	targetId: number
 ) => {
 	if (action === 'add')

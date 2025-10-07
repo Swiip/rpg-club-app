@@ -57,16 +57,10 @@ export const computeStats = (events: EventWithJoins[], sort: Sort, dir: Dir) => 
 
 	events.forEach((event) => {
 		event.os.forEach((os) => {
-			if (os.game.name.toLowerCase() === 'jds') {
-				[os.gm, ...os.registration.map((registration) => registration.member)].forEach((player) => {
-					getEntry(player).bg++;
-				});
-			} else {
-				incRole(os.gm, 'gm', 'os', os.id);
-				os.registration
-					.filter((registration) => registration.confirmation)
-					.forEach((registration) => incRole(registration.member, 'pc', 'os', os.id));
-			}
+			incRole(os.gm, 'gm', 'os', os.id);
+			os.registration
+				.filter((registration) => registration.confirmation)
+				.forEach((registration) => incRole(registration.member, 'pc', 'os', os.id));
 		});
 
 		event.session.forEach((session) => {
@@ -76,6 +70,12 @@ export const computeStats = (events: EventWithJoins[], sort: Sort, dir: Dir) => 
 				.forEach((registration) =>
 					incRole(registration.member, 'pc', 'campaign', session.campaign.id)
 				);
+		});
+
+		event.boardgame.forEach((boardgame) => {
+			boardgame.registration
+				.map((registration) => registration.member)
+				.forEach((player) => getEntry(player).bg++);
 		});
 	});
 

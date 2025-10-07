@@ -13,6 +13,14 @@ export const getMention = (member: { discord_id: string }, mentions: Set<string>
 	return `<@${member.discord_id}>`;
 };
 
+export const getMentions = (members: { discord_id: string }[], mentions: Set<string>) =>
+	members
+		.map((member) => {
+			mentions.add(member.discord_id);
+			return `<@${member.discord_id}>`;
+		})
+		.join(', ');
+
 export const sendMessage = async (message: SendMessageBody) => {
 	try {
 		const url = message.thread_name ? DISCORD_THREADS_WEBHOOK_URL : DISCORD_WEBHOOK_URL;

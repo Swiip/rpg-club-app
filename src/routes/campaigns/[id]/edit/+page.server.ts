@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	const result =
 		params.id === 'new' ? { data: undefined } : await fetchCampaign(supabase, Number(params.id));
 
-	const gamesResult = await fetchGames(supabase);
+	const gamesResult = await fetchGames(supabase, 'rpg');
 	const membersResult = await fetchMembers(supabase);
 
 	return {

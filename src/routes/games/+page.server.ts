@@ -4,12 +4,14 @@ import type { PageServerLoad } from './$types';
 import { authGuard } from '$lib/supabase/auth';
 import { fetchGames } from '$lib/supabase/games';
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
 
 	const { member } = await authGuard(session, supabase, redirect);
 
-	const result = await fetchGames(supabase);
+	const type = url.searchParams.get('bg') === null ? 'rpg' : 'bg';
+
+	const result = await fetchGames(supabase, type);
 
 	return {
 		games: result.data,

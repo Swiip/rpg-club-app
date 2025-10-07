@@ -4,7 +4,11 @@ import type { EventWithJoins } from '$lib/supabase/events';
 
 type OsEvent = EventWithJoins['os'][number];
 type CampaignEvent = EventWithJoins['session'][number]['campaign'];
-export type Table = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent);
+type BgEvent = EventWithJoins['boardgame'][number];
+
+export type TableRpg = ({ type: 'os' } & OsEvent) | ({ type: 'campaign' } & CampaignEvent);
+export type TableBg = { type: 'bg' } & BgEvent;
+export type Table = TableRpg | TableBg;
 
 export type Event = {
 	id: number;
@@ -55,6 +59,12 @@ export const computeCalendar = (events: EventWithJoins[]): Calendar => {
 		if (eventData.session) {
 			event.tables.push(
 				...eventData.session.map((session) => ({ type: 'campaign' as const, ...session.campaign }))
+			);
+		}
+
+		if (eventData.boardgame) {
+			event.tables.push(
+				...eventData.boardgame.map((boardgame) => ({ type: 'bg' as const, ...boardgame }))
 			);
 		}
 

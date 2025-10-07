@@ -53,6 +53,77 @@ export type Database = {
           },
         ]
       }
+      boardgame: {
+        Row: {
+          created_at: string
+          description: string
+          event: number
+          id: number
+          message_id: string | null
+          thread_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          event: number
+          id?: number
+          message_id?: string | null
+          thread_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          event?: number
+          id?: number
+          message_id?: string | null
+          thread_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "boardgame_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "event"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      boardgame_games: {
+        Row: {
+          boardgame: number
+          created_at: string
+          game: number
+          id: number
+        }
+        Insert: {
+          boardgame: number
+          created_at?: string
+          game: number
+          id?: number
+        }
+        Update: {
+          boardgame?: number
+          created_at?: string
+          game?: number
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "boardgame-games_boardgame_fkey"
+            columns: ["boardgame"]
+            isOneToOne: false
+            referencedRelation: "boardgame"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "boardgame-games_game_fkey"
+            columns: ["game"]
+            isOneToOne: false
+            referencedRelation: "game"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaign: {
         Row: {
           created_at: string
@@ -129,6 +200,7 @@ export type Database = {
           id: number
           illustration: string
           name: string
+          type: number
         }
         Insert: {
           created_at?: string
@@ -136,6 +208,7 @@ export type Database = {
           id?: number
           illustration: string
           name: string
+          type?: number
         }
         Update: {
           created_at?: string
@@ -143,6 +216,7 @@ export type Database = {
           id?: number
           illustration?: string
           name?: string
+          type?: number
         }
         Relationships: []
       }
@@ -233,6 +307,7 @@ export type Database = {
       }
       registration: {
         Row: {
+          boardgame: number | null
           campaign: number | null
           confirmation: boolean
           created_at: string
@@ -241,6 +316,7 @@ export type Database = {
           os: number | null
         }
         Insert: {
+          boardgame?: number | null
           campaign?: number | null
           confirmation: boolean
           created_at?: string
@@ -249,6 +325,7 @@ export type Database = {
           os?: number | null
         }
         Update: {
+          boardgame?: number | null
           campaign?: number | null
           confirmation?: boolean
           created_at?: string
@@ -257,6 +334,13 @@ export type Database = {
           os?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "registration_boardgame_fkey"
+            columns: ["boardgame"]
+            isOneToOne: false
+            referencedRelation: "boardgame"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "registration_campaign_fkey"
             columns: ["campaign"]

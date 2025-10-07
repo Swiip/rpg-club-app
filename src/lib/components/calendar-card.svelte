@@ -51,19 +51,25 @@
 
 	{#each event.tables as table (`${table.type}${table.id}`)}
 		{#if showDetails}
-			<CardImage
-				{supabase}
-				bucket="game-banners"
-				url={table.game.illustration}
-				alt={table.game.name}
-				title={`${table.type === 'os' ? 'OS' : 'Campagne'}: ${table.title}`}
-			/>
+			{#if table.type === 'os' || table.type === 'campaign'}
+				<CardImage
+					{supabase}
+					bucket="game-banners"
+					url={table.game.illustration}
+					alt={table.game.name}
+					title={`${table.type === 'os' ? 'OS' : 'Campagne'}: ${table.title}`}
+				/>
+			{/if}
 			<CardSection as="article" className="flex-col p-4 gap-2">
 				<CalendarTable {table} />
 			</CardSection>
 		{:else}
 			<CardSection as="article" className="p-4">
-				<p>{table.type === 'os' ? 'OS' : 'Campagne'} : {table.title}</p>
+				{#if table.type === 'os' || table.type === 'campaign'}
+					<p>{table.type === 'os' ? 'OS' : 'Campagne'} : {table.title}</p>
+				{:else}
+					<p>Jeu de société</p>
+				{/if}
 			</CardSection>
 		{/if}
 	{/each}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import AddButton from '$lib/components/add-button.svelte';
 	import Container from '$lib/components/container.svelte';
 	import FuturePastTabs from '$lib/components/future-past-tabs.svelte';
 	import OsCard from '$lib/components/os-card.svelte';
@@ -11,11 +11,7 @@
 <Container>
 	<FuturePastTabs />
 
-	<div class="flex w-full justify-end">
-		<button class="btn preset-filled-primary-500" onclick={() => goto(`/os/new/edit`)}>
-			Ajouter +
-		</button>
-	</div>
+	<AddButton url="/os/new/edit" />
 
 	{#if oses && oses.length > 0}
 		{#each oses as os (os.id)}

@@ -5,12 +5,12 @@
 	type Props = {
 		supabase: SupabaseClient;
 		bucket: string;
-		url: string;
+		url: string | undefined;
 		className?: string;
 		alt?: string;
 	};
 
-	let { supabase, bucket, url: inputUrl, className, alt = undefined } = $props();
+	let { supabase, bucket, url: inputUrl, className, alt = undefined }: Props = $props();
 
 	let url = $state<string>();
 
@@ -25,5 +25,5 @@
 {#if url}
 	<img src={url} {alt} class={className} />
 {:else}
-	<div class={className}>No image</div>
+	<div class={className}>Pas d'image</div>
 {/if}

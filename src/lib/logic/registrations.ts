@@ -4,18 +4,19 @@ import type { WithRegistration } from '$lib/supabase/types';
 const mapRegistrations = <T>(
 	data: WithRegistration,
 	callback: (registration: WithRegistration['registration'][number]) => T,
-
 	confirmation = true
 ) =>
 	data.registration
 		.filter((registration) => registration.confirmation === confirmation)
 		.map(callback);
 
-const hasIntersection = (a: WithRegistration, b: WithRegistration) => {
-	const aMembers = [a.gm, ...mapRegistrations(a, (r) => r.member)];
-	const bMembers = [b.gm, ...mapRegistrations(b, (r) => r.member)];
-	return aMembers.filter((a) => bMembers.find((b) => a.id === b.id));
-};
+const getAllMembers = (data: WithRegistration) => [
+	...('gm' in data ? [data.gm] : []),
+	...mapRegistrations(data, (r) => r.member)
+];
+
+const hasIntersection = (a: WithRegistration, b: WithRegistration) =>
+	getAllMembers(a).filter((a) => getAllMembers(b).find((b) => a.id === b.id));
 
 export type RegistrionModel = {
 	confirmed: MemberView[] | undefined;

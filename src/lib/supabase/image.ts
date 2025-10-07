@@ -1,9 +1,17 @@
 import type { SupabaseClient } from '$lib/supabase/types';
 
-export const downloadImage = async (supabase: SupabaseClient, bucket: string, path: string) => {
+export const downloadImage = async (
+	supabase: SupabaseClient,
+	bucket: string,
+	path: string | undefined
+) => {
 	try {
-		if (path.startsWith('http')) {
+		if (path?.startsWith('http')) {
 			return path;
+		}
+
+		if (!path) {
+			throw new Error('No path');
 		}
 
 		const { data, error } = await supabase.storage.from(bucket).download(path);

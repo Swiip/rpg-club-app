@@ -6,12 +6,12 @@
 	type Props = {
 		supabase: SupabaseClient;
 		bucket: string;
-		onChange: (url: string) => void;
-		url: string;
+		onChange?: (url: string | undefined) => void;
+		url: string | undefined;
 		className: string;
 	};
 
-	let { supabase, bucket, onChange, url, className } = $props();
+	let { supabase, bucket, onChange, url, className }: Props = $props();
 
 	let uploading = $state(false);
 	let files = $state<FileList>();
@@ -27,7 +27,7 @@
 			const path = await uploadImage(supabase, bucket, files[0]);
 
 			url = path;
-			onChange(path);
+			onChange?.(path);
 		} finally {
 			uploading = false;
 		}

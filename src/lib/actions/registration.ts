@@ -2,7 +2,7 @@ import { updateRegistration, type RegistrationAction } from '$lib/supabase/regis
 import type { Action } from '@sveltejs/kit';
 
 export const registration =
-	(type: 'os' | 'campaign'): Action =>
+	(type: 'os' | 'campaign' | 'boardgame'): Action =>
 	async ({ locals: { supabase }, request }) => {
 		const formData = await request.formData();
 		const targetId = Number(formData.get('targetId'));

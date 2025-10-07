@@ -15,7 +15,7 @@ export const fetchMemberByDiscordId = (supabase: SupabaseClient, discordId: stri
 export const fetchMembers = (supabase: SupabaseClient) =>
 	supabase
 		.from('member')
-		.select(`id, handle, avatar, authorized`)
+		.select(`id, handle, avatar, authorized, discord_id`)
 		.order('handle', { ascending: true });
 
 export const updateMemberAuthorization = (

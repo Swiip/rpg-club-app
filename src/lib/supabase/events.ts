@@ -27,7 +27,7 @@ const fetchAllEventsForCalendar = (supabase: SupabaseClient) =>
 			id, date, start, end, location,
 			os (
 				id, title, game ( name, illustration ),
-			gm ${memberView},
+				gm ${memberView},
 				registration ( confirmation, member ${memberView} )
 			),
 			session (
@@ -38,6 +38,11 @@ const fetchAllEventsForCalendar = (supabase: SupabaseClient) =>
 					gm ${memberView},
 					registration ( confirmation, member ${memberView} )
 				)
+			),
+			boardgame (
+			    id,
+				boardgame_games ( id, game ( id, name, illustration ) ),
+				registration ( confirmation, member ${memberView} )
 			),
 			availability ( availability, member ${memberView} )
 		`

@@ -1,3 +1,4 @@
+import type { BoardgameWithJoins } from '$lib/supabase/boardgames';
 import type { CampaignWithJoins } from '$lib/supabase/campaigns';
 import type { Database } from '$lib/supabase/database.types';
 import type { OsWithJoins } from '$lib/supabase/os';
@@ -15,10 +16,12 @@ export type Member = Database['public']['Tables']['member']['Row'];
 export type Registration = Database['public']['Tables']['registration']['Row'];
 export type Os = Database['public']['Tables']['os']['Row'];
 export type Campaign = Database['public']['Tables']['campaign']['Row'];
+export type Boardgame = Database['public']['Tables']['boardgame']['Row'];
 
 export type WithRegistration =
 	| Pick<OsWithJoins, 'id' | 'gm' | 'registration'>
-	| Pick<CampaignWithJoins, 'id' | 'gm' | 'registration'>;
+	| Pick<CampaignWithJoins, 'id' | 'gm' | 'registration'>
+	| Pick<BoardgameWithJoins, 'id' | 'registration'>;
 
 export type RegistrationWithJoin = WithRegistration['registration'][number];
 

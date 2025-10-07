@@ -8,6 +8,7 @@
 	import CalendarX from '@lucide/svelte/icons/calendar-x';
 	import Dices from '@lucide/svelte/icons/dices';
 	import CircleUser from '@lucide/svelte/icons/circle-user';
+	import Grid from '@lucide/svelte/icons/grid-2x2';
 	import Sword from '@lucide/svelte/icons/sword';
 	import Swords from '@lucide/svelte/icons/swords';
 	import ChartNoAxesCombined from '@lucide/svelte/icons/chart-no-axes-combined';
@@ -65,6 +66,9 @@
 		</MenuItem>
 		<MenuItem tooltip="Campagnes" link="/campaigns">
 			<Swords size={20} />
+		</MenuItem>
+		<MenuItem tooltip="Jeux de société" link="/boardgames">
+			<Grid size={20} />
 		</MenuItem>
 		<MenuItem tooltip="Stats" link="/stats">
 			<ChartNoAxesCombined size={20} />

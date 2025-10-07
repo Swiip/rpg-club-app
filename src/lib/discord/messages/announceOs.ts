@@ -1,10 +1,8 @@
 import { getMention } from '$lib/discord/send';
-import { createPrivateClient } from '$lib/supabase/clients';
 import { fetchOsDetails } from '$lib/supabase/os';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-export const announceOs = async (id: number) => {
-	const supabase = createPrivateClient();
-
+export const announceOs = async (supabase: SupabaseClient, id: number) => {
 	const result = await fetchOsDetails(supabase, id);
 
 	if (!result.data) {

@@ -1,10 +1,11 @@
 <script lang="ts">
 	import AddButton from '$lib/components/add-button.svelte';
+	import BoardRpGamesTabs from '$lib/components/board-rp-games-tabs.svelte';
 	import Container from '$lib/components/container.svelte';
 	import GameCard from '$lib/components/game-card.svelte';
 
-	const { data } = $props();
-	const { supabase, games } = data;
+	let { data } = $props();
+	let { supabase, games } = $derived(data);
 
 	let filter = $state('');
 
@@ -15,6 +16,8 @@
 
 <Container>
 	<AddButton url="/games/new/edit" />
+
+	<BoardRpGamesTabs />
 
 	<label class="label">
 		<span class="label-text">Filtre</span>
