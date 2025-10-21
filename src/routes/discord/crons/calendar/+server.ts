@@ -11,7 +11,7 @@ export const GET = async ({ request }) => {
 
 	const message = await createCalendarMessage();
 
-	await sendMessage(message);
+	await sendMessage('announcement', message);
 
 	return new Response(`Sent message:\n\n${JSON.stringify(message, null, 2)}`);
 };

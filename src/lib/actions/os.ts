@@ -16,11 +16,11 @@ const announceOsToDiscord = async (
 
 	if (isNew) {
 		const message = await announceOs(supabase, id);
-		await sendMessage(message);
-		const { id: messageId, channel_id: threadId } = await sendMessage(threadMessage);
+		await sendMessage('announcement', message);
+		const { id: messageId, channel_id: threadId } = await sendMessage('rpg', threadMessage);
 		await setMessage(supabase, id, messageId, threadId);
 	} else if (messageId && threadId) {
-		await editMessage(messageId, threadId, threadMessage);
+		await editMessage('rpg', messageId, threadId, threadMessage);
 	}
 };
 

@@ -17,11 +17,11 @@ const announceBoardgameToDiscord = async (
 
 	if (isNew) {
 		const message = await announceBg(supabase, id);
-		await sendMessage(message);
-		const { id: messageId, channel_id: threadId } = await sendMessage(threadMessage);
+		await sendMessage('announcement', message);
+		const { id: messageId, channel_id: threadId } = await sendMessage('bg', threadMessage);
 		await setMessage(supabase, id, messageId, threadId);
 	} else if (messageId && threadId) {
-		await editMessage(messageId, threadId, threadMessage);
+		await editMessage('bg', messageId, threadId, threadMessage);
 	}
 };
 

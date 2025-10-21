@@ -1,4 +1,10 @@
-import { DISCORD_WEBHOOK_URL, DISCORD_THREADS_WEBHOOK_URL } from '$env/static/private';
+import {
+	DISCORD_WEBHOOK_URL,
+	DISCORD_RPG_WEBHOOK_URL,
+	DISCORD_BG_WEBHOOK_URL
+} from '$env/static/private';
+
+export type DiscordChannel = 'announcement' | 'rpg' | 'bg';
 
 type SendMessageBody = {
 	content: string;
@@ -6,6 +12,12 @@ type SendMessageBody = {
 	allowed_mentions?: {
 		users: string[];
 	};
+};
+
+export const channelMap: Record<DiscordChannel, string> = {
+	announcement: DISCORD_WEBHOOK_URL,
+	rpg: DISCORD_RPG_WEBHOOK_URL,
+	bg: DISCORD_BG_WEBHOOK_URL
 };
 
 export const getMention = (member: { discord_id: string }, mentions: Set<string>) => {
@@ -21,11 +33,9 @@ export const getMentions = (members: { discord_id: string }[], mentions: Set<str
 		})
 		.join(', ');
 
-export const sendMessage = async (message: SendMessageBody) => {
+export const sendMessage = async (channel: DiscordChannel, message: SendMessageBody) => {
 	try {
-		const url = message.thread_name ? DISCORD_THREADS_WEBHOOK_URL : DISCORD_WEBHOOK_URL;
-
-		const response = await fetch(`${url}?wait=true`, {
+		const response = await fetch(`${channelMap[channel]}?wait=true`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(message)
@@ -45,15 +55,15 @@ export const sendMessage = async (message: SendMessageBody) => {
 };
 
 export const editMessage = async (
+	channel: DiscordChannel,
 	messageId: string,
 	threadId: string | undefined,
 	message: SendMessageBody
 ) => {
 	try {
-		const url = message.thread_name ? DISCORD_THREADS_WEBHOOK_URL : DISCORD_WEBHOOK_URL;
 		const queryParam = threadId ? `?thread_id=${threadId}` : '';
 
-		const response = await fetch(`${url}/messages/${messageId}${queryParam}`, {
+		const response = await fetch(`${channelMap[channel]}/messages/${messageId}${queryParam}`, {
 			method: 'PATCH',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(message)

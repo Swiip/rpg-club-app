@@ -12,7 +12,7 @@ export const GET = async ({ request }) => {
 	try {
 		const message = await createReminderMessage();
 
-		await sendMessage(message);
+		await sendMessage('announcement', message);
 
 		return new Response(`Sent message:\n\n${JSON.stringify(message, null, 2)}`);
 	} catch (error) {
