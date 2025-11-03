@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>
-	<title>Rock'n'Rôlistes App</title>
+	<title>Autres Mondes</title>
 </svelte:head>
 
 <AppBar
@@ -41,11 +41,7 @@
 >
 	{#snippet lead()}
 		<a href="/">
-			<img
-				src="/assets/ROCKNOLISTES-logo.png"
-				alt="Rock'n'Rôlistes App Logo"
-				class="size-8 rounded-lg"
-			/>
+			<img src="/assets/d20-clipart.svg" alt="Autres Mondes App Logo" class="size-8 rounded-lg" />
 		</a>
 	{/snippet}
 	{#snippet trail()}
@@ -75,9 +71,9 @@
 		</MenuItem>
 	{/snippet}
 	{#snippet headline()}
-		<h2 class="h2">Rock'n'Rôlistes App</h2>
+		<h2 class="h2">Autres Mondes</h2>
 	{/snippet}
-	<span>Rock'n'Rôlistes App</span>
+	<span>Autres Mondes</span>
 </AppBar>
 
 {@render children()}
