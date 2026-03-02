@@ -10,6 +10,7 @@
 	import Pen from '@lucide/svelte/icons/pen';
 	import { goto } from '$app/navigation';
 	import CalendarTable from './tables/calendar-table.svelte';
+	import Avatars from './avatars.svelte';
 
 	type Props = {
 		event: Event;
@@ -69,6 +70,10 @@
 					<p>{table.type === 'os' ? 'OS' : 'Campagne'} : {table.title}</p>
 				{:else}
 					<p>Jeu de société</p>
+					<Avatars
+						mode="avatar-and-handle"
+						members={table.registration.map((r) => r.member)}
+					/>
 				{/if}
 			</CardSection>
 		{/if}
