@@ -9,7 +9,9 @@
 	let isRpg = $derived(page.url.searchParams.get('bg') === null);
 
 	const handleChange = (type: TabNames) => {
-		goto(resolve(location.pathname + (type === 'rpg' ? '' : '?bg=true')));
+		const path = location.pathname + (type === 'rpg' ? '' : '?bg=true');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		goto(resolve(path as any));
 	};
 </script>
 

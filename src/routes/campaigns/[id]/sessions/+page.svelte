@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Container from '$lib/components/container.svelte';
+	import FuturePastTabs from '$lib/components/future-past-tabs.svelte';
 	import NewSessionsTable from '$lib/components/forms/new-sessions-table.svelte';
 	import SessionsTable from '$lib/components/forms/sessions-table.svelte';
 
@@ -18,6 +19,8 @@
 	<SessionsTable campaignId={campaign.id} sessions={campaign.session} showPlusButton={false} />
 
 	<h2 class="h3 pt-8 pb-4 text-center capitalize">Dates possibles</h2>
+
+	<FuturePastTabs />
 
 	<NewSessionsTable {campaign} {events} />
 </Container>

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import type { Pathname } from '$app/types';
 
 	type Props = {
-		url: string;
+		url: Pathname;
 	};
 
 	let { url }: Props = $props();

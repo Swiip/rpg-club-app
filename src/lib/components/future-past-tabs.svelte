@@ -9,7 +9,9 @@
 	let isFuture = $derived(page.url.searchParams.get('past') === null);
 
 	const handleChange = (type: TabNames) => {
-		goto(resolve(location.pathname + (type === 'future' ? '' : '?past=true')));
+		const path = location.pathname + (type === 'future' ? '' : '?past=true');
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		goto(resolve(path as any));
 	};
 </script>
 

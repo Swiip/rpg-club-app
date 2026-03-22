@@ -2,11 +2,12 @@
 	import { Tooltip } from '@skeletonlabs/skeleton-svelte';
 	import type { Snippet } from 'svelte';
 	import { resolve } from '$app/paths';
+	import type { Pathname } from '$app/types';
 
 	type Props = {
 		children: Snippet;
 		tooltip: string;
-		link: string;
+		link: Pathname;
 	};
 
 	const { children, tooltip, link }: Props = $props();
