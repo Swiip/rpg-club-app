@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
 	import CardSection from './card/card-section.svelte';
@@ -23,7 +24,8 @@
 	let { members, campaign, supabase, campaigns }: Props = $props();
 	let showDetails = $state(false);
 
-	const handleClick = (campaign: CampaignWithJoins) => () => goto(`/campaigns/${campaign.id}/edit`);
+	const handleClick = (campaign: CampaignWithJoins) => () =>
+		goto(resolve(`/campaigns/${campaign.id}/edit`));
 </script>
 
 <CardContainer>

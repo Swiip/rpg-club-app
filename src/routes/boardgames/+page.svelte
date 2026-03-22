@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import BoardgameCard from '$lib/components/boardgame-card.svelte';
 	import Container from '$lib/components/container.svelte';
 	import FuturePastTabs from '$lib/components/future-past-tabs.svelte';
@@ -12,7 +13,10 @@
 	<FuturePastTabs />
 
 	<div class="flex w-full justify-end">
-		<button class="btn preset-filled-primary-500" onclick={() => goto(`/boardgames/new/edit`)}>
+		<button
+			class="btn preset-filled-primary-500"
+			onclick={() => goto(resolve(`/boardgames/new/edit`))}
+		>
 			Ajouter +
 		</button>
 	</div>

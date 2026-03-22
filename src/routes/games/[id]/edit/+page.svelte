@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import UploadImage from '$lib/components/image/upload-image.svelte';
 	import { getGameType } from '$lib/supabase/games.js';
 
@@ -8,7 +9,7 @@
 
 	const handleCancel = (event: MouseEvent) => {
 		event.preventDefault();
-		goto('/games');
+		goto(resolve('/games'));
 	};
 </script>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import CardContainer from './card/card-container.svelte';
 	import CardSection from './card/card-section.svelte';
 	import CardMoreButton from './card/card-more-button.svelte';
@@ -26,7 +27,7 @@
 
 	const handleEdit = (event: Event) => {
 		event.preventDefault();
-		goto(`/boardgames/${boardgame.id}/edit`);
+		goto(resolve(`/boardgames/${boardgame.id}/edit`));
 	};
 
 	let handleDelete = $derived(boardgame.registration.length === 0 ? () => {} : null);

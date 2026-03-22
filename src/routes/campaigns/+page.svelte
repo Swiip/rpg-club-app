@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import CampaignCard from '$lib/components/campaign-card.svelte';
 	import Container from '$lib/components/container.svelte';
 
@@ -9,7 +10,10 @@
 
 <Container>
 	<div class="flex w-full justify-end">
-		<button class="btn preset-filled-primary-500" onclick={() => goto(`/campaigns/new/edit`)}>
+		<button
+			class="btn preset-filled-primary-500"
+			onclick={() => goto(resolve(`/campaigns/new/edit`))}
+		>
 			Ajouter +
 		</button>
 	</div>

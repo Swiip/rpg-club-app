@@ -1,4 +1,5 @@
 import { goto } from '$app/navigation';
+import { resolve } from '$app/paths';
 
 export const gotoWithParams = (params: Record<string, string | undefined>) => {
 	const searchParams = new URLSearchParams(location.search);
@@ -12,8 +13,8 @@ export const gotoWithParams = (params: Record<string, string | undefined>) => {
 	});
 
 	return searchParams.size === 0
-		? goto(location.pathname)
-		: goto(`${location.pathname}?${searchParams}`);
+		? goto(resolve(location.pathname))
+		: goto(resolve(`${location.pathname}?${searchParams}`));
 };
 
 export const gotoWithParam = (param: string, value: string | undefined) =>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Tooltip } from '@skeletonlabs/skeleton-svelte';
 	import type { Snippet } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	type Props = {
 		children: Snippet;
@@ -23,7 +24,7 @@
 	arrow
 >
 	{#snippet trigger()}
-		<a class="btn-icon" href={link}>
+		<a class="btn-icon" href={resolve(link)}>
 			{@render children()}
 		</a>
 	{/snippet}

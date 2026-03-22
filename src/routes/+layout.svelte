@@ -2,6 +2,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { invalidate } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import Calendar from '@lucide/svelte/icons/calendar';
@@ -40,7 +41,7 @@
 	trailSpaceX="space-x-2"
 >
 	{#snippet lead()}
-		<a href="/">
+		<a href={resolve('/')}>
 			<img src="/assets/d20-clipart.svg" alt="Autres Mondes App Logo" class="size-8 rounded-lg" />
 		</a>
 	{/snippet}

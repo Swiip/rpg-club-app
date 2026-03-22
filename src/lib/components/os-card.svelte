@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { SupabaseClient } from '@supabase/supabase-js';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
 	import CardSection from './card/card-section.svelte';
@@ -24,7 +25,7 @@
 
 	const handleEdit = (os: OsWithJoins) => (event: Event) => {
 		event.preventDefault();
-		goto(`/os/${os.id}/edit`);
+		goto(resolve(`/os/${os.id}/edit`));
 	};
 
 	let onDelete = $derived(os.registration.length === 0 ? () => {} : null);

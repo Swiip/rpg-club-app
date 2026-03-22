@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	const { data } = $props();
 	const { event } = data;
 
 	const handleCancel = (event: MouseEvent) => {
 		event.preventDefault();
-		goto('/calendar');
+		goto(resolve('/calendar'));
 	};
 </script>
 

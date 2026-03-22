@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import CardContainer from './card/card-container.svelte';
 	import CardImage from './card/card-image.svelte';
@@ -18,7 +19,7 @@
 	let showDetails = $state(false);
 
 	const handleClick = (game: Game | undefined) => () => {
-		goto(`/games/${game?.id ? game.id : 'new'}/edit`);
+		goto(resolve(`/games/${game?.id ? game.id : 'new'}/edit`));
 	};
 </script>
 

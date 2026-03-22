@@ -6,6 +6,7 @@
 	import type { CampaignWithJoins } from '$lib/supabase/campaigns';
 	import { formatDate } from '$lib/logic/dates';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 
 	type Props = {
 		campaignId: number;
@@ -25,7 +26,7 @@
 
 	const handleSessions = (event: MouseEvent) => {
 		event.preventDefault();
-		goto(`/campaigns/${campaignId}/sessions`);
+		goto(resolve(`/campaigns/${campaignId}/sessions`));
 	};
 </script>
 

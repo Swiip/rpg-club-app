@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { formatDate } from '$lib/logic/dates';
 
 	const { data } = $props();
@@ -7,7 +8,7 @@
 
 	const handleCancel = (event: MouseEvent) => {
 		event.preventDefault();
-		goto('/os');
+		goto(resolve('/os'));
 	};
 </script>
 
