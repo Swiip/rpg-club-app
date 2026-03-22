@@ -1,8 +1,8 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 import { authGuard } from '$lib/supabase/auth';
-import { fetchEventsForCalendar } from '$lib/supabase/events';
+import { deleteEvent, fetchEventsForCalendar } from '$lib/supabase/events';
 
 export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSession } }) => {
 	const { session } = await safeGetSession();
@@ -18,3 +18,12 @@ export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSes
 		member
 	};
 };
+
+export const actions = {
+	delete: async ({ locals: { supabase }, request }) => {
+		const data = await request.formData();
+		const eventId = Number(data.get('eventId'));
+		await supabase.from('availability').delete().eq('event', eventId);
+		return deleteEvent(supabase, eventId);
+	}
+} satisfies Actions;

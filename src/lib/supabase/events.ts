@@ -66,6 +66,9 @@ export const fetchEvent = (supabase: SupabaseClient, id: number) =>
 export const upsertEvent = (supabase: SupabaseClient, event: PartialSome<Event, 'id'>) =>
 	supabase.from('event').upsert(event);
 
+export const deleteEvent = (supabase: SupabaseClient, id: number) =>
+	supabase.from('event').delete().eq('id', id);
+
 const fetchAllEventsForAvailabilities = (supabase: SupabaseClient) =>
 	supabase
 		.from('event')

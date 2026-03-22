@@ -8,8 +8,10 @@
 	import Warnings from './warnings.svelte';
 	import { getWarningFlags } from '$lib/logic/warnings';
 	import Pen from '@lucide/svelte/icons/pen';
+	import Trash from '@lucide/svelte/icons/trash';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { enhance } from '$app/forms';
 	import CalendarTable from './tables/calendar-table.svelte';
 	import Avatars from './avatars.svelte';
 
@@ -41,6 +43,14 @@
 			<button class="btn-icon preset-tonal-primary" onclick={handleEdit}>
 				<Pen size={16} />
 			</button>
+			{#if event.tables.length === 0}
+				<form method="POST" action="?/delete" use:enhance>
+					<input type="hidden" name="eventId" value={event.id} />
+					<button class="btn-icon preset-tonal-error">
+						<Trash size={16} />
+					</button>
+				</form>
+			{/if}
 		</small>
 	</CardSection>
 
